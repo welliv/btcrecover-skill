@@ -3,3 +3,7 @@
 __pycache__/
 benchmark_test_*
 consent.log
+
+# Stale test artifacts
+btcrecover-hybrid/
+btcrecover-skill/
