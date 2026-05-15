@@ -99,7 +99,27 @@ python seedrecover.py \
   --tokenlist words.txt
 ```
 
-## Swapped Words
+For comma-separated token groups (words that must appear together in order):
+```bash
+python seedrecover.py --dsw --no-dupchecks \
+  --mnemonic-length 24 \
+  --tokenlist tokengroups.txt \
+  --addrs bc1q... --addr-limit 10 \
+  --wallet-type bip39 \
+  --max-tokens 9 --min-tokens 8
+```
+
+Token groups example (`tokengroups.txt`):
+```
+^basic,dawn,renew,punch,arch,situate
+arrest,question,armor
+hole,lounge,practice
+resist
+zoo,zoo,zoo
+```
+Each comma-separated group stays together. `--min-tokens 8` = use at least 8 groups. `--max-tokens 9` = use at most 9 groups.
+
+### Swapped Words
 
 When you know all words but they may be in the wrong order. Complexity:
 - 12-word seed: 1 swap = 67 tries, 2 swaps = 4,423, 3 swaps = 291,919
@@ -211,7 +231,84 @@ python btcrecover.py \
 | `stacks` | Stacks blockchain |
 | `elrond` | Elrond (now MultiversX) |
 | `hederaed25519` | Hedera Hashgraph |
+| `helium` | Helium (HNT) |
 | `blockchainpasswordv3` | Blockchain.com legacy recovery mnemonic |
+
+### Wallet Type Example Commands
+
+**Ethereum (missing words):**
+```bash
+python seedrecover.py --wallet-type ethereum \
+  --mnemonic "word1 ? word3 word4 ? word6 ..." \
+  --addrs 0x... --addr-limit 100
+```
+
+**Cardano — Ledger seed, with stake address:**
+```bash
+python seedrecover.py --wallet-type cardano \
+  --mnemonic "..." --addrs addr1... --addr-limit 5
+```
+
+**Polkadot Substrate — custom derivation path:**
+```bash
+python seedrecover.py --wallet-type polkadotsubstrate \
+  --mnemonic "..." --addrs 1... \
+  --substrate-path "//hard/soft///password"
+```
+
+**Stellar (XLM):**
+```bash
+python seedrecover.py --wallet-type xlm \
+  --mnemonic "..." --addrs G... --addr-limit 2 --no-eta
+```
+
+**Hedera Hashgraph:**
+```bash
+python seedrecover.py --wallet-type hederaed25519 \
+  --mnemonic "..." --addrs 0x... --addr-limit 1
+```
+
+**Helium (HNT):**
+```bash
+python seedrecover.py --wallet-type helium \
+  --mnemonic "..." --addrs ... --addr-limit 2
+```
+
+**Elrond (MultiversX):**
+```bash
+python seedrecover.py --wallet-type elrond \
+  --mnemonic "..." --addrs erd1... --addr-limit 2
+```
+
+**Tron:**
+```bash
+python seedrecover.py --wallet-type tron \
+  --mnemonic "..." --addrs T... --addr-limit 1
+```
+
+**Stacks:**
+```bash
+python seedrecover.py --wallet-type stacks \
+  --mnemonic "..." --addrs SP... --addr-limit 10
+```
+
+**Blockchain.com legacy v3 recovery mnemonic:**
+```bash
+python seedrecover.py --wallet-type blockchainpasswordv3 \
+  --mnemonic "carve witch manage ..." --mnemonic-length 17
+```
+
+**Electrum Legacy (electrum1):**
+```bash
+python seedrecover.py --wallet-type electrum1 \
+  --mnemonic "..." --addrs 1... --addr-limit 2
+```
+
+**Ethereum Validator (uses pubkey as address):**
+```bash
+python seedrecover.py --wallet-type ethereumvalidator \
+  --mnemonic "..." --addrs 0x... --addr-limit 1
+```
 
 ## aezeed (LND Lightning)
 

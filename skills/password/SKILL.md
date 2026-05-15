@@ -59,9 +59,23 @@ Electrum:
 python extract-electrum-hash.py wallet > wallet.extract
 ```
 
-Blockchain.com:
+Blockchain.com (main password):
 ```bash
 python extract-blockchain-hash.py wallet.aes.json > wallet.extract
+```
+
+Blockchain.com (second password):
+```bash
+python btcrecover.py --wallet wallet.aes.json \
+  --blockchain-secondpass \
+  --passwordlist passwords.txt \
+  --typos-case --typos-delete --typos 4
+```
+
+Blockchain.com (direct tokenlist recovery):
+```bash
+python btcrecover.py --wallet wallet.aes.json \
+  --typos-capslock --tokenlist tokens.txt
 ```
 
 ### Other extract scripts
@@ -75,6 +89,28 @@ extract-coinomi-privkey.py          extract-dogechain-privkey.py
 extract-metamask-hash.py            extract-metamask-vaults.py
 extract-msigna-partmpk.py           extract-electrum2-partmpk.py
 extract-electrum-halfseed.py        download-blockchain-wallet.py
+```
+
+### Decrypting and Dumping
+
+If you already know the correct password and just need to extract keys:
+
+```bash
+# Dump decrypted wallet contents to file
+python btcrecover.py --wallet wallet.dat \
+  --dump-wallet wallet_dump.txt \
+  --correct-wallet-password "known_password"
+
+# Dump private keys (Electrum-importable format)
+python btcrecover.py --wallet wallet.dat \
+  --dump-privkeys wallet_privkeys.txt \
+  --correct-wallet-password "known_password"
+
+# Blockchain.com with second password
+python btcrecover.py --wallet wallet.aes.json \
+  --dump-wallet wallet_dump.txt \
+  --correct-wallet-password "known_password" \
+  --blockchain-secondpass --correct-wallet-secondpassword "second_password"
 ```
 
 ### Data extract for cloud recovery
@@ -156,6 +192,71 @@ Limit tokens to avoid combinatorial explosion:
 ```bash
 python btcrecover.py --rawprivatekey --addrs 1EDr... --wallet-type bitcoin \
   --max-tokens 1 --tokenlist tokens.txt
+```
+
+### BIP39 Passphrase Recovery
+
+When the user has the correct 12/24 seed words but forgot the BIP39 passphrase (25th word):
+
+```bash
+python btcrecover.py --bip39 \
+  --mnemonic "word1 word2 ... word12" \
+  --tokenlist passphrase_list.txt \
+  --addrs bc1q... \
+  --addr-limit 100 \
+  --force-bip44 --force-p2sh --force-p2tr \
+  --typos 1 --typos-delete --typos-swap
+```
+
+For non-Bitcoin wallets, add `--wallet-type`:
+
+| Wallet type | `--wallet-type` flag | Example address prefix |
+|-------------|---------------------|----------------------|
+| Bitcoin (default) | (omit) | `bc1q...`, `1...`, `3...` |
+| Electrum 2.x | `electrum2` | `bc1q...` |
+| Ethereum | `ethereum` | `0x...` |
+| Ethereum Validator | `ethereumvalidator` | `0x...` (64 hex) |
+| Zilliqa | `zilliqa` | `zil1...` |
+| Bitcoin Cash | `bch` | `bitcoincash:...` or `qq...` |
+| Cardano | `cardano` | `addr1...` or `stake1...` |
+| Stellar (XLM) | `xlm` | `G...` |
+| Litecoin | `litecoin` | `L...` or `ltc1...` |
+| Dogecoin | `dogecoin` | `D...` |
+| Dash | `dash` | `X...` |
+| DigiByte | `digibyte` | `D...` |
+| Groestlecoin | `groestlecoin` | `F...` |
+| Vertcoin | `vertcoin` | `V...` |
+| Monacoin | `monacoin` | `M...` |
+| Ripple | `ripple` | `r...` |
+| Tron | `tron` | `T...` |
+| Polkadot Substrate | `polkadotsubstrate` | `1...` (58 chars) |
+| Stacks | `stacks` | `SP...` or `SM...` |
+| SLIP39 | `--slip39` (instead of `--bip39`) | Varies by coin |
+
+**Tokenlist building for passphrase recovery:**
+- Add the exact passphrase guess
+- Generate truncations (e.g. `recoverytesting` → also `recoverytest`)
+- Add common suffixes (`1`, `!`, `123`)
+- Add empty string as baseline check
+- Common structural variants (past tense, `s` suffix for verbs)
+
+**Important:** BIP39 passphrase recovery is NOT GPU-accelerated. CPU only (~2,300 p/s on modern CPU).
+
+### SLIP39 Passphrase Recovery (Shamir shares + passphrase)
+
+```bash
+python btcrecover.py --slip39 \
+  --mnemonic "share1word1 share1word2 ... share2word1 share2word2 ..." \
+  --tokenlist passphrase.txt \
+  --addrs bc1q... --addr-limit 100
+```
+
+For SLIP39 with typos on the shares themselves:
+```bash
+python btcrecover.py --slip39 \
+  --mnemonic "share words here..." \
+  --typos 2 --tokenlist passphrase.txt \
+  --addrs ... --addr-limit 100
 ```
 
 ## Phase 5c: GPU Acceleration
