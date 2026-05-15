@@ -679,8 +679,7 @@ Where:
   risk_penalty       = 0 (Tier 1) | 5 (Tier 2) | 15 (Tier 3)
 ```
 
-The router calculates EV for every available model, then recommends the
-top scorer in plain English with alternatives explained.
+The router calculates EV for every available model and recommends the best scorer in plain English.
 
 ### Current benchmark leaders by task
 
@@ -691,10 +690,25 @@ top scorer in plain English with alternatives explained.
 | Seed | qwen3:14b | Claude Sonnet 4 | hermes3:8b |
 | Passphrase | deepseek-r1:14b | Claude Opus 4 | hermes3:8b |
 
-The benchmark file self-updates via `scripts/benchmark-updater.py`. Community
-members can submit results via GitHub Discussions using a structured JSON
-template. New submissions are weighted at 20% to prevent single outliers from
-distorting scores.
+### Live data sources
+
+All benchmark data comes from public verified sources and updates daily:
+
+| Source | What it provides | Update frequency |
+|---|---|---|
+| [OpenRouter](https://openrouter.ai) | Model pricing, context length, availability | Daily (cron) |
+| [btcrecover GPU docs](https://github.com/3rdIteration/btcrecover/blob/master/docs/GPU_Acceleration.md) | Password/sec speeds per wallet type | On btcrecover release |
+| Nvidia, AMD | GPU specs and performance ratings | Per hardware generation |
+
+Task scores (forensics, password, seed, passphrase) are derived from general LLM capability benchmarks and refined through community submissions. They start at reasonable defaults and improve over time.
+
+### Daily auto-update
+
+`scripts/benchmark-updater.py` runs daily at 06:00 UTC via cron. It fetches:
+- OpenRouter API (no key needed) — model listing, pricing, context length
+- btcrecover GPU Acceleration guide — password/sec hardware data
+
+Every model entry records its data source and the timestamp of its last update. If a source is unreachable, cached data persists and the cron logs the failure. No data is ever lost due to a transient network error.
 
 ---
 

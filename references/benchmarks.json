@@ -5,117 +5,224 @@
       "password": 88,
       "seed": 90,
       "passphrase": 88,
-      "cost_per_session_usd": 5.00,
+      "cost_per_session_usd": 0.105,
       "vram_gb": null,
       "type": "cloud",
-      "provider": "Anthropic",
-      "best_for": ["forensics", "complex_recovery"]
+      "provider": "unknown",
+      "best_for": [
+        "forensics",
+        "complex_recovery"
+      ],
+      "context_length": 200000,
+      "updated": "2026-05-15",
+      "source": "live:openrouter"
     },
     "claude-sonnet-4": {
       "forensics": 85,
       "password": 90,
       "seed": 92,
       "passphrase": 90,
-      "cost_per_session_usd": 1.50,
+      "cost_per_session_usd": 0.021,
       "vram_gb": null,
       "type": "cloud",
-      "provider": "Anthropic",
-      "best_for": ["password", "seed"]
+      "provider": "unknown",
+      "best_for": [
+        "seed",
+        "complex_recovery"
+      ],
+      "context_length": 1000000,
+      "updated": "2026-05-15",
+      "source": "live:openrouter"
     },
     "gpt-4o": {
       "forensics": 82,
       "password": 85,
       "seed": 87,
       "passphrase": 85,
-      "cost_per_session_usd": 2.00,
+      "cost_per_session_usd": 0.015,
       "vram_gb": null,
       "type": "cloud",
-      "provider": "OpenAI",
-      "best_for": ["password", "seed"]
+      "provider": "unknown",
+      "best_for": [
+        "seed",
+        "complex_recovery"
+      ],
+      "context_length": 128000,
+      "updated": "2026-05-15",
+      "source": "live:openrouter"
     },
     "gpt-4o-mini": {
       "forensics": 70,
       "password": 78,
       "seed": 80,
       "passphrase": 78,
-      "cost_per_session_usd": 0.15,
+      "cost_per_session_usd": 0.0009,
       "vram_gb": null,
       "type": "cloud",
-      "provider": "OpenAI",
-      "best_for": ["budget_recovery"]
+      "provider": "unknown",
+      "best_for": [
+        "seed"
+      ],
+      "context_length": 128000,
+      "updated": "2026-05-15",
+      "source": "live:openrouter"
     },
     "deepseek-r1-14b": {
       "forensics": 80,
       "password": 88,
       "seed": 85,
       "passphrase": 88,
-      "cost_per_session_usd": 0.00,
+      "cost_per_session_usd": 0.0039,
       "vram_gb": 14,
       "type": "local",
-      "provider": "Ollama",
+      "provider": "unknown",
       "ollama_pull": "ollama pull deepseek-r1:14b",
-      "best_for": ["password", "passphrase"]
+      "best_for": [
+        "password",
+        "complex_recovery"
+      ],
+      "context_length": 64000,
+      "updated": "2026-05-15",
+      "source": "live:openrouter"
     },
     "deepseek-r1-32b": {
       "forensics": 85,
       "password": 90,
       "seed": 88,
       "passphrase": 90,
-      "cost_per_session_usd": 0.00,
+      "cost_per_session_usd": 0.0,
       "vram_gb": 20,
       "type": "local",
       "provider": "Ollama",
       "ollama_pull": "ollama pull deepseek-r1:32b",
-      "best_for": ["password", "passphrase", "forensics"]
+      "best_for": [
+        "password",
+        "complex_recovery"
+      ]
     },
     "hermes3:8b": {
       "forensics": 72,
       "password": 78,
       "seed": 80,
       "passphrase": 78,
-      "cost_per_session_usd": 0.00,
+      "cost_per_session_usd": 0.0,
       "vram_gb": 6,
       "type": "local",
       "provider": "Ollama",
       "ollama_pull": "ollama pull hermes3:8b",
-      "best_for": ["budget_local", "general_purpose"]
+      "best_for": [
+        "seed"
+      ]
     },
     "qwen3:14b": {
       "forensics": 85,
       "password": 82,
       "seed": 88,
       "passphrase": 82,
-      "cost_per_session_usd": 0.00,
+      "cost_per_session_usd": 0.0,
       "vram_gb": 10,
       "type": "local",
       "provider": "Ollama",
       "ollama_pull": "ollama pull qwen3:14b",
-      "best_for": ["forensics", "seed"]
+      "best_for": [
+        "seed",
+        "complex_recovery"
+      ]
     },
     "gemma3:12b": {
       "forensics": 75,
       "password": 76,
       "seed": 78,
       "passphrase": 76,
-      "cost_per_session_usd": 0.00,
+      "cost_per_session_usd": 0.0,
       "vram_gb": 8,
       "type": "local",
       "provider": "Ollama",
       "ollama_pull": "ollama pull gemma3:12b",
-      "best_for": ["general_purpose"]
+      "best_for": [
+        "seed"
+      ]
+    },
+    "gemini-2.0-flash": {
+      "forensics": 78,
+      "password": 82,
+      "seed": 84,
+      "passphrase": 82,
+      "cost_per_session_usd": 0.0006,
+      "context_length": 1048576,
+      "vram_gb": null,
+      "type": "cloud",
+      "provider": "unknown",
+      "updated": "2026-05-15",
+      "source": "live:openrouter",
+      "best_for": [
+        "seed"
+      ]
+    },
+    "qwen3-14b": {
+      "forensics": 85,
+      "password": 82,
+      "seed": 88,
+      "passphrase": 82,
+      "cost_per_session_usd": 0.0004,
+      "context_length": 40960,
+      "vram_gb": 14,
+      "type": "local",
+      "provider": "unknown",
+      "updated": "2026-05-15",
+      "source": "live:openrouter",
+      "ollama_pull": "ollama pull qwen3:14b",
+      "best_for": [
+        "seed",
+        "complex_recovery"
+      ]
+    },
+    "llama3.1-8b": {
+      "forensics": 65,
+      "password": 72,
+      "seed": 74,
+      "passphrase": 72,
+      "cost_per_session_usd": 0.0001,
+      "context_length": 16384,
+      "vram_gb": 8,
+      "type": "local",
+      "provider": "unknown",
+      "updated": "2026-05-15",
+      "source": "live:openrouter",
+      "ollama_pull": "ollama pull llama3.1:8b",
+      "best_for": [
+        "budget_recovery"
+      ]
+    },
+    "gemma3-12b": {
+      "forensics": 75,
+      "password": 76,
+      "seed": 78,
+      "passphrase": 76,
+      "cost_per_session_usd": 0.0002,
+      "context_length": 131072,
+      "vram_gb": 12,
+      "type": "local",
+      "provider": "unknown",
+      "updated": "2026-05-15",
+      "source": "live:openrouter",
+      "ollama_pull": "ollama pull gemma3:12b",
+      "best_for": [
+        "seed"
+      ]
     }
   },
   "game_theory_router": {
     "description": "Selects optimal model based on task, cost, and privacy preferences.",
-    "formula": "EV = (task_score × evidence_multiplier) - cost_penalty - risk_penalty",
+    "formula": "EV = (task_score \u00d7 evidence_multiplier) - cost_penalty - risk_penalty",
     "variables": {
       "task_score": "Model's benchmark score for this recovery type (0-100)",
       "evidence_multiplier": {
         "HIGH": 1.0,
         "MEDIUM": 0.85,
-        "LOW": 0.70
+        "LOW": 0.7
       },
-      "cost_penalty": "(estimated_cost_usd / wallet_value_usd) × 20, capped at 20",
+      "cost_penalty": "(estimated_cost_usd / wallet_value_usd) \u00d7 20, capped at 20",
       "risk_penalty": {
         "tier1_offline": 0,
         "tier2_cloud_reasoning": 5,
@@ -123,11 +230,11 @@
       }
     },
     "rules": [
-      "If user prefers offline and has Ollama installed → use local model with highest task_score",
-      "If task is forensics and cloud is acceptable → use Claude Opus 4 or qwen3:14b",
-      "If task is password/seed and budget is constrained → use GPT-4o-mini or hermes3:8b",
-      "If wallet value > $10,000 → prefer Tier 1 (offline) regardless of user preference",
-      "Default → use Ollama hermes3:8b if available, else fallback to cloud"
+      "If user prefers offline and has Ollama installed \u2192 use local model with highest task_score",
+      "If task is forensics and cloud is acceptable \u2192 use Claude Opus 4 or qwen3:14b",
+      "If task is password/seed and budget is constrained \u2192 use GPT-4o-mini or hermes3:8b",
+      "If wallet value > $10,000 \u2192 prefer Tier 1 (offline) regardless of user preference",
+      "Default \u2192 use Ollama hermes3:8b if available, else fallback to cloud"
     ]
   },
   "hardware_recommendations": {
@@ -206,12 +313,93 @@
       "rtx_3060": 10000,
       "rtx_3090": 50000,
       "rtx_4090": 100000
+    },
+    "bitcoin_core_jtr_kernel": {
+      "label": "bitcoin core (jtr kernel)",
+      "cpu_persec": 70,
+      "gpu_persec": 6750
+    },
+    "bitcoin_core_opencl_brute": {
+      "label": "bitcoin core (opencl_brute)",
+      "cpu_persec": 70,
+      "gpu_persec": 950
+    },
+    "blockchaincom_main_password": {
+      "label": "blockchain.com main password",
+      "cpu_persec": 1000,
+      "gpu_persec": 10000
+    },
+    "blockchaincom_second_password": {
+      "label": "blockchain.com second password",
+      "cpu_persec": 390,
+      "gpu_persec": 15500
+    },
+    "dogechaininfo": {
+      "label": "dogechain.info",
+      "cpu_persec": 1300,
+      "gpu_persec": 11300
+    },
+    "electrum_2_wallet_password": {
+      "label": "electrum 2 wallet password",
+      "cpu_persec": 4500,
+      "gpu_persec": 21000
+    },
+    "bip39_passphrase_or_electrum_extra_words": {
+      "label": "bip39 passphrase (or electrum 'extra words'",
+      "cpu_persec": 2300,
+      "gpu_persec": 10400
+    },
+    "bip39_12_word_seed": {
+      "label": "bip39 12 word seed",
+      "cpu_persec": 33000,
+      "gpu_persec": 134000
+    },
+    "bip39_12_word_seed_tokenlist": {
+      "label": "bip39 12 word seed (tokenlist)",
+      "cpu_persec": 33000,
+      "gpu_persec": 130000
+    },
+    "bip39_24_word_seed": {
+      "label": "bip39 24 word seed",
+      "cpu_persec": 160000,
+      "gpu_persec": 180000
+    },
+    "bip39_24_word_seed_tokenlist": {
+      "label": "bip39 24 word seed (tokenlist)",
+      "cpu_persec": 140000,
+      "gpu_persec": 160000
+    },
+    "electrum_seed": {
+      "label": "electrum seed",
+      "cpu_persec": 200000,
+      "gpu_persec": 366000
+    },
+    "bip38_encrypted_key": {
+      "label": "bip38 encrypted key",
+      "cpu_persec": 20,
+      "gpu_persec": 20
     }
   },
   "community_benchmarks": {
     "description": "Community-submitted benchmark results",
     "submission_url": "https://github.com/welliv/btcrecover-skill/discussions/categories/benchmarks",
-    "weighting": "existing_score × 0.8 + new_submission × 0.2",
+    "weighting": "existing_score \u00d7 0.8 + new_submission \u00d7 0.2",
     "last_updated": "2026-05-15"
+  },
+  "sources": {
+    "openrouter": {
+      "url": "https://openrouter.ai/api/v1/models",
+      "last_updated": "2026-05-15 15:35:49 UTC",
+      "models_tracked": 9,
+      "pricing_updated": 0,
+      "status": "ok"
+    },
+    "last_updated": "2026-05-15 15:35:49 UTC",
+    "btcrecover_gpu": {
+      "url": "https://raw.githubusercontent.com/3rdIteration/btcrecover/master/docs/GPU_Acceleration.md",
+      "last_updated": "2026-05-15",
+      "entries": 13,
+      "status": "ok"
+    }
   }
 }
