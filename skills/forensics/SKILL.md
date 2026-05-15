@@ -49,7 +49,7 @@ Sort by: modification date (oldest first), file size (100KB–10MB typical), mag
 
 ```python
 WALLET_SIGNATURES = {
-    b'\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00': 'Bitcoin Core (BDB)',
+    b'\x00\x00\x00\x00\x01\x00\x00\x00': 'Bitcoin Core (BDB)',
     b'Salted__': 'Electrum or AES-encrypted',
     b'{"': 'Blockchain.com JSON',
 }
@@ -66,14 +66,14 @@ Warning: if you find a seed phrase in email, treat it as compromised. Sweep imme
 ## Phase 6: Triage
 
 Found a wallet file? Can you open it?
-- Yes → No recovery needed
-- No → Password or seed recovery
+- Yes: no recovery needed
+- No: password or seed recovery
 
 ## Phase 7: The cprkrn Protocol
 
 Find the password change date. Search for wallet files modified before that date. Try old passwords against old wallet files.
 
-The cprkrn case was resolved by finding a 2019 backup that predated the 2020 password change. The old wallet still used the old password.
+The [cprkrn case](https://x.com/cprkrn/status/2054586810475364536?s=20) was resolved by finding a 2019 backup that predated the 2020 password change. The old wallet still used the old password.
 
 ```bash
 find / -name "wallet.dat" -type f -newermt "2017-01-01" ! -newermt "2020-01-01" 2>/dev/null

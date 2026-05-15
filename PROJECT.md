@@ -29,7 +29,7 @@
 
 ## 1. The Origin Story
 
-On **13 May 2026**, a pseudonymous X user known as @cprkrn posted a thread
+On **13 May 2026**, a pseudonymous X user known as [@cprkrn](https://x.com/cprkrn/status/2054586810475364536?s=20) posted a thread
 that went viral across the crypto world. He had been locked out of a Bitcoin
 wallet containing 5 BTC — worth approximately $400,000 at the time — for over
 11 years. He had tried everything: brute-force attacks renting GPU time,
