@@ -117,8 +117,8 @@ jobs:
               CHECKSUMS.sha256
           fi
 
-          # Verify the signature before uploading
-          gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256 2>&1
+          # Verify the clearsigned file (signature is embedded in clearsign output)
+          gpg --verify CHECKSUMS.sha256.asc 2>&1
           echo "GPG signature verified successfully"
 
       # -----------------------------------------------------------------------
