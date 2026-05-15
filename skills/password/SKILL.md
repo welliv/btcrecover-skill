@@ -333,6 +333,22 @@ Over 30 minutes:
 bash scripts/session-manager.sh start
 ```
 
+For extremely long runs (GPU jobs, multi-day):
+
+```bash
+# Start with autosave — saves progress every ~5 minutes
+python btcrecover.py \
+  --wallet wallet.extract \
+  --tokenlist tokens.txt \
+  --enable-gpu --global-ws 4096 --local-ws 256 \
+  --no-eta --no-dupchecks \
+  --worker 1/5 \
+  --autosave progress.sav
+
+# Resume an interrupted run
+python btcrecover.py --restore progress.sav
+```
+
 Translate progress to: "X% complete, about Y hours left."
 
 If found: show password (no screenshots). Run sweep script. Do not celebrate yet.
