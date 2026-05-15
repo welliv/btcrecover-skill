@@ -19,7 +19,7 @@ Stephen is the original author and maintainer of btcrecover, the battle-tested r
 ## Inspirations & Special Thanks
 
 - **@cprkrn** — whose May 2026 viral recovery story proved what AI + btcrecover could achieve and directly inspired this skill.  
-- **Andrej Karpathy** — whose observations on reliable LLM agent behavior (andrej-karpathy-skills) shaped the skill's structure and failure-mode handling.  
+- **Andrej Karpathy** — whose observations on reliable LLM agent behaviour ([tweet](https://x.com/karpathy/status/2015883857489522876), [repo](https://github.com/multica-ai/andrej-karpathy-skills)) shaped the skill's structure and failure-mode handling.  
 - **Nous Research (Hermes Agent team)** — for building the local-first agent platform this skill was designed around.
 
 ## Becoming a Co-Maintainer

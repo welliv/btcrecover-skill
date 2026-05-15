@@ -175,7 +175,7 @@ GPL-2.0. Free forever.
 
 Built on btcrecover by Stephen Rothery (3rdIteration).
 Inspired by @cprkrn's May 2026 recovery story.
-Skill structure informed by Andrej Karpathy's work on LLM agent behaviour.
+Skill structure informed by Andrej Karpathy's work on LLM agent behaviour ([tweet](https://x.com/karpathy/status/2015883857489522876), [repo](https://github.com/multica-ai/andrej-karpathy-skills)).
 
 ---
 *Free. Open source. Always.*

@@ -924,7 +924,7 @@ The maintainers table has open slots from day one. This signals that the
 project is meant to be collaborative, not owned.
 
 The attribution file also credits @cprkrn (the case that sparked the project)
-and Andrej Karpathy (whose LLM coding observations informed the skill structure).
+and Andrej Karpathy ([tweet](https://x.com/karpathy/status/2015883857489522876), [repo](https://github.com/multica-ai/andrej-karpathy-skills)) whose LLM coding observations informed the skill structure.
 
 ---
 
