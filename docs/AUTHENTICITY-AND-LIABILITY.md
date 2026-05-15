@@ -5,10 +5,8 @@
 The skill uses several mechanisms to prove it's genuine:
 
 1. GPG commit signing (verified by GitHub)
-2. Cosign keyless signing on every release (recorded in Rekor transparency log)
-3. SHA256 checksums for all files (CHECKSUMS.sha256)
-4. Weekly typosquat monitoring via `scripts/typosquat-monitor.py`
-5. Branch protection: signed commits required, no force push
+2. Weekly typosquat monitoring via `scripts/typosquat-monitor.py`
+3. Branch protection: signed commits required, no force push
 
 ## Liability
 

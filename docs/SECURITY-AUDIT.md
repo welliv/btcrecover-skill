@@ -15,7 +15,7 @@ Shut down (not sleep) after recovery. Optional RAM clear with `sudo sdmem -v`.
 `verify-btcrecover.sh` checks remote URL against official repo. Blocked patterns: TCRetriever, demining, etc.
 
 ## 5. Poisoned SKILL.md
-Signed CHECKSUMS manifest. Cosign + GPG verification. Weekly typosquat monitoring.
+GPG commit signing. Weekly typosquat monitoring.
 
 ## 6. Compromised Python Dependencies
 `pip install --require-hashes` guidance. Virtual environment isolation.

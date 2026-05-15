@@ -100,7 +100,7 @@ Researchers who have responsibly disclosed issues and helped make this skill saf
 Once a fix is released, the author will:
 
 1. Tag a new version with the fix
-2. Update CHECKSUMS.sha256 and re-sign
+2. Push the fix to main
 3. Publish a security advisory on GitHub
 4. Credit the reporter in the release notes (unless anonymity requested)
 5. Update this file with the vulnerability in the hall of fame
