@@ -733,7 +733,7 @@ the script completes, knowing the sweep is broadcast.
 
 **Stage 7 — Celebration, donation ask, nuke (Step 7 and nuke-session.sh)**
 Celebration only after DONE is typed. Donation ask structured as:
-"Support btcrecover first. Support this skill second, only if you want to."
+"Support btcrecover first: https://github.com/3rdIteration/btcrecover#if-this-tool-or-other-content-on-my-youtube-channel-was-helpful-feel-free-to-send-a-tip-to. Support this skill second, only if you want to."
 Then nuke-session.sh destroys all session data and exits clean.
 
 ### What nuke-session.sh destroys

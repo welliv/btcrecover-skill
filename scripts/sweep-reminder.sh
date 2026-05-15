@@ -123,7 +123,7 @@ echo "SUPPORT THE PROJECT"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo
 echo "This skill is free and always will be."
-echo "Support btcrecover first: https://github.com/3rdIteration/btcrecover"
+echo "Support btcrecover first: https://github.com/3rdIteration/btcrecover#if-this-tool-or-other-content-on-my-youtube-channel-was-helpful-feel-free-to-send-a-tip-to"
 echo "Support this skill second: https://github.com/welliv/btcrecover-skill"
 echo
 

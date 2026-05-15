@@ -34,7 +34,8 @@ All co-maintainers must follow the same security and attribution standards estab
 
 ## Donations
 
-See the donation section in `sweep-reminder.sh`.  
+Support btcrecover first: [3rdIteration/btcrecover#donations](https://github.com/3rdIteration/btcrecover#if-this-tool-or-other-content-on-my-youtube-channel-was-helpful-feel-free-to-send-a-tip-to)
+
 All donations are voluntary and flow first to the btcrecover maintainer (3rdIteration). This skill takes no percentage.
 
 ---
