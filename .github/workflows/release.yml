@@ -92,20 +92,33 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           # Import the author's GPG private key from repository secrets
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import 2>&1
 
           # Sign the checksums file
-          echo "$GPG_PASSPHRASE" | gpg \
-            --batch \
-            --yes \
-            --passphrase-fd 0 \
-            --clearsign \
-            --armor \
-            --output CHECKSUMS.sha256.asc \
-            CHECKSUMS.sha256
+          # Handle both empty and non-empty passphrases
+          if [ -z "$GPG_PASSPHRASE" ]; then
+            gpg \
+              --batch \
+              --yes \
+              --pinentry-mode loopback \
+              --passphrase '' \
+              --clearsign \
+              --armor \
+              --output CHECKSUMS.sha256.asc \
+              CHECKSUMS.sha256
+          else
+            echo "$GPG_PASSPHRASE" | gpg \
+              --batch \
+              --yes \
+              --passphrase-fd 0 \
+              --clearsign \
+              --armor \
+              --output CHECKSUMS.sha256.asc \
+              CHECKSUMS.sha256
+          fi
 
           # Verify the signature before uploading
-          gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
+          gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256 2>&1
           echo "GPG signature verified successfully"
 
       # -----------------------------------------------------------------------
