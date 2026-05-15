@@ -1,0 +1,34 @@
+{
+  "model_benchmarks": {
+    "ollama/llama3:8b": {
+      "speed": "medium",
+      "accuracy": "high",
+      "cost": "free",
+      "privacy": "local",
+      "recommended_for": ["password", "seed"]
+    },
+    "anthropic/claude-3-haiku": {
+      "speed": "fast",
+      "accuracy": "very_high",
+      "cost": "low",
+      "privacy": "cloud",
+      "recommended_for": ["forensics"]
+    },
+    "openai/gpt-4o-mini": {
+      "speed": "fast",
+      "accuracy": "high",
+      "cost": "very_low",
+      "privacy": "cloud",
+      "recommended_for": ["password", "seed"]
+    }
+  },
+  "game_theory_router": {
+    "description": "Selects optimal model based on task, cost, and privacy preferences.",
+    "rules": [
+      "If user prefers offline and has Ollama installed -> use local model",
+      "If task is forensics and cloud is acceptable -> use Claude 3 Haiku",
+      "If task is password/seed and budget is constrained -> use GPT-4o-mini",
+      "Default -> use Ollama llama3:8b if available, else fallback to cloud"
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+# CODEOWNERS — btcrecover skill
+#
+# Files listed here require approval from the specified owner(s) before
+# any pull request can be merged. This prevents unauthorized changes to
+# security-critical files.
+#
+# GitHub enforces this automatically when branch protection is enabled
+# with "Require review from Code Owners" checked.
+#
+# Format: <file pattern>   <GitHub username(s)>
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# --- Security-critical: require author approval ---
+
+# The main skill orchestrator
+SKILL.md                                    @[yourusername]
+
+# Safety rules — the most sensitive document in the repo
+references/safety-rules.md                  @[yourusername]
+
+# Post-recovery scripts — handle private keys and session cleanup
+scripts/sweep-reminder.sh                   @[yourusername]
+scripts/nuke-session.sh                     @[yourusername]
+
+# Installation and verification chain
+install.sh                                  @[yourusername]
+scripts/verify-btcrecover.sh                @[yourusername]
+VERIFIED.md                                 @[yourusername]
+CHECKSUMS.sha256                            @[yourusername]
+
+# GitHub Actions — prevents supply chain attacks via CI
+.github/workflows/release.yml              @[yourusername]
+
+# Legal and identity documents
+DISCLAIMER.md                               @[yourusername]
+MAINTAINERS.md                              @[yourusername]
+
+# --- Connectivity and session management ---
+scripts/connectivity-check.sh               @[yourusername]
+scripts/session-manager.sh                  @[yourusername]
+
+# --- Reference data (security-relevant) ---
+references/benchmarks.json                  @[yourusername]
+
+# --- Sub-skills (sensitive — handle wallet data logic) ---
+skills/password/SKILL.md                    @[yourusername]
+skills/seed/SKILL.md                        @[yourusername]
+skills/forensics/SKILL.md                   @[yourusername]
+
+# --- Everything else: any maintainer can approve ---
+# Add co-maintainers here as the project grows:
+# README.md                                 @[yourusername] @[comaintainer]
+# references/wallet-types.md               @[yourusername] @[comaintainer]
+# references/typo-patterns.md              @[yourusername] @[comaintainer]
+# agents/                                  @[yourusername] @[comaintainer]
+# guides/                                  @[yourusername] @[comaintainer]
