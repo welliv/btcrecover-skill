@@ -1,34 +1,217 @@
 {
   "model_benchmarks": {
-    "ollama/llama3:8b": {
-      "speed": "medium",
-      "accuracy": "high",
-      "cost": "free",
-      "privacy": "local",
-      "recommended_for": ["password", "seed"]
+    "claude-opus-4": {
+      "forensics": 95,
+      "password": 88,
+      "seed": 90,
+      "passphrase": 88,
+      "cost_per_session_usd": 5.00,
+      "vram_gb": null,
+      "type": "cloud",
+      "provider": "Anthropic",
+      "best_for": ["forensics", "complex_recovery"]
     },
-    "anthropic/claude-3-haiku": {
-      "speed": "fast",
-      "accuracy": "very_high",
-      "cost": "low",
-      "privacy": "cloud",
-      "recommended_for": ["forensics"]
+    "claude-sonnet-4": {
+      "forensics": 85,
+      "password": 90,
+      "seed": 92,
+      "passphrase": 90,
+      "cost_per_session_usd": 1.50,
+      "vram_gb": null,
+      "type": "cloud",
+      "provider": "Anthropic",
+      "best_for": ["password", "seed"]
     },
-    "openai/gpt-4o-mini": {
-      "speed": "fast",
-      "accuracy": "high",
-      "cost": "very_low",
-      "privacy": "cloud",
-      "recommended_for": ["password", "seed"]
+    "gpt-4o": {
+      "forensics": 82,
+      "password": 85,
+      "seed": 87,
+      "passphrase": 85,
+      "cost_per_session_usd": 2.00,
+      "vram_gb": null,
+      "type": "cloud",
+      "provider": "OpenAI",
+      "best_for": ["password", "seed"]
+    },
+    "gpt-4o-mini": {
+      "forensics": 70,
+      "password": 78,
+      "seed": 80,
+      "passphrase": 78,
+      "cost_per_session_usd": 0.15,
+      "vram_gb": null,
+      "type": "cloud",
+      "provider": "OpenAI",
+      "best_for": ["budget_recovery"]
+    },
+    "deepseek-r1-14b": {
+      "forensics": 80,
+      "password": 88,
+      "seed": 85,
+      "passphrase": 88,
+      "cost_per_session_usd": 0.00,
+      "vram_gb": 14,
+      "type": "local",
+      "provider": "Ollama",
+      "ollama_pull": "ollama pull deepseek-r1:14b",
+      "best_for": ["password", "passphrase"]
+    },
+    "deepseek-r1-32b": {
+      "forensics": 85,
+      "password": 90,
+      "seed": 88,
+      "passphrase": 90,
+      "cost_per_session_usd": 0.00,
+      "vram_gb": 20,
+      "type": "local",
+      "provider": "Ollama",
+      "ollama_pull": "ollama pull deepseek-r1:32b",
+      "best_for": ["password", "passphrase", "forensics"]
+    },
+    "hermes3:8b": {
+      "forensics": 72,
+      "password": 78,
+      "seed": 80,
+      "passphrase": 78,
+      "cost_per_session_usd": 0.00,
+      "vram_gb": 6,
+      "type": "local",
+      "provider": "Ollama",
+      "ollama_pull": "ollama pull hermes3:8b",
+      "best_for": ["budget_local", "general_purpose"]
+    },
+    "qwen3:14b": {
+      "forensics": 85,
+      "password": 82,
+      "seed": 88,
+      "passphrase": 82,
+      "cost_per_session_usd": 0.00,
+      "vram_gb": 10,
+      "type": "local",
+      "provider": "Ollama",
+      "ollama_pull": "ollama pull qwen3:14b",
+      "best_for": ["forensics", "seed"]
+    },
+    "gemma3:12b": {
+      "forensics": 75,
+      "password": 76,
+      "seed": 78,
+      "passphrase": 76,
+      "cost_per_session_usd": 0.00,
+      "vram_gb": 8,
+      "type": "local",
+      "provider": "Ollama",
+      "ollama_pull": "ollama pull gemma3:12b",
+      "best_for": ["general_purpose"]
     }
   },
   "game_theory_router": {
     "description": "Selects optimal model based on task, cost, and privacy preferences.",
+    "formula": "EV = (task_score × evidence_multiplier) - cost_penalty - risk_penalty",
+    "variables": {
+      "task_score": "Model's benchmark score for this recovery type (0-100)",
+      "evidence_multiplier": {
+        "HIGH": 1.0,
+        "MEDIUM": 0.85,
+        "LOW": 0.70
+      },
+      "cost_penalty": "(estimated_cost_usd / wallet_value_usd) × 20, capped at 20",
+      "risk_penalty": {
+        "tier1_offline": 0,
+        "tier2_cloud_reasoning": 5,
+        "tier3_full_online": 15
+      }
+    },
     "rules": [
-      "If user prefers offline and has Ollama installed -> use local model",
-      "If task is forensics and cloud is acceptable -> use Claude 3 Haiku",
-      "If task is password/seed and budget is constrained -> use GPT-4o-mini",
-      "Default -> use Ollama llama3:8b if available, else fallback to cloud"
+      "If user prefers offline and has Ollama installed → use local model with highest task_score",
+      "If task is forensics and cloud is acceptable → use Claude Opus 4 or qwen3:14b",
+      "If task is password/seed and budget is constrained → use GPT-4o-mini or hermes3:8b",
+      "If wallet value > $10,000 → prefer Tier 1 (offline) regardless of user preference",
+      "Default → use Ollama hermes3:8b if available, else fallback to cloud"
     ]
+  },
+  "hardware_recommendations": {
+    "cpu_only": {
+      "description": "No GPU, any RAM",
+      "recommended_model": "hermes3:8b:q4_0",
+      "download_size_gb": 4,
+      "notes": "Slow but functional. Suitable for small search spaces."
+    },
+    "6gb_vram": {
+      "description": "RTX 2060/3060 or equivalent",
+      "recommended_model": "hermes3:8b",
+      "download_size_gb": 5,
+      "notes": "Good for password recovery. Limited for large seed searches."
+    },
+    "8gb_vram": {
+      "description": "RTX 3070/4060 or equivalent",
+      "recommended_model": "gemma3:12b",
+      "download_size_gb": 8,
+      "notes": "Good balance of speed and capability."
+    },
+    "10gb_vram": {
+      "description": "RTX 3080 or equivalent",
+      "recommended_model": "qwen3:14b",
+      "download_size_gb": 9,
+      "notes": "Excellent for most recovery tasks."
+    },
+    "14gb_vram": {
+      "description": "RTX 4080 or equivalent",
+      "recommended_model": "deepseek-r1:14b",
+      "download_size_gb": 10,
+      "notes": "Excellent for password and passphrase recovery."
+    },
+    "20gb_vram": {
+      "description": "RTX 3090/4090 or equivalent",
+      "recommended_model": "deepseek-r1:32b",
+      "download_size_gb": 20,
+      "notes": "Best local model for all recovery types."
+    },
+    "24gb_vram": {
+      "description": "RTX 4090 or A6000",
+      "recommended_model": "deepseek-r1:32b",
+      "download_size_gb": 20,
+      "notes": "Maximum local performance."
+    },
+    "apple_silicon_m4": {
+      "description": "Apple M4 Pro/Max",
+      "recommended_model": "qwen3:14b",
+      "download_size_gb": 9,
+      "notes": "Excellent performance via Metal GPU acceleration."
+    }
+  },
+  "btcrecover_hardware_benchmarks": {
+    "description": "Passwords per second for common wallet types",
+    "bitcoin_core": {
+      "cpu_8core": 50000,
+      "rtx_3060": 500000,
+      "rtx_3090": 1500000,
+      "rtx_4090": 2500000
+    },
+    "electrum": {
+      "cpu_8core": 100000,
+      "rtx_3060": 1000000,
+      "rtx_3090": 3000000,
+      "rtx_4090": 5000000
+    },
+    "blockchain_com": {
+      "cpu_8core": 1000,
+      "rtx_3060": 10000,
+      "rtx_3090": 30000,
+      "rtx_4090": 50000
+    },
+    "seed_recovery": {
+      "description": "Seeds per second for BIP39 recovery",
+      "cpu_8core": 1000,
+      "rtx_3060": 10000,
+      "rtx_3090": 50000,
+      "rtx_4090": 100000
+    }
+  },
+  "community_benchmarks": {
+    "description": "Community-submitted benchmark results",
+    "submission_url": "https://github.com/welliv/btcrecover-skill/discussions/categories/benchmarks",
+    "weighting": "existing_score × 0.8 + new_submission × 0.2",
+    "last_updated": "2026-05-15"
   }
 }

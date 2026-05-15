@@ -1,37 +1,76 @@
-# Cline Setup
+# Cline (VS Code) Setup Guide — btcrecover skill
+
+Cline is an AI coding agent that runs inside VS Code. It supports the
+SKILL.md format and can use both local models (via Ollama) and cloud APIs.
+
+---
 
 ## Installation
 
-Cline (VS Code) supports skills via the `skills` directory or direct loading.
+### Option 1 — Verified installer
 
-### Method 1: Direct Load
+```bash
+curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+# Select option 3: .vscode/skills/ (Cline)
+```
 
-1. Start Cline
-2. Use the skill loading command (if available) or manually load the SKILL.md file.
-3. Cline will load the skill and make it available for use.
+### Option 2 — Manual
 
-### Method 2: Manual Installation
+```bash
+git clone https://github.com/[yourusername]/btcrecover-skill
+mkdir -p .vscode/skills/
+cp -r btcrecover-skill .vscode/skills/
+chmod +x .vscode/skills/btcrecover-skill/scripts/*.sh
+```
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/3rdIteration/btcrecover-skill.git
-   ```
-2. Copy the `btcrecover-skill` directory to your Cline skills directory.
-3. Restart Cline and the skill will be available.
+Skills directories in Cline:
 
-## Usage
+| Scope | Path | Use case |
+|---|---|---|
+| Project-level | `.vscode/skills/` | Per-project, shared via git |
+| Global | `~/.vscode/skills/` | Available in all VS Code projects |
 
-Once loaded, describe your wallet recovery situation in plain English:
-> "I think I lost my Bitcoin wallet password. I remember it had something to do with my dog's name and my birth year."
+---
 
-The skill will guide you through the recovery process with step-by-step instructions.
+## Model configuration for recovery
 
-## Configuration
+For **Tier 1 offline recovery** (recommended), point Cline at a local
+Ollama model:
 
-No special configuration is required. The skill works out-of-the-box with Cline's default settings.
+1. Install Ollama: `curl -fsSL https://ollama.com/install.sh | sh`
+2. Pull a model: `ollama pull qwen3:14b`
+3. In VS Code: Cline settings → API Provider → OpenAI Compatible
+4. Base URL: `http://127.0.0.1:11434/v1`
+5. API Key: (leave blank)
+6. Model: `qwen3:14b`
 
-## Notes
+For **Tier 2 cloud reasoning**, use your preferred cloud API:
+- Anthropic: set ANTHROPIC_API_KEY in Cline settings
+- OpenAI: set OPENAI_API_KEY in Cline settings
+- OpenRouter: set OPENROUTER_API_KEY for access to 200+ models
 
-- Cline provides excellent integration with VS Code and various LLM providers.
-- For maximum privacy, consider using local models (Ollama) with Cline if supported.
-- The skill is designed to work seamlessly with Cline's skill system.
+---
+
+## Triggering the skill
+
+In VS Code with Cline open:
+- Type `/skills btcrecover` to explicitly invoke
+- Or describe your situation: "I need to recover my Bitcoin wallet password"
+
+---
+
+## Important note for Windows VS Code users
+
+Cline's terminal uses PowerShell by default. The recovery skill's scripts
+are bash. Change the integrated terminal to bash:
+
+```json
+// .vscode/settings.json
+{
+  "terminal.integrated.defaultProfile.windows": "Git Bash"
+}
+```
+
+Or use VS Code with WSL2 (recommended for this skill on Windows):
+- Install WSL2: `wsl --install`
+- Open VS Code in WSL: `code .` from inside a WSL terminal
