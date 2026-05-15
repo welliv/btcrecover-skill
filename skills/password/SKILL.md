@@ -131,6 +131,32 @@ Show the command. Wait for approval. Run.
 
 When the user has an encrypted paper wallet, brain wallet, warp wallet, or raw private key, skip wallet extract and use the appropriate mode:
 
+### Known Issue: hash160 Error (btcrecover 1.13.0)
+
+If btcrecover exits immediately with:
+```
+UnboundLocalError: cannot access local variable 'hash160'
+where it is not associated with a value
+```
+
+This is a known upstream bug in btcrecover 1.13.0 affecting these wallet types when used in passphrase/BIP39 recovery mode:
+- `--wallet-type ripple` (XRP)
+- `--wallet-type tron`
+- `--wallet-type zilliqa`
+- `--warpwallet` with certain address formats
+
+**Workaround — update btcrecover:**
+```bash
+cd ~/btcrecover    # or wherever btcrecover is installed
+git pull
+pip install -r requirements.txt --upgrade --quiet
+```
+
+Then re-run the command. The bug is fixed in later commits.
+
+**Report it upstream** — a single bug report helps the next person:
+https://github.com/3rdIteration/btcrecover/issues
+
 ### BIP38 Paper Wallet
 
 ```bash
@@ -165,6 +191,19 @@ Force compressed only:
 ```bash
 python btcrecover.py --brainwallet --addrs 3C4d... --skip-uncompressed --passwordlist passwords.txt
 ```
+
+**How to choose compressed vs uncompressed:**
+
+| Address format | Flag to add | Notes |
+|---|---|---|
+| `bc1q...` (Native SegWit) | `--skip-uncompressed` | Always compressed |
+| `3...` (P2SH SegWit) | `--skip-uncompressed` | Always compressed |
+| `1...` (Legacy P2PKH) | Omit both flags | Try both — halves false negatives |
+
+When in doubt, omit both flags (default: tries both). This doubles the search space but guarantees you won't miss the address.
+
+Early brainwallets (pre-2013, from Bitaddress.org): use `--skip-compressed`.
+Modern wallets and tools: use `--skip-uncompressed`.
 
 ### Warpwallet
 
@@ -244,19 +283,42 @@ For non-Bitcoin wallets, add `--wallet-type`:
 
 ### SLIP39 Passphrase Recovery (Shamir shares + passphrase)
 
+> **Version note:** SLIP39 passphrase support has changed across btcrecover versions. If you see:
+> `TypeError: config_mnemonic() got an unexpected keyword argument 'passphrases'`
+> update btcrecover first: `git pull && pip install -r requirements.txt`
+
+SLIP39 passphrases are recovered via seedrecover.py (not btcrecover.py):
+
 ```bash
-python btcrecover.py --slip39 \
+python seedrecover.py \
+  --slip39 \
   --mnemonic "share1word1 share1word2 ... share2word1 share2word2 ..." \
-  --tokenlist passphrase.txt \
-  --addrs bc1q... --addr-limit 100
+  --passphrase-arg "candidate_passphrase" \
+  --addrs bc1q... \
+  --addr-limit 10
 ```
 
-For SLIP39 with typos on the shares themselves:
+For a passwordlist rather than a single passphrase:
 ```bash
-python btcrecover.py --slip39 \
+python seedrecover.py \
+  --slip39 \
   --mnemonic "share words here..." \
-  --typos 2 --tokenlist passphrase.txt \
-  --addrs ... --addr-limit 100
+  --seedlist passphrases.txt \
+  --addrs bc1q... --addr-limit 10
+```
+
+For shares with typos (separate from passphrase recovery):
+```bash
+python seedrecover.py --slip39 \
+  --mnemonic "share words here..." \
+  --typos 2
+```
+
+With missing word (big-typo = completely different word):
+```bash
+python seedrecover.py --slip39 \
+  --mnemonic "share words here..." \
+  --big-typos 1
 ```
 
 ## Phase 5c: GPU Acceleration
@@ -348,6 +410,8 @@ python btcrecover.py \
 # Resume an interrupted run
 python btcrecover.py --restore progress.sav
 ```
+
+> **Note:** `--autosave` is only available in `btcrecover.py` (wallet password recovery). It is NOT available in `seedrecover.py`. For interrupted seed recovery sessions, use `--skip N` to resume from a known offset — see the seed subskill for details.
 
 Translate progress to: "X% complete, about Y hours left."
 

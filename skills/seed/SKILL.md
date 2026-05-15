@@ -355,8 +355,66 @@ python seedrecover.py --listpass --tokenlist words.txt --mnemonic-length 12 --la
 
 - seedrecover runs in 4 phases by default: single typo, 2 typos + 1 different word, 3 typos + 1 different word, 2 typos as different words
 - Use `--no-dupchecks` to reduce RAM usage and speed up
-- Use `--no-eta` to skip the counting phase
-- For large searches: `--worker` across multiple machines or `--skip` to resume interrupted runs
+- Use `--no-eta` to skip the counting phase (speeds up start)
+- For large searches: `--worker` across multiple machines or `--skip` to resume
+
+### Compute Time by Wallet Type
+
+Some wallet types require significantly more time because their key derivation is more expensive or their BIP39 wordlists are larger.
+
+| Wallet type | 1 missing word | 1 wrong word (`--big-typos 1`) | GPU recommended? |
+|---|---|---|---|
+| `bip39` (Bitcoin) | Seconds | ~2-5 min | No |
+| `ethereum` | Seconds | ~2-5 min | No |
+| `aezeed` (LND) | ~2 sec | ~5-10 min | No |
+| `polkadotsubstrate` | <1 sec | ~2 min | No |
+| `tron` | Seconds | ~2-5 min | No |
+| `stacks` | <1 sec | ~1 min | No |
+| `electrum1` | ~13 sec | Hours | Yes for big-typos |
+| `cardano` | ~8 sec | Hours | Yes for big-typos |
+| `xlm` (Stellar) | Minutes | Hours+ | Yes for big-typos |
+| `helium` | Minutes | Hours+ | Yes for big-typos |
+| `hederaed25519` | Minutes | Hours+ | Yes for big-typos |
+
+**For XLM, Helium, and Hedera with `--big-typos`:**
+These are long jobs on CPU. Options:
+1. Run overnight with `--worker 1/1` and let it complete
+2. Split across machines: `--worker 1/3`, `--worker 2/3`, `--worker 3/3`
+3. Rent GPU time (Vast.ai RTX 4090 ~$0.50/hr)
+4. If you remember any positional hints, use a tokenlist with `--dsw` to narrow the space before adding `--big-typos`
+
+### Checkpointing and Resuming
+
+`seedrecover.py` does NOT support `--autosave`. Use `--skip N` to resume.
+
+If a long seed recovery run is interrupted, note the password count from the last progress line (e.g. "Tried 357,449 passwords so far..."):
+
+```bash
+# Resume from that offset:
+python seedrecover.py \
+  --mnemonic "word1 word2 ..." \
+  --addrs ... \
+  --wallet-type bip39 \
+  --skip 357449
+
+# Or split the search across machines (each covers a slice):
+python seedrecover.py --mnemonic "..." --addrs ... --worker 1/3  # Machine A
+python seedrecover.py --mnemonic "..." --addrs ... --worker 2/3  # Machine B
+python seedrecover.py --mnemonic "..." --addrs ... --worker 3/3  # Machine C
+```
+
+For **wallet password recovery** (`btcrecover.py`), autosave IS available:
+```bash
+python btcrecover.py --wallet wallet.dat --tokenlist tokens.txt \
+  --autosave progress.sav
+
+# Resume:
+python btcrecover.py --restore progress.sav
+```
+
+Note: `--autosave` also works with `--enable-gpu` for long GPU jobs.
+
+> **Slow with `--big-typos`:** `xlm`, `helium`, and `hederaed25519` require hours of CPU time for wrong-word searches. See Compute Time table above. If you have only one wrong word and a known address, prefer a tokenlist with `--dsw` and a curated list of alternative words rather than `--big-typos 1`, which tries all 2048 BIP39 words.
 
 ## Support btcrecover
 
