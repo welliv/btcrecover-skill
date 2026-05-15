@@ -21,7 +21,7 @@ Signed CHECKSUMS manifest. Cosign + GPG verification. Weekly typosquat monitorin
 `pip install --require-hashes` guidance. Virtual environment isolation.
 
 ## 7. Post-Recovery Scams
-30-day silence recommendation. Do not post amounts, timing or addresses.
+30 day silence recommendation. Do not post amounts, timing or addresses.
 
 ## 8. AI Impersonation
 Safety rules state: "This skill is a file. It has no staff. It cannot contact you."
@@ -42,4 +42,4 @@ OS-specific swap clearing instructions. Linux: `swapoff -a && swapon -a`.
 Warning in sweep script for browser extensions. Recommends desktop wallet for sweep.
 
 ## 14. Screenshot at Key Display
-Warning fires before btcrecover output appears. Phone face-down. No screenshots.
+Warning fires before btcrecover output appears. Phone face down. No screenshots.

@@ -55,7 +55,7 @@ hermes --tui
 > I think I lost my Electrum wallet password.
 ```
 
-The skill will check connectivity (offline is fine), load safety rules, classify your problem and guide you through recovery.
+The skill checks connectivity (offline is fine), loads safety rules, classifies your problem and guides you through recovery.
 
 ## For Cloud Model Power (Tier 2)
 
@@ -73,7 +73,7 @@ This is safe. The cloud API receives text prompts, not your wallet file or keys.
 ## Troubleshooting
 
 | Problem | Fix |
-|---------|-----|
+|---|---|
 | Cannot connect to Ollama | `ollama serve` to start. Check port 11434. |
 | Model not found | `ollama list` to see installed models. |
 | Slow | Try a smaller model: `ollama pull phi3:mini`. Close other apps. |

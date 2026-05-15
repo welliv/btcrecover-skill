@@ -26,7 +26,7 @@ User describes situation
 
 ## Step 0: First Run
 
-Show DISCLAIMER.md. User types `ACCEPT`. Log to `consent.log`. One time only.
+Show DISCLAIMER.md. User types `ACCEPT`. Log to `consent.log`. Once only.
 
 ## Step 0: Verify btcrecover
 
@@ -34,7 +34,7 @@ Show DISCLAIMER.md. User types `ACCEPT`. Log to `consent.log`. One time only.
 bash scripts/verify-btcrecover.sh
 ```
 
-Checks remote URL against official repo. Checks for known malicious forks. Halts on failure.
+Checks remote URL against the official repo. Detects known malicious forks. Halts on failure.
 
 ## Step 1: Connectivity
 
@@ -42,7 +42,7 @@ Checks remote URL against official repo. Checks for known malicious forks. Halts
 bash scripts/connectivity-check.sh
 ```
 
-Checks: ICMP ping, DNS resolution, TCP port 53. Also detects active interfaces and cloud sync processes.
+Checks ICMP ping, DNS resolution and TCP port 53. Also detects active interfaces and cloud sync processes.
 
 Exit 0 = offline (safe). Exit 1 = online (requires tier choice).
 
@@ -68,7 +68,7 @@ Read `references/benchmarks.json`. Calculate expected value:
 EV = (task_score × evidence_multiplier) - cost_penalty - risk_penalty
 ```
 
-Recommend the top model in plain English.
+Recommend the best model. No jargon.
 
 ## Step 3: Classify Problem
 
@@ -86,11 +86,10 @@ Rate evidence: high, medium or low.
 
 Load the right subskill. For each command:
 
-1. Show it in plain English
-2. Explain what it does
-3. Wait for approval
-4. Run it
-5. Report results
+1. Show it. Explain what it does.
+2. Wait for approval.
+3. Run it.
+4. Report results.
 
 ## Step 5: Long Sessions
 
@@ -100,7 +99,7 @@ Jobs over 30 minutes:
 bash scripts/session-manager.sh start
 ```
 
-Wraps btcrecover in screen/tmux with automatic checkpointing. Reports progress in plain English.
+Wraps btcrecover in screen or tmux with automatic checkpointing. Reports progress in plain English.
 
 ## Step 6: Progress Briefings
 
@@ -121,7 +120,7 @@ When btcrecover finds the credential:
 bash scripts/sweep-reminder.sh
 ```
 
-Six steps with Enter gates:
+Six steps, press Enter between each:
 1. Reframe: accessible is not safe
 2. Create new wallet on clean device
 3. Verify receive address (8 characters)
@@ -136,21 +135,39 @@ bash scripts/nuke-session.sh
 
 Deletes tokenlists, extracts, clipboard, shell history, scrollback.
 
+## Test Prompts
+
+Run these to validate the skill:
+
+```text
+"I lost my Bitcoin Core wallet password. I think it was a pet name with numbers."
+
+"I have 12 seed words but three of them might be wrong. Help me recover."
+
+"I found an old USB stick with wallet files. Not sure what type."
+
+"I remember the password had leet speak in it. Like @ for a and 3 for e."
+
+"I have the wallet file but the password changed in 2020. Is there an older backup?"
+```
+
+Each prompt should trigger a different subskill (password, seed, forensics, typo mutations and forensics).
+
 ## Security
 
 ### Three Tiers
 
 **Tier 1 — Fully offline**
-Local AI, no internet, btcrecover local. No one sees your keys. Recommended for wallets over $1,000.
+Local AI, no internet. No one sees your keys. Best for wallets over $1,000.
 
 **Tier 2 — Local agent + cloud API**
-Hermes on your machine calls a cloud API. Wallet file stays local. Text prompts only. Consent: "I UNDERSTAND".
+Your machine calls a cloud API. Wallet file stays local. Text prompts only. Consent: "I UNDERSTAND".
 
 **Tier 3 — Fully online**
 Use with caution. Consent: "I UNDERSTAND AND ACCEPT". Sweep immediately.
 
 ### Key Distinction
-Tier 2 is not Tier 3. In Tier 2, the cloud API receives text prompts, never your wallet file or keys. You run the commands locally. In Tier 3, the platform itself controls the environment.
+Tier 2 is not Tier 3. In Tier 2, only text prompts go to cloud — your wallet file and keys never leave your machine. You run the commands locally. In Tier 3, the platform itself controls the environment.
 
 ## What This Skill Never Does
 
@@ -158,7 +175,7 @@ Tier 2 is not Tier 3. In Tier 2, the cloud API receives text prompts, never your
 - Hold, move or transmit funds
 - Share seed phrases or private keys
 - Store sensitive data in plain text
-- Contact you (it is a file, not a service)
+- Contact you (it's a file, not a service)
 - Guarantee success
 
 ## Compatibility

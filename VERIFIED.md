@@ -1,12 +1,6 @@
 # VERIFIED — btcrecover skill authenticity anchor
 
-This file establishes the canonical identity of the btcrecover skill and
-its author. Use it to verify any installation you did not personally
-download from the canonical source.
-
-If the information in this file does not match what you see at the GitHub
-URL below, or if you received this file from anywhere other than the
-canonical repository, treat the installation as potentially compromised.
+Use this file to verify any installation you did not download from the canonical source. If the information here doesn't match what you see at the GitHub URL below, or if you received this file from anywhere else, treat the installation as potentially compromised.
 
 ---
 
@@ -16,15 +10,13 @@ canonical repository, treat the installation as potentially compromised.
 https://github.com/welliv/btcrecover-skill
 ```
 
-This is the only official repository. Every other copy is either a fork
-(which you should verify separately) or a fake.
+This is the only official repository. Every other copy is either a fork (verify separately) or a fake.
 
 ---
 
 ## Author identity — cross-verified
 
-The following accounts all belong to the same person. Each proof is
-cryptographically signed and publicly auditable on Keybase.
+These accounts all belong to the same person. Each proof is cryptographically signed and publicly auditable on Keybase.
 
 | Platform | URL |
 |---|---|
@@ -32,7 +24,7 @@ cryptographically signed and publicly auditable on Keybase.
 | GitHub | https://github.com/welliv |
 | X (Twitter) | https://x.com/welliv |
 
-To verify these identities are linked:
+To verify:
 
 ```bash
 # Install Keybase: https://keybase.io/download
@@ -49,13 +41,10 @@ keybase id welliv
 Example format: DEAD BEEF 1234 5678 ABCD  EF01 2345 6789 ABCD EF01
 ```
 
-Import the author's public key:
+Import and verify:
 
 ```bash
-# From Keybase (recommended)
 curl https://keybase.io/welliv/key.asc | gpg --import
-
-# Then verify a signed release:
 gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
 ```
 
@@ -63,9 +52,7 @@ gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
 
 ## Sigstore / Cosign identity
 
-Every release is signed via GitHub Actions using Sigstore's keyless
-signing. The signing event is recorded in the Rekor transparency log —
-a tamper-resistant public record that cannot be altered after the fact.
+Every release is signed via GitHub Actions using Sigstore's keyless signing, recorded in the Rekor transparency log — a tamper-resistant public record.
 
 ```
 Certificate identity:
@@ -75,11 +62,9 @@ OIDC issuer:
   https://token.actions.githubusercontent.com
 ```
 
-Verify a release with Cosign:
+Verify with Cosign:
 
 ```bash
-# Install cosign: https://docs.sigstore.dev/cosign/system_config/installation/
-
 cosign verify-blob \
   --bundle CHECKSUMS.sha256.bundle \
   --certificate-identity-regexp="github.com/welliv" \
@@ -93,8 +78,7 @@ cosign verify-blob \
 
 ## File integrity
 
-Every official release includes a `CHECKSUMS.sha256` file containing
-SHA256 hashes of all skill files. Verify your installation:
+Every release includes `CHECKSUMS.sha256` containing SHA256 hashes of all skill files.
 
 ```bash
 sha256sum -c CHECKSUMS.sha256
@@ -106,8 +90,7 @@ sha256sum -c CHECKSUMS.sha256
 
 ## One-command verified install
 
-The safest way to install. Does Cosign verification, GPG verification,
-and SHA256 file integrity check automatically:
+Does Cosign, GPG, and SHA256 checks automatically:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
@@ -134,8 +117,7 @@ Use this list to detect fakes and scams:
 ✗  Offers to run the recovery for you remotely
 ```
 
-The skill is a file. It has no staff. It cannot contact you. Anyone who
-does any of the above in the name of this skill is a scammer.
+The skill is a file. It has no staff. It cannot contact you. Anyone doing any of the above in its name is a scammer.
 
 ---
 
@@ -144,25 +126,18 @@ does any of the above in the name of this skill is a scammer.
 1. Do not interact with it further
 2. Do not share any wallet data, seed phrases, or private keys
 3. Open an issue at the canonical GitHub URL above
-4. If you sent any funds to an address provided by the fake:
-   contact local law enforcement and file a report at ic3.gov (US)
-   or actionfraud.police.uk (UK)
+4. If you sent funds to an address provided by the fake: contact local law enforcement and file a report at ic3.gov (US) or actionfraud.police.uk (UK)
 
 ---
 
 ## Reporting impersonators and typosquats
 
-If you find a package on skills.sh, GitHub, npm, or any other platform
-that appears to be impersonating this skill:
+If you find a package on skills.sh, GitHub, npm, or any platform impersonating this skill, open an issue at: https://github.com/welliv/btcrecover-skill/issues
 
-Open an issue at: https://github.com/welliv/btcrecover-skill/issues
 Title it: `[IMPERSONATION] found fake skill at [URL]`
 
-Include the URL and any details you have. We will investigate and file
-takedown requests where applicable.
+Include the URL and any details. We will investigate and file takedown requests where applicable.
 
 ---
 
-*This file is part of every official release and its SHA256 hash is
-included in CHECKSUMS.sha256. If the hash of this file does not match
-the CHECKSUMS.sha256 in the same release, the file has been tampered with.*
+*This file is part of every official release and its SHA256 hash is included in CHECKSUMS.sha256. If the hash doesn't match, the file has been tampered with.*

@@ -20,7 +20,7 @@ set -euo pipefail
 
 BTCRECOVER_PATH="${1:-}"
 
-# --- Colors ---
+# --- Colours ---
 if [ -t 1 ]; then
     RED='\033[0;31m' GREEN='\033[0;32m' YELLOW='\033[1;33m'
     BOLD='\033[1m' DIM='\033[2m' NC='\033[0m'

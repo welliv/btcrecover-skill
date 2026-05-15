@@ -61,7 +61,7 @@ That moment is why this skill exists.
 
 The cprkrn story revealed two problems sitting on top of each other.
 
-**The technical problem:** btcrecover is a powerful, well-maintained, and
+**The technical problem:** btcrecover is a powerful, well maintained, and
 extensively documented tool. But it requires technical knowledge to use.
 You need to understand wallet formats, extraction scripts, tokenlist syntax,
 typo flags, derivation paths, and GPU acceleration. Most people who have
@@ -84,7 +84,7 @@ can use it safely" is exactly where this skill lives.
 **Simply, simple, stupid, and safe.**
 
 A non-technical user should be able to describe their situation in plain
-English, provide the details they have, and receive guided, step-by-step
+English, provide the details they have, and receive guided, step by step
 help through recovery — with every dangerous decision made safe by default,
 every technical complexity abstracted away, and every scam vector anticipated
 and defended against.
@@ -125,7 +125,7 @@ btcrecover-skill/
 │   │   └── release.yml           ← Auto-signing workflow (Cosign + GPG on every tag)
 │   └── CODEOWNERS                ← Security-critical file ownership rules
 │
-├── references/                   ← Data and rules (loaded by sub-skills on demand)
+├── references/                   ← Data and rules (loaded by subskills on demand)
 │   ├── safety-rules.md           ← Immutable security rules (read every session)
 │   ├── benchmarks.json           ← AI model performance data + game-theory router
 │   ├── wallet-types.md           ← Per-wallet recovery commands and GPU benchmarks
@@ -140,7 +140,7 @@ btcrecover-skill/
 │   ├── benchmark-updater.py      ← Self-updating model benchmark fetcher
 │   └── typosquat-monitor.py      ← Weekly fake skill detection (GitHub + skills.sh)
 │
-├── skills/                       ← Sub-skills (loaded by SKILL.md per recovery type)
+├── skills/                       ← Subskills (loaded by SKILL.md per recovery type)
 │   ├── password/
 │   │   └── SKILL.md              ← Password and passphrase recovery (8 phases)
 │   ├── seed/
@@ -197,7 +197,7 @@ L3 — Sub-skills (loaded per recovery type)
      skills/forensics/SKILL.md  → file archaeology
 
 L4 — References and scripts (loaded on demand)
-     references/ files loaded only when the sub-skill needs them
+     references/ files loaded only when the subskill needs them
      scripts/ executed only when the user approves each command
 ```
 
@@ -229,10 +229,10 @@ User describes situation (plain English)
     Classifies: PASSWORD | SEED | FORENSIC | HYBRID
           │
           ▼
-    Routes to appropriate sub-skill
+    Routes to appropriate subskill
           │
           ▼
-    Sub-skill builds btcrecover command
+    Subskill builds btcrecover command
     Shows command to user in plain English
     User approves → runs (never auto-executes)
           │
@@ -262,7 +262,7 @@ The L2 skill file. Seven mandatory steps:
 - **Step 1**: Connectivity gate via `connectivity-check.sh`.
 - **Step 2**: Model recommendation via `references/benchmarks.json`.
 - **Step 3**: Natural language triage interview. Classifies recovery type.
-- **Step 4**: Routes to sub-skill. Builds and previews btcrecover command.
+|- **Step 4**: Routes to subskill. Builds and previews btcrecover command.
 - **Step 5**: Long-session management via `session-manager.sh`.
 - **Step 6**: Progress briefing at each milestone.
 - **Step 7**: Post-recovery protocol via `sweep-reminder.sh` then `nuke-session.sh`.
@@ -448,7 +448,7 @@ Six problem classifications with distinct strategies:
 - **INVALID**: Checksum failure. Last word has ~128 valid options if all others
   correct. Tokenlist approach for multiple wrong words.
 - **WRONG_COIN**: Systematic derivation path check — BIP44/49/84/86 in order.
-- **EXTRA_PASSPHRASE**: Routes to password sub-skill for passphrase recovery.
+|- **EXTRA_PASSPHRASE**: Routes to password subskill for passphrase recovery.
 
 Covers: BIP39, SLIP39, Electrum 1.x/2.x. Multi-language wordlists.
 Address database method for recovery without a known address.
@@ -466,7 +466,7 @@ The cprkrn scenario. Nine phases:
 4. Identify and sort candidates (by modification date, magic bytes, md5
    deduplication)
 5. Cloud storage and email search (Dropbox, Google Drive, IMAP)
-6. Triage results and hand-off to appropriate sub-skill
+6. Triage results and hand-off to appropriate subskill
 7. **The cprkrn Protocol**: named procedure for finding pre-password-change
    backups. The pattern that resolved the cprkrn case.
 8. Corrupted file handling (bsddb3, testdisk, photorec)
@@ -585,7 +585,7 @@ What the user never sees:
 | SEED | Missing or wrong BIP39/SLIP39 words | seed/ | Seconds to weeks |
 | PASSPHRASE | Forgotten BIP39 25th word | password/ (passphrase mode) | Seconds to days |
 | FORENSIC | Unknown wallet file location | forensics/ | 30 min to 2 hours |
-| HYBRID | Multiple issues combined | All sub-skills in sequence | Variable |
+| HYBRID | Multiple issues combined | All subskills in sequence | Variable |
 
 ### Evidence quality and its effect on recovery
 
@@ -783,7 +783,7 @@ Run mandatory before first session.
 **5. Poisoned SKILL.md (HIGH)**
 Fix: Signed CHECKSUMS manifest. Cosign + GPG verification in install.sh.
 Typosquat monitoring via `scripts/typosquat-monitor.py` (weekly cron).
-Prompt injection awareness added to forensics sub-skill.
+Prompt injection awareness added to forensics subskill.
 
 **6. Compromised Python dependencies (MEDIUM)**
 Fix: `pip install --require-hashes` guidance. Virtual environment for
@@ -806,7 +806,7 @@ from scams. Key red flags: upfront fee, Telegram/Gmail-only contact, 100%
 success guarantee, seed phrase required for "verification."
 
 **10. Prompt injection via wallet file metadata (MEDIUM)**
-Fix: Forensics sub-skill explicitly instructs the AI to treat all file
+Fix: Forensics subskill explicitly instructs the AI to treat all file
 names and metadata as untrusted data, not instructions.
 
 ### Category 4 — Operational

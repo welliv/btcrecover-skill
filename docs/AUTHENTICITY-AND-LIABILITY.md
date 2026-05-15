@@ -2,7 +2,7 @@
 
 ## Anti-Impersonation
 
-The skill uses several mechanisms to prove it is genuine:
+The skill uses several mechanisms to prove it's genuine:
 
 1. GPG commit signing (verified by GitHub)
 2. Cosign keyless signing on every release (recorded in Rekor transparency log)
@@ -12,7 +12,7 @@ The skill uses several mechanisms to prove it is genuine:
 
 ## Liability
 
-**Disclaimer.** The software is provided "as is", without warranty. The user assumes all risk.
+**Disclaimer.** The software is provided "as is", without warranty. You assume all risk.
 
 **Your responsibilities:**
 - Verify any tools you use (btcrecover, etc.)

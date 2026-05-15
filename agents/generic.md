@@ -129,14 +129,14 @@ Regardless of which agent or method you use, the skill requires:
 
 1. **The LLM can read the full SKILL.md** (~5,000 tokens) in context
 2. **The LLM supports a context window of at least 16,000 tokens**
-   (for longer recovery sessions with sub-skills loaded)
+   (for longer recovery sessions with subskills loaded)
 3. **You have a terminal** where you can run the btcrecover commands
    the skill generates
 4. **btcrecover is installed** on your machine:
    `git clone https://github.com/3rdIteration/btcrecover`
 
 If your model has a very small context window (<8K tokens), load only
-the relevant sub-skill instead of the full SKILL.md:
+the relevant subskill instead of the full SKILL.md:
 - Password recovery: paste `skills/password/SKILL.md`
 - Seed recovery: paste `skills/seed/SKILL.md`
 - File archaeology: paste `skills/forensics/SKILL.md`
