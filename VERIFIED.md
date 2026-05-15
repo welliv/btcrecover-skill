@@ -21,6 +21,25 @@ This is the only official repository. Every other copy is either a fork (verify 
 | GitHub | https://github.com/welliv |
 | X (Twitter) | https://x.com/welliv |
 
+## How to verify authenticity
+
+**Commit signing.** Every commit in this repository should show a "Verified" badge on GitHub, proving it was signed by the account owner's GPG key.
+
+To check: visit [the commit history](https://github.com/welliv/btcrecover-skill/commits/main) and confirm commits show the green "Verified" badge. Any commit without it was not made by the repository owner.
+
+**Clone only from the canonical URL:**
+```bash
+git clone https://github.com/welliv/btcrecover-skill
+```
+
+After cloning, check the remote:
+```bash
+git remote -v
+# Should show: origin  https://github.com/welliv/btcrecover-skill
+```
+
+If the remote URL is anything other than the canonical URL above, the installation is not from this repository.
+
 ---
 
 ## What the real skill NEVER does

@@ -33,13 +33,30 @@ User describes situation
 
 Show DISCLAIMER.md. User types `ACCEPT`. Log to `consent.log`. Once only.
 
-## Step 0: Verify btcrecover
+## Step 0: Setup and Verify btcrecover
 
+Check for the marker file `~/.btcrecover-skill/.btcrecover-verified`.
+
+**If marker exists (returning user):** run verify only:
 ```bash
 bash scripts/verify-btcrecover.sh
 ```
+- Exit 0: verified — proceed to Step 1.
+- Exit 1: suspicious fork detected — show warning, refuse to continue until user reinstalls from the official source.
+- Exit 2: btcrecover missing (deleted or moved) — offer to re-run setup.
 
-Checks remote URL against the official repo. Detects known malicious forks. Halts on failure.
+**If marker does not exist (first run):** tell the user warmly:
+> "Before we start, I need to set up btcrecover — the open-source tool that does the actual recovery work. One-time setup, takes about a minute."
+
+Then run:
+```bash
+bash scripts/setup-btcrecover.sh
+```
+- Exit 0: ready — proceed to Step 1.
+- Exit 1: failed or declined — explain what is needed and wait.
+- Exit 2: prerequisites missing (Python/git) — show the install instructions from the script output and pause until the user confirms they are installed.
+
+If btcrecover is missing at any later step, do not show a raw error. Say: "It looks like btcrecover is missing — let me set that up." Then run `setup-btcrecover.sh` and resume.
 
 ## Step 1: Connectivity
 
@@ -48,6 +65,11 @@ bash scripts/connectivity-check.sh
 ```
 
 Checks ICMP ping, DNS resolution and TCP port 53. Also detects active interfaces and cloud sync processes.
+
+**Exit codes:**
+- `2` = OFFLINE — green light. Proceed to Step 2.
+- `0` = FULLY ONLINE — show tier selection below.
+- `1` = PARTIAL (some layers blocked) — treat as online, show tier selection.
 
 ### Offline Verification (Mandatory)
 

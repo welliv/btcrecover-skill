@@ -95,17 +95,26 @@ secure_delete() {
     echo "  Deleted: $target"
 }
 
-# 1. Session base directory
+# 1. Session artefacts (NOT btcrecover/ or venv/ — those are preserved for future sessions)
 echo "[1/8] Session files..."
 if [[ -d "$SESSION_DIR" ]]; then
-    # Delete everything except the nuke log (which we write last)
-    find "$SESSION_DIR" -type f ! -name "nuke.log" -print0 2>/dev/null | while IFS= read -r -d '' f; do
+    # Only delete named session artefacts, never the btcrecover install or venv
+    SESSION_ARTEFACTS=(
+        "$SESSION_DIR/consent.log"
+        "$SESSION_DIR/session.log"
+        "$SESSION_DIR/session.pid"
+        "$SESSION_DIR/recovery.log"
+        "$SESSION_DIR/recovery.checkpoint"
+        "$SESSION_DIR/btcrecover.log"
+    )
+    for f in "${SESSION_ARTEFACTS[@]}"; do
         secure_delete "$f"
     done
-    # Remove empty directories
-    if [[ "$DRY_RUN" != true ]]; then
-        find "$SESSION_DIR" -type d -empty -delete 2>/dev/null || true
-    fi
+    # Also remove any old nuke logs from previous sessions
+    for f in "$SESSION_DIR"/nuke-*.log; do
+        [[ -f "$f" ]] && secure_delete "$f"
+    done
+    # Preserve: btcrecover/ venv/ .btcrecover-verified .accepted nuke.log
 else
     echo "  No session directory found."
 fi
