@@ -58,7 +58,18 @@ bash scripts/setup-btcrecover.sh
 
 If btcrecover is missing at any later step, do not show a raw error. Say: "It looks like btcrecover is missing — let me set that up." Then run `setup-btcrecover.sh` and resume.
 
-## Step 1: Connectivity
+## Step 1: Connectivity — HARD GATE
+
+🚫 **You MUST NOT proceed past this step without exit 0 from `connectivity-check.sh --enforce`.**
+
+Exit 0 means either:
+- User is verified **offline** (Tier 1 — safe to proceed)
+- User has typed explicit **consent** to proceed online (Tier 2 or 3)
+
+Without exit 0, you MUST NOT ask for or accept any sensitive data:
+seed phrases, private keys, wallet files, passphrases, or addresses.
+
+### Step 1a — Initial connectivity check
 
 ```bash
 bash scripts/connectivity-check.sh
@@ -67,52 +78,47 @@ bash scripts/connectivity-check.sh
 Checks ICMP ping, DNS resolution and TCP port 53. Also detects active interfaces and cloud sync processes.
 
 **Exit codes:**
-- `2` = OFFLINE — green light. Proceed to Step 2.
-- `0` = FULLY ONLINE — show tier selection below.
-- `1` = PARTIAL (some layers blocked) — treat as online, show tier selection.
+- `2` = OFFLINE — run `--enforce` to confirm (will auto-pass). Then proceed to Step 2.
+- `0` = FULLY ONLINE — run `--enforce` for interactive tier consent.
+- `1` = PARTIAL (some layers blocked) — treat as online, run `--enforce`.
 
-### Offline Verification (Mandatory)
+### Step 1b — Enforce gate (do not skip)
 
-Before any secret handling — wallet files, seed phrases, private keys, passphrases — confirm disconnection:
-
-1. Tell the user: **Disconnect from Wi-Fi, Ethernet, mobile data, and any VPN.**
-2. Verify with:
-   ```bash
-   ping -c 2 8.8.8.8
-   nslookup github.com
-   ```
-3. Both must **fail**. Do not proceed unless offline is confirmed.
-
-### Split-Workflow (When User Can't Go Offline)
-
-If the user cannot or will not disconnect:
-
-**Seed recovery (mnemonic):** Never ask for the real mnemonic online. Build commands with placeholder words. Let the user substitute their real words locally.
-
-**Password/passphrase recovery:** Build the tokenlist online (safe — it's just word fragments, not keys). Keep the wallet file off the connected machine. Use `--data-extract` (see password subskill Phase 5) to create a portable data string if renting cloud GPU:
 ```bash
-# On disconnected machine:
-python btcrecover.py --data-extract --wallet wallet.dat > data.b64
-
-# Send data.b64 (safe, contains only password-hash material)
-# to the cloud machine for brute-force
+bash scripts/connectivity-check.sh --enforce
 ```
 
-When the connectivity check reports online:
+This is the **hard gate**. The script is interactive — it shows the tier menu
+and blocks until the user types one of:
 
-```
-TIER 1 — Fully offline (recommended)
-  Disconnect internet. Use local AI. Maximum security.
+| Input | Tier | Meaning |
+|-------|------|---------|
+| `DISCONNECTED` | Tier 1 | Confirms offline. Script re-checks connectivity. |
+| `TIER2 I UNDERSTAND` | Tier 2 | Cloud reasoning only. Keys stay local. |
+| `TIER3 I UNDERSTAND AND ACCEPT` | Tier 3 | Full online. Treat keys as compromised post-recovery. |
 
-TIER 2 — Local agent + cloud API
-  Keys stay local. Only text prompts go to cloud.
-  Type "I UNDERSTAND" to proceed.
-  Wallet file stays on local machine. Never transmit it.
+**Exit 0** — proceed to Step 2.
+**Any other exit** — the script failed or user aborted. Show the output and wait.
 
-TIER 3 — Fully online
-  Last resort. Type "I UNDERSTAND AND ACCEPT" to proceed.
-  Use --data-extract to avoid sharing raw wallet files.
-```
+The script logs consent to `~/.btcrecover-skill/consent.log` with timestamp.
+
+### Security notes for the agent
+
+- **Tier 1 (offline):** Full seed, wallet file, keys — safe to process. Proceed normally.
+- **Tier 2 (cloud reasoning):** Seed words and wallet files stay on local machine.
+  The agent may reason about password patterns, tokenlists, and error messages
+  via the cloud API. btcrecover runs locally.
+  - Seed recovery: use placeholder words, let user substitute locally.
+  - Password recovery: build tokenlist online (word fragments only — safe).
+  - Use `--data-extract` instead of transmitting wallet files.
+- **Tier 3 (fully online):** Last resort. Platform controls environment.
+  Prefer `--data-extract` for wallet hashes. Sweep IMMEDIATELY on success.
+
+### After the gate passes
+
+1. Note the active tier in the session context for later steps (sweep urgency depends on it).
+2. Add sweep urgency notes: Tier 1 → standard. Tier 2 → standard. Tier 3 → IMMEDIATE.
+3. Proceed to Step 2.
 
 ## Step 2: Model Recommendation
 
