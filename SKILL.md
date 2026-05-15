@@ -17,8 +17,9 @@ User describes situation
   → Step 0: Verify btcrecover
   → Step 1: Check connectivity
   → Step 2: Recommend model
-  → Step 3: Classify problem (password/seed/forensics/hybrid)
+  → Step 3: Classify problem (password/seed/passphrase/forensics/hybrid)
   → Step 3b: Pre-Flight Validation (if seed or hybrid)
+  → Step 4: Pick the right tool (btcrecover.py for passwords, seedrecover.py for seeds)
   → Step 4: Route to subskill, build command, user approves
   → Step 5: Manage long sessions
   → Step 6: Report progress
@@ -176,9 +177,23 @@ Run these to validate the skill:
 "I have the wallet file but the password changed in 2020. Is there an older backup?"
 
 "I have my 12 seed words and a known address from the wallet, but I forgot my passphrase. It was a sentence-like phrase, all lowercase."
+
+"I have my 12 seed words but they might be in the wrong order. I know my old address though."
+
+"I have a BIP38 encrypted paper wallet. The private key starts with 6Pn."
+
+"I have a brainwallet address and I remember the passphrase was a book title."
+
+"My seed words are all there but I think 2 words might be swapped."
+
+"I only have 10 of my 12 seed words. I have an address with some transactions on it."
+
+"I have a SLIP39 backup from my Trezor. I have 2 of 3 shares but one word in each share might be wrong."
+
+"I remember my Electrum wallet password was a movie quote with numbers."
 ```
 
-Each prompt should trigger a different subskill (password, seed, forensics, typo mutations, forensics, and hybrid seed+passphrase).
+Each prompt should trigger a different subskill (password, seed, forensics, typo mutations, descrambling, BIP38, brainwallet, hybrid seed+passphrase, swapped words, SLIP39, and wallet password recovery).
 
 ## Security
 

@@ -47,6 +47,8 @@ If confident: `--typos 1` with case swap. If unsure: `--typos 2`. If leet suspec
 
 ## Phase 5: Wallet Extract (Tier 2 Only)
 
+### Standard wallet extracts
+
 Bitcoin Core:
 ```bash
 python extract-bitcoin-hash.py wallet.dat > wallet.extract
@@ -62,7 +64,141 @@ Blockchain.com:
 python extract-blockchain-hash.py wallet.aes.json > wallet.extract
 ```
 
+### Other extract scripts
+
+Full list in `extract-scripts/`:
+```
+extract-bitcoin-mkey.py            extract-multibit-hd-data.py
+extract-bither-partkey.py           extract-blockchain-main-data.py
+extract-blockchain-second-hash.py   extract-multibit-hash.py
+extract-coinomi-privkey.py          extract-dogechain-privkey.py
+extract-metamask-hash.py            extract-metamask-vaults.py
+extract-msigna-partmpk.py           extract-electrum2-partmpk.py
+extract-electrum-halfseed.py        download-blockchain-wallet.py
+```
+
+### Data extract for cloud recovery
+
+Instead of sharing your wallet file with a rented GPU machine, extract a data string:
+```bash
+python btcrecover.py --data-extract --wallet wallet.dat
+```
+
+Then recover on the cloud machine with:
+```bash
+python btcrecover.py --data-extract-string "BASE64..." --tokenlist ...
+```
+
 Show the command. Wait for approval. Run.
+
+## Phase 5b: Special Recovery Modes
+
+When the user has an encrypted paper wallet, brain wallet, warp wallet, or raw private key, skip wallet extract and use the appropriate mode:
+
+### BIP38 Paper Wallet
+
+```bash
+python btcrecover.py \
+  --bip38-enc-privkey "6PnM7h9sBC9EMZxLVsKzpafvBN8zjKp8MZj6h9mfvYEQRMkKBTPTyWZHHx" \
+  --passwordlist passwords.txt
+```
+
+For non-Bitcoin BIP38 (Litecoin, Dash):
+```bash
+python btcrecover.py \
+  --bip38-enc-privkey "6PfVHSTbgRNDaSwddBNgx2vMhMuNdiwRWjFgMGcJPb6J2pCG32SuL3vo6q" \
+  --bip38-currency litecoin \
+  --passwordlist passwords.txt
+```
+
+### Brainwallet
+
+Password-derived keys (any text string → hash → private key):
+
+Default (checks both compressed and uncompressed):
+```bash
+python btcrecover.py --brainwallet --addrs bc1q... --passwordlist passwords.txt
+```
+
+Force uncompressed only:
+```bash
+python btcrecover.py --brainwallet --addrs 1BBR... --skip-compressed --passwordlist passwords.txt
+```
+
+Force compressed only:
+```bash
+python btcrecover.py --brainwallet --addrs 3C4d... --skip-uncompressed --passwordlist passwords.txt
+```
+
+### Warpwallet
+
+Passphrase + salt → key. Needs both passphrase (from passwordlist/tokenlist) and salt:
+```bash
+python btcrecover.py --warpwallet --warpwallet-salt "known-or-guess-salt" \
+  --addrs bc1q... --passwordlist passwords.txt
+```
+
+For Litecoin:
+```bash
+python btcrecover.py --warpwallet --warpwallet-salt "..." \
+  --crypto litecoin --addrs L... --passwordlist passwords.txt
+```
+
+### Raw Private Key
+
+When you have an encrypted raw private key:
+```bash
+python btcrecover.py --rawprivatekey --addrs 0x... --wallet-type ethereum \
+  --tokenlist tokens.txt
+```
+
+Limit tokens to avoid combinatorial explosion:
+```bash
+python btcrecover.py --rawprivatekey --addrs 1EDr... --wallet-type bitcoin \
+  --max-tokens 1 --tokenlist tokens.txt
+```
+
+## Phase 5c: GPU Acceleration
+
+When the search space is large and the user has a GPU:
+
+```bash
+# Bitcoin Core wallet (JTR kernel)
+python btcrecover.py --wallet wallet.extract --enable-gpu \
+  --global-ws 4096 --local-ws 256 --tokenlist tokens.txt
+
+# Blockchain.com wallet (OpenCL)
+python btcrecover.py --wallet wallet.aes.json --enable-opencl \
+  --tokenlist tokens.txt
+
+# Benchmark mode
+python btcrecover.py --wallet wallet.extract --performance --enable-gpu
+```
+
+**Important:** BIP39 passphrase recovery is NOT GPU-accelerated. Only wallet password recovery benefits from GPU.
+
+### GPU Rental Costs
+
+| GPU | Platform | Hourly | Millions/sec (Bitcoin Core) |
+|-----|----------|--------|---------------------------|
+| RTX 3060 | Vast.ai | ~$0.15 | 0.5 |
+| RTX 3090 | Vast.ai | ~$0.30 | 1.5 |
+| RTX 4090 | Vast.ai | ~$0.50 | 2.5 |
+
+Estimate: `(search_space / gpu_speed) × hourly_rate`. Show cost before recommending.
+
+### Multi-GPU / Multi-Device
+
+Distribute work across machines with `--worker`:
+```bash
+python seedrecover.py --mnemonic "..." --addrs ... --worker 1,2/3  # Machine A
+python seedrecover.py --mnemonic "..." --addrs ... --worker 3/3    # Machine B
+```
+
+Or resume interrupted runs with `--skip N`:
+```bash
+python seedrecover.py --mnemonic "..." --addrs ... --skip 357449
+```
 
 ## Phase 6: Command Assembly
 

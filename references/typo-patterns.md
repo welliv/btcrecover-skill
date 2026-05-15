@@ -62,6 +62,90 @@ For a sentence-like phrase like "golivelifebeforelifetakeyou":
 
 The tokenlist should be 4-15 entries for a focused passphrase recovery. Broader lists risk combinatorial explosion with typos enabled.
 
+## Passwordlist vs Tokenlist
+
+**Passwordlist** (`--passwordlist FILE`): One password per line, tried verbatim. No combination or permutation. Supports typos via `--typos-*` flags. Use for: known password guesses, RockYou wordlists, leaked password databases.
+
+**Tokenlist** (`--tokenlist FILE`): Tokens per line that btcrecover permutes and combines into passwords. Each line is a "token" and btcrecover tries all combinations of 1, 2, 3, ... N tokens. Use for: partial password fragments, seed descrambling, BIP39 passphrase recovery.
+
+When in doubt, use `--passwordlist` for exact passphrase guesses and `--tokenlist` only when you need combinatorial combinations from fragments. Passwordlists are easier to reason about for passphrase recovery.
+
+## Tokenlist Format Reference
+
+### Basic
+- One token per line
+- btcrecover tries all permutations of tokens to form passwords
+
+### Comments
+- `#` at column 0 = comment line (ignored)
+- `#` with leading space = valid token (e.g. ` #hashtag`)
+
+### Mutual Exclusion (OR tokens)
+Tokens on the same line (space-separated): at most one is used in any single password attempt.
+```
+Cairo cairo London london
+```
+→ picks at most one of these four, never two.
+
+### Required Tokens
+`+` at line start (plus space): token MUST be included in every password attempt.
+```
++ Beetlejuice beetlejuice Betelgeuse betelgeuse
+```
+→ exactly one of these four must appear in every attempt.
+
+### Positional Anchors
+`^N^token` — token only tried at position N (1-indexed).
+```
+^1^ocean            # must be first
+^2^hidden           # must be second
+^3^kidney           # must be third
+```
+
+### Beginning/End Anchors
+`^token` — only at beginning of password.
+`token$` — only at end of password.
+
+### Middle Anchor
+`^N,M^token` — token only tried in positions N through M, never first or last.
+```
+^3,^token           # position 3 or later, never last
+^,3^token           # position 3 or earlier, never first or last
+^,^token            # anywhere in middle (never first, never last)
+```
+
+### Relative Anchors
+`^rN^token` — relative ordering among anchored tokens (lower r = earlier position).
+```
+^r1^ocean           # comes before r2
+^r2^hidden          # comes after r1, before r3
+^r3^kidney          # comes after r2
+```
+
+### Token Groups (Comma-Separated)
+Words on the same line, comma-separated, must appear together in that order.
+```
+^dawn,renew,punch   # these 3 words appear together, in this order
+arrest,question     # another group
+```
+Combines with `+` required and positional anchors.
+
+### Inline CLI Options in Tokenlist
+First line can start with `#--` followed by additional CLI arguments. This is how btcrecover auto-loads options when you double-click the tokenlist file. Safe from: `--passwordlist`, `--tokenlist`, `--performance`, `--utf8` (these are NOT permitted inline).
+
+### Wildcards in Tokenlist/Passwordlist
+
+| Wildcard | Expands to | Example |
+|----------|-----------|---------|
+| `%1,6d` | Digits 1-6 chars | `%1,4d` → 0, 1, ..., 9999 |
+| `%a` | All letters (a-z, A-Z) | Single character |
+| `%e` | Custom list (repeating) | Same value each occurrence |
+| `%f` | Custom list (repeating, nested wildcards) | Can contain other wildcards |
+| `%j` | Custom list (standard) | Different per occurrence |
+| `%k` | Custom list (standard) | Different per occurrence |
+
+Custom lists loaded via `--wildcard-custom-list-LETTER FILE`. Requires `--has-wildcards` flag.
+
 **Password:**
 | Flag | Effect | Performance |
 |------|--------|-------------|
