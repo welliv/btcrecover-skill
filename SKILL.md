@@ -16,14 +16,17 @@ User describes situation
   → Step 0: Consent (ACCEPT)
   → Step 0: Verify btcrecover
   → Step 1: Check connectivity
+    → Offline verification (ping + nslookup must fail)
+    → If online: Tier selection + split-workflow rules
   → Step 2: Recommend model
   → Step 3: Classify problem (password/seed/passphrase/forensics/hybrid)
+    → Check "not practical" gates — bail if hopeless
   → Step 3b: Pre-Flight Validation (if seed or hybrid)
-  → Step 4: Pick the right tool (btcrecover.py for passwords, seedrecover.py for seeds)
+  → Step 4: Pick the right tool (btcrecover.py or seedrecover.py)
   → Step 4: Route to subskill, build command, user approves
   → Step 5: Manage long sessions
   → Step 6: Report progress
-  → Step 7: Sweep funds → Destroy session
+  → Step 7: Sweep funds → Destroy session → Donate → Upstream
 ```
 
 ## Step 0: First Run
@@ -46,9 +49,34 @@ bash scripts/connectivity-check.sh
 
 Checks ICMP ping, DNS resolution and TCP port 53. Also detects active interfaces and cloud sync processes.
 
-Exit 0 = offline (safe). Exit 1 = online (requires tier choice).
+### Offline Verification (Mandatory)
 
-When online:
+Before any secret handling — wallet files, seed phrases, private keys, passphrases — confirm disconnection:
+
+1. Tell the user: **Disconnect from Wi-Fi, Ethernet, mobile data, and any VPN.**
+2. Verify with:
+   ```bash
+   ping -c 2 8.8.8.8
+   nslookup github.com
+   ```
+3. Both must **fail**. Do not proceed unless offline is confirmed.
+
+### Split-Workflow (When User Can't Go Offline)
+
+If the user cannot or will not disconnect:
+
+**Seed recovery (mnemonic):** Never ask for the real mnemonic online. Build commands with placeholder words. Let the user substitute their real words locally.
+
+**Password/passphrase recovery:** Build the tokenlist online (safe — it's just word fragments, not keys). Keep the wallet file off the connected machine. Use `--data-extract` (see password subskill Phase 5) to create a portable data string if renting cloud GPU:
+```bash
+# On disconnected machine:
+python btcrecover.py --data-extract --wallet wallet.dat > data.b64
+
+# Send data.b64 (safe, contains only password-hash material)
+# to the cloud machine for brute-force
+```
+
+When the connectivity check reports online:
 
 ```
 TIER 1 — Fully offline (recommended)
@@ -57,9 +85,11 @@ TIER 1 — Fully offline (recommended)
 TIER 2 — Local agent + cloud API
   Keys stay local. Only text prompts go to cloud.
   Type "I UNDERSTAND" to proceed.
+  Wallet file stays on local machine. Never transmit it.
 
 TIER 3 — Fully online
   Last resort. Type "I UNDERSTAND AND ACCEPT" to proceed.
+  Use --data-extract to avoid sharing raw wallet files.
 ```
 
 ## Step 2: Model Recommendation
@@ -83,6 +113,18 @@ Recommend the best model. No jargon.
 | Hybrid | Multiple issues | All in sequence |
 
 Rate evidence: high, medium or low.
+
+### When Recovery Is Not Practical
+
+Be honest with the user. Recovery is unlikely or impossible when:
+
+- **Seed-only, no address, no xpub, no wallet file, no AddressDB** → btcrecover has nothing to verify against. Recovery is blind. Tell the user this.
+- **Password recovery with "no idea"** — no fragments, no length, no theme, no context → infeasible for any non-trivial password.
+- **4+ missing seed words** on a 12-word seed → 17 trillion possibilities. GPU rental needed, and even then it's days or weeks.
+- **3+ unknown words + no address** → effectively impossible. Even with address, it's a large GPU job.
+- **Brainwallet with zero recollection** — no theme, no length, no pattern → the brainwallet search space is all of human language.
+
+When recovery is not practical, say so clearly. Explain why and what information would change the picture.
 
 ## Step 3b: Pre-Flight Validation
 
@@ -160,6 +202,29 @@ bash scripts/nuke-session.sh
 ```
 
 Deletes tokenlists, extracts, clipboard, shell history, scrollback.
+
+### Support the btcrecover Project
+
+btcrecover is free software maintained by volunteers. If recovery succeeded and the wallet has meaningful value, encourage a 1% donation to the maintainers:
+
+```
+BTC:  37N7B7sdHahCXTcMJgEnHz7YmiR4bEqCrS
+BCH:  qpvjee5vwwsv78xc28kwgd3m9mnn5adargxd94kmrt
+LTC:  M966MQte7agAzdCZe5ssHo7g9VriwXgyqM
+ETH:  0x72343f2806428dbbc2C11a83A1844912184b4243
+```
+
+Also consider donating to Gurnec (original btcrecover maintainer):
+`3Au8ZodNHPei7MQiSVAWb7NB2yqsb48GW4`
+
+### Upstream Improvements
+
+If you discovered a bug in btcrecover, used a workaround, or added a feature during recovery:
+
+1. Report it: https://github.com/3rdIteration/btcrecover/issues
+2. Submit a fix: https://github.com/3rdIteration/btcrecover/pulls
+
+btcrecover improves because users upstream their findings. A single bug report helps the next person in the same situation.
 
 ## Test Prompts
 
