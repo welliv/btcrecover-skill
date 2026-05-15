@@ -27,33 +27,6 @@ Subject line: `[SECURITY] btcrecover-skill — [brief description]`
 - Impact assessment
 - Suggested fix (optional)
 
-### Encrypted reports
-
-For sensitive details, use the author's GPG key:
-
-```bash
-curl https://keybase.io/welliv/key.asc | gpg --import
-gpg --encrypt --recipient welliv --armor your-report.txt
-```
-
-Send the encrypted output to the email above.
-
----
-
-## Response timeline
-
-| Action | Target time |
-|---|---|
-| Acknowledgment | Within 48 hours |
-| Initial assessment | Within 5 days |
-| Fix timeline communicated | Within 10 days |
-| Fix released | Within 30 days of confirmation |
-| Public disclosure | After fix is available |
-
-For critical vulnerabilities (those that could cause immediate fund loss), the target for a fix is 7 days.
-
----
-
 ## Scope
 
 **In scope:**
