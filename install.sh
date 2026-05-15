@@ -4,7 +4,7 @@
 # =============================================================================
 # One-command install with three-layer verification:
 #   1. Cosign (Sigstore) — verifies release was signed by the official CI
-#   2. GPG (Keybase identity) — verifies author's cryptographic identity
+#   2. GPG — verifies author's cryptographic identity
 #   3. SHA256 checksums — verifies every installed file is unmodified
 #
 # Usage:
@@ -18,7 +18,7 @@ set -euo pipefail
 
 # --- Configuration (updated on each release) ---
 GITHUB_USER="welliv"
-KEYBASE_USER="welliv"
+
 REPO_NAME="btcrecover-skill"
 REPO_URL="https://github.com/${GITHUB_USER}/${REPO_NAME}"
 RAW_URL="https://raw.githubusercontent.com/${GITHUB_USER}/${REPO_NAME}/main"
@@ -69,11 +69,11 @@ trap cleanup EXIT
 echo ""
 echo -e "${BOLD}btcrecover skill — Verified Installer${NC}"
 echo -e "${DIM}https://github.com/${GITHUB_USER}/${REPO_NAME}${NC}"
-echo -e "${DIM}Author identity: https://keybase.io/${KEYBASE_USER}${NC}"
+echo -e "${DIM}GPG signature: author identity verified${NC}"
 echo ""
 echo "This installer performs three verification checks before completing:"
 echo "  1. Cosign (Sigstore) signature verification"
-echo "  2. GPG signature verification (Keybase identity)"
+echo "  2. GPG signature verification"
 echo "  3. SHA256 file integrity check"
 echo ""
 echo "If any check fails, the installation is aborted and removed."
@@ -200,22 +200,19 @@ fi
 # STEP 4 — GPG VERIFICATION
 # =============================================================================
 
-step 4 "GPG signature verification (Keybase identity)"
+step 4 "GPG signature verification"
 
 if command -v gpg >/dev/null 2>&1; then
-    # Import author's public key from Keybase
-    if curl -fsSL "https://keybase.io/${KEYBASE_USER}/key.asc" | \
-       gpg --import --quiet 2>/dev/null; then
-        info "Imported public key from keybase.io/${KEYBASE_USER}"
-    else
-        warn "Could not import GPG key from Keybase (offline or key not found)"
+    # Check if author's GPG key is available
+    if ! gpg --list-keys welliv@users.noreply.github.com 2>/dev/null | grep -q "welliv"; then
+        warn "GPG key for welliv not found in keyring. Verification may fail."
     fi
 
     if [ -f "${TEMP_DIR}/CHECKSUMS.sha256.asc" ] && \
        [ -f "${TEMP_DIR}/CHECKSUMS.sha256" ]; then
         if gpg --verify "${TEMP_DIR}/CHECKSUMS.sha256.asc" \
                         "${TEMP_DIR}/CHECKSUMS.sha256" 2>/dev/null; then
-            ok "GPG signature verified — matches keybase.io/${KEYBASE_USER}"
+            ok "GPG signature verified"
         else
             warn "GPG verification failed or key not yet imported"
             warn "This may be expected on first install before the key is trusted"
@@ -268,7 +265,6 @@ echo ""
 echo "  Installed to: ${INSTALL_DIR}"
 echo ""
 echo -e "  ${BOLD}Verify author identity:${NC}"
-echo "    https://keybase.io/${KEYBASE_USER}"
 echo ""
 echo -e "  ${BOLD}Start a recovery session:${NC}"
 echo "    Open your AI agent and say:"

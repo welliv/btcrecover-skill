@@ -165,7 +165,6 @@ jobs:
               CHECKSUMS.sha256
 
             # GPG
-            curl https://keybase.io/welliv/key.asc | gpg --import
             gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
 
             # File integrity
@@ -173,7 +172,6 @@ jobs:
             ```
 
             ### Author identity
-            - Keybase: https://keybase.io/welliv
             - GitHub: https://github.com/welliv
 
             ### Built on

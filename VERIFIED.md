@@ -14,23 +14,12 @@ This is the only official repository. Every other copy is either a fork (verify 
 
 ---
 
-## Author identity — cross-verified
-
-These accounts all belong to the same person. Each proof is cryptographically signed and publicly auditable on Keybase.
+## Author identity
 
 | Platform | URL |
 |---|---|
-| Keybase | https://keybase.io/welliv |
 | GitHub | https://github.com/welliv |
 | X (Twitter) | https://x.com/welliv |
-
-To verify:
-
-```bash
-# Install Keybase: https://keybase.io/download
-keybase id welliv
-# Output shows all verified accounts linked to the same cryptographic key
-```
 
 ---
 
@@ -41,10 +30,9 @@ keybase id welliv
 Example format: DEAD BEEF 1234 5678 ABCD  EF01 2345 6789 ABCD EF01
 ```
 
-Import and verify:
+Verify a signed release:
 
 ```bash
-curl https://keybase.io/welliv/key.asc | gpg --import
 gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
 ```
 

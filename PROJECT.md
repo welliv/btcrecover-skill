@@ -965,14 +965,10 @@ authenticity chain (Keybase + GPG + Cosign) is established.
 Complete in this order. Do not skip or reorder.
 
 ```
-1. Create Keybase account
-   keybase login
-   keybase prove github welliv
-   keybase prove twitter welliv
-   keybase pgp gen
+1. Generate a GPG key:
+   gpg --gen-key
 
-2. Add GPG key to GitHub
-   gpg --armor --export [fingerprint] → paste into GitHub Settings → GPG keys
+2. Add GPG key to GitHub:
 
 3. Enable commit signing
    git config --global user.signingkey [fingerprint]
@@ -1065,4 +1061,3 @@ Then tell no one about it for thirty days.
 *GPL-2.0 — free forever*
 
 *Canonical source: https://github.com/welliv/btcrecover-skill*
-*Author identity: https://keybase.io/welliv*
