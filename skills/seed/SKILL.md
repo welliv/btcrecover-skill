@@ -94,7 +94,9 @@ python btcrecover.py \
   --wallet wallet.extract \
   --seed "word1 word2 ... word12" \
   --passphrase-list passphrase_list.txt \
-  --typos 1 --typos-case
+  --typos 1 --typos-case \
+  --addr-limit 100 \
+  --force-bip44 --force-p2sh --force-p2tr
 ```
 
 ## Languages

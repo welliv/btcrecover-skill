@@ -71,8 +71,19 @@ python btcrecover.py \
   --wallet wallet.extract \
   --tokenlist tokenlist.txt \
   --typos 1 --typos-case --typos-swap \
-  --threads 4 --checkpoint
+  --threads 4 \
+  --addr-limit 100 \
+  --force-bip44 --force-p2sh --force-p2tr \
+  --checkpoint
 ```
+
+**Always include these flags:**
+- `--addr-limit 100` — checks 100 address indices per derivation path. Funds may be at a change address (index 15, 27, etc.), not just index 0. Do not assume index 0.
+- `--force-bip44 --force-p2sh --force-p2tr` — forces all derivation paths. btcrecover auto-detects the address type from `--addrs` and skips non-matching types, but wallet software sometimes uses multiple types within the same wallet.
+- If the user provided a known address, include `--addrs ADDRESS` so btcrecover stops instantly on first match.
+
+**Tokenlist building:**
+For passphrase recovery, generate truncations of every user guess. If the user says the phrase was `recoverytesting`, also include `recoverytest`, `recoverytestin`, `recoverytesti`. People naturally shorten phrases when typing into a wallet. Also include empty string (no passphrase) as a baseline check.
 
 Explain each flag in plain English. Wait for approval.
 
@@ -92,8 +103,12 @@ If found: show password (no screenshots). Run sweep script. Do not celebrate yet
 ## Phase 8: If Nothing Works
 
 1. Increase typos to 2
-2. Expand tokenlist
+2. Expand tokenlist — include truncations, common suffixes, leet speak variants
 3. Try different wallet extract
+4. **Diagnostic: verify the seed alone** — run btcrecover with `--mnemonic` and `--addrs` but no tokenlist (empty passphrase). If the address doesn't match with no passphrase, the seed itself may be wrong or the address belongs to a different wallet.
+5. **Diagnostic: expand address search** — increase `--addr-limit` to 500 or 1000. Funds may be deep in the change chain.
+6. **Diagnostic: try all derivation paths individually** — if `--force-bip44 --force-p2sh --force-p2tr` didn't work, try each path separately with a wider address range. Some wallets use non-standard paths.
+7. **Ask the user for more clues** — length, theme, numbers, symbols, when the wallet was created, what software was used. A single new clue can collapse the search space.
 4. Try passphrase mode
 5. Escalate to forensics (find older backups)
 6. GPU rental

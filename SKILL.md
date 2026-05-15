@@ -18,6 +18,7 @@ User describes situation
   → Step 1: Check connectivity
   → Step 2: Recommend model
   → Step 3: Classify problem (password/seed/forensics/hybrid)
+  → Step 3b: Pre-Flight Validation (if seed or hybrid)
   → Step 4: Route to subskill, build command, user approves
   → Step 5: Manage long sessions
   → Step 6: Report progress
@@ -82,6 +83,22 @@ Recommend the best model. No jargon.
 
 Rate evidence: high, medium or low.
 
+## Step 3b: Pre-Flight Validation
+
+Before routing, validate whatever the user provided:
+
+**Seed words** (from text or image):
+- If the user sent a photo, use vision_analyze to read the words
+- Check every word against the BIP39 English wordlist (2048 words)
+- Verify the BIP39 checksum: SHA256 of the entropy must match the last word's bits
+- A checksum fail with all-valid words means the last word is wrong (~128 alternatives for 12-word seeds)
+- Report what passes and what fails before proceeding
+
+**Known address** (if provided by user):
+- Capture it for use with `--addr` flag in btcrecover
+- `--addr` stops btcrecover immediately on first address match — no need to work through all candidates
+- This is especially valuable for passphrase recovery: with seed + address, btcrecover can verify instantly
+
 ## Step 4: Route to Subskill
 
 Load the right subskill. For each command:
@@ -90,6 +107,14 @@ Load the right subskill. For each command:
 2. Wait for approval.
 3. Run it.
 4. Report results.
+
+**Command-building defaults (all cases):**
+- Always use `--addr-limit 100` unless the user knows the exact address index. People send and receive to non-default indices (change addresses, reused wallets). Index 0 is not safe to assume.
+- Always force all derivation paths: `--force-bip44 --force-p2sh --force-p2tr`. btcrecover auto-detects the address type and skips other paths, but wallet software (Sparrow, Electrum, hardware wallets) may use different derivation types for different addresses. Forcing all paths catches more matches at minimal performance cost.
+- Pass this rule to any subskill that builds btcrecover commands.
+
+**Tokenlist building (passphrase recovery):**
+For every passphrase guess, generate truncations. If the user says `recoverytesting`, include `recoverytest`, `recoverytestin`, `recoverytesti` and other natural truncations. People often shorten phrases in wallets. Also generate all-lowercase versions and common suffix additions (numbers, `!`).
 
 ## Step 5: Long Sessions
 
@@ -149,9 +174,11 @@ Run these to validate the skill:
 "I remember the password had leet speak in it. Like @ for a and 3 for e."
 
 "I have the wallet file but the password changed in 2020. Is there an older backup?"
+
+"I have my 12 seed words and a known address from the wallet, but I forgot my passphrase. It was a sentence-like phrase, all lowercase."
 ```
 
-Each prompt should trigger a different subskill (password, seed, forensics, typo mutations and forensics).
+Each prompt should trigger a different subskill (password, seed, forensics, typo mutations, forensics, and hybrid seed+passphrase).
 
 ## Security
 

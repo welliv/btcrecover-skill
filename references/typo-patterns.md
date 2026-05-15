@@ -41,7 +41,26 @@ Passphrase is not a password. It extends the seed, creating a different wallet. 
 
 Common: single word, short phrase, sentence, another seed, 25th word.
 
-## btcrecover Flags
+## Custom-Word Utility
+
+You need to translate the user's guess into a tokenlist.
+
+**Exact passphrase guess:**
+If the user says "I think it was recoverytesting":
+1. Add the exact string: `recoverytesting`
+2. Generate truncations: `recoverytest`, `recoverytesti`, `recoverytestin`
+3. Add common suffixes: `recoverytesting1`, `recoverytesting!`
+4. Add the common `s` variant: `recoverytestings`
+
+For a sentence-like phrase like "golivelifebeforelifetakeyou":
+1. Add the exact string
+2. Generate truncations at natural word boundaries
+3. Add the `s` variant for verbs: `golivelifebeforelifetakesyou`
+4. Add common misspellings and alternative past-tense forms: `golivelifebeforelifetookyou`
+
+**Always include:** empty string (no passphrase) as a baseline check.
+
+The tokenlist should be 4-15 entries for a focused passphrase recovery. Broader lists risk combinatorial explosion with typos enabled.
 
 **Password:**
 | Flag | Effect | Performance |
