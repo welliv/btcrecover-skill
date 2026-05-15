@@ -1,17 +1,27 @@
 # btcrecover-skill Design
 
-## Full Technical Blueprint
+Technical blueprint for contributors.
 
-This document contains the complete technical design for the btcrecover-skill, intended for contributors and maintainers.
+## Architecture
 
-## Table of Contents
-1. [System Architecture](#1-system-architecture)
-2. [Progressive Disclosure Layers](#2-progressive-disclosure-layers)
-3. [Security Model](#3-security-model)
-4. [Data Flow](#4-data-flow)
-5. [Extending the Skill](#5-extending-the-skill)
-6. [API References](#6-api-references)
-7. [Testing Strategy](#7-testing-strategy)
+The skill uses four-stage progressive disclosure:
 
----
-*This is a living document. Last updated: May 2026.*
+**L1** — Name and description in system prompt (~80 tokens). Agent knows the skill exists.
+
+**L2** — Main orchestrator (SKILL.md). Loaded when user describes a recovery situation.
+
+**L3** — Subskills loaded per recovery type (password, seed, forensics).
+
+**L4** — References and scripts loaded on demand.
+
+## Flow
+
+User describes situation → Consent gate → Verify btcrecover → Check connectivity → Model recommendation → Problem classification → Subskill routing → btcrecover command generation → User approval → Run → Report → Post-recovery safety → Session destruction.
+
+## Security
+
+Three tiers of isolation. Advisor-not-actor architecture: the skill generates commands, the user runs them. Consent gates at every decision point.
+
+## Extending
+
+Add new wallet types to `references/wallet-types.md`. Add new models to `references/benchmarks.json`. Submit community benchmarks via GitHub Discussions.

@@ -1,229 +1,68 @@
-# Password and Seed Word Error Pattern Library
+# Error Patterns
 
-## Section 1: Password Typos
+## Password Typos
 
-### Visual Character Confusion
-Characters that look similar and are commonly confused:
-- O (letter) vs 0 (zero)
-- l (lowercase L) vs 1 (one) vs I (uppercase i)
-- S vs 5
-- B vs 8
-- g vs 9
-- Z vs 2
-- rn vs m (r+n looks like m)
+**Visual confusion:** O/0, l/1/I, S/5, B/8, g/9, Z/2, rn/m.
 
-### Capitalisation Errors
-- All lowercase when it should be mixed case
-- All uppercase when it should be mixed case
-- First letter capitalised vs not
-- CAPS LOCK on for entire password
-- Shift key held wrong (e.g., "P@SSWORD" instead of "p@ssword")
+**Capitalisation:** All lower when should be mixed. First letter caps. Caps lock on. Shift held wrong.
 
-### Keyboard Proximity Errors
-Common adjacent-key mistakes:
-- a → s, q, z
-- e → r, w, d
-- i → u, o, k
-- n → m, b, j
-- t → r, y, g
-- o → i, p, l
+**Keyboard proximity:** a→s/q/z, e→r/w/d, i→u/o/k, n→m/b/j, t→r/y/g, o→i/p/l.
 
-### Leet Speak Substitutions
-Common character replacements:
-- a → @, 4
-- e → 3
-- i → 1, !
-- o → 0
-- s → $, 5
-- t → 7
-- l → 1
-- b → 8
-- g → 9
-- z → 2
+**Leet speak:** a→@/4, e→3, i→1/!, o→0, s→$/5, t→7.
 
-### Common Suffixes and Prefixes
-Users often add these to "make a password stronger":
-- 123, 1234, 12345
-- !, !!, !!!
-- 1!, 2014, 2015, 2016, 2017, 2018, 2019, 2020
-- @, #, $, %
-- 01, 02, 03 ... 99
-- qwerty, abc, xyz
+**Common suffixes:** 123, !, !!, 1!, years (2014–2020), @.
 
-### Transposed Characters
-Adjacent characters swapped:
-- "teh" instead of "the"
-- "adn" instead of "and"
-- "passowrd" instead of "password"
+**Transposition:** "teh" for "the", "passowrd" for "password".
 
-### Repeated Characters
-- "passsword" instead of "password"
-- "helloo" instead of "hello"
-- "111" instead of "1"
+**Repeats:** "passsword", "helloo".
 
-### Deleted Characters
-- "pasword" instead of "password"
-- "btcrecover" instead of "btcrecover"
+**Deletions:** "pasword" for "password".
 
-### Inserted Characters
-- "passw0rd" instead of "password"
-- "bitcoiin" instead of "bitcoin"
+## Seed Word Errors
 
----
+BIP39 first 4 characters uniquely identify each word. Knowing the first 4 letters identifies the word.
 
-## Section 2: Seed Word Mistakes
+**Lookalikes:**
 
-### BIP39 4-Character Uniqueness Rule
-BIP39 words are chosen so that the first 4 characters uniquely identify each word. This means:
-- If you know the first 4 letters, you know the word
-- "abandon" = "aban" (unique)
-- "ability" = "abil" (unique)
-- Typo in the 4th character can change the word entirely
-
-### Look-Alike Seed Words
-Words that are visually or phonetically similar:
-
-| Word | Common Confusion |
-|------|-----------------|
+| Word | Confused with |
+|------|--------------|
 | abandon | abacus |
 | ability | ablaze |
 | absent | absorb |
 | abstract | abuse |
 | accident | accent |
 | account | accuse |
-| achieve | acquire |
-| acquire | address |
-| address | advance |
-| advance | advice |
-| advice | affair |
-| afraid | again |
-| agent | agree |
-| airport | alarm |
-| alarm | album |
-| album | alcohol |
-| alien | alive |
-| allow | alone |
-| alone | along |
-| already | also |
-| always | amazing |
-| amount | anchor |
-| anchor | ancient |
-| anger | angle |
-| animal | ankle |
-| annual | another |
-| answer | antenna |
-| antenna | antique |
-| anxiety | any |
-| apart | apology |
-| appear | apple |
-| approve | april |
-| arch | area |
-| argue | armed |
-| armor | around |
-| arrest | arrive |
-| arrow | artist |
-| artwork | aspect |
-| assault | asset |
-| assist | assume |
-| asthma | athlete |
-| atom | attack |
-| attend | august |
-| author | auto |
-| autumn | average |
-| avoid | awake |
-| aware | awful |
 
-### Non-English Wordlists
-BIP39 supports multiple languages. Common mistakes:
-- Using words from the wrong language wordlist
-- Mixing languages (some words from English, some from Spanish)
-- Not knowing which language was used
+Also: wrong language wordlist, words in wrong order, extra or missing words.
 
-Supported languages:
-- English
-- Chinese (Simplified)
-- Chinese (Traditional)
-- French
-- Italian
-- Japanese
-- Korean
-- Spanish
+## Passphrase Patterns
 
-### Seed Word Order Mistakes
-- Words in wrong position
-- Two words swapped
-- Entire sequence reversed
+Passphrase is not a password. It extends the seed, creating a different wallet. Both can be used together.
 
-### Extra or Missing Words
-- 13-word seed (extra word, possibly a passphrase)
-- 11-word seed (missing word)
-- 25-word seed (extra word, possibly a passphrase)
-- 23-word seed (missing word)
+Common: single word, short phrase, sentence, another seed, 25th word.
 
----
+## btcrecover Flags
 
-## Section 3: Passphrase Patterns
+**Password:**
+| Flag | Effect | Performance |
+|------|--------|-------------|
+| `--tokenlist FILE` | Base words | Required |
+| `--typos N` | Allow N typos | Exponential |
+| `--typos-case` | Case toggling | 2x per word |
+| `--typos-swap` | Adjacent swap | Linear |
+| `--typos-repeat` | Repeat char | Linear |
+| `--typos-delete` | Delete char | Linear |
+| `--typos-replace` | Replace char | Linear |
+| `--threads N` | CPU threads | Linear |
 
-### Common Passphrase Mistakes
-- Passphrase confused with password
-- Passphrase written down separately from seed
-- Passphrase uses same pattern as password
-- Multiple passphrases tried, user forgot which one
+**Seed:**
+| Flag | Effect |
+|------|--------|
+| `--mnemonic "..."` | Phrase with ? for unknowns |
+| `--bip39` | BIP39 wordlist |
+| `--electrum1/2` | Electrum format |
+| `--slip39` | Shamir format |
+| `--language LANG` | Non-English wordlist |
+| `--path "..."` | Derivation paths |
 
-### Passphrase vs Password
-- **Password:** Encrypts the wallet file (needed to open the wallet)
-- **Passphrase:** Extends the seed phrase (creates a different wallet)
-- Both can be used together
-- A wallet can have a password, a passphrase, both, or neither
-
-### Common Passphrase Patterns
-- Single word (like a password)
-- Short phrase (2-4 words)
-- Sentence or quote
-- Another seed phrase
-- "25th word" (single word added to 24-word seed)
-
----
-
-## btcrecover Flag Reference
-
-### Password Recovery Flags
-| Flag | Description | Performance Impact |
-|------|-------------|-------------------|
-| `--tokenlist FILE` | Base words for password generation | Required |
-| `--passwordlist FILE` | Additional passwords to try | Fast |
-| `--typos N` | Allow N typos per word | Exponential |
-| `--typos-case` | Case toggling | 2× per word |
-| `--typos-swap` | Adjacent character swap | Linear |
-| `--typos-repeat` | Repeated characters | Linear |
-| `--typos-delete` | Deleted characters | Linear |
-| `--typos-replace` | Character replacement | Linear |
-| `--typos-insert` | Inserted characters | Linear |
-| `--threads N` | Number of CPU threads | Linear speedup |
-| `--checkpoint` | Save progress for resume | Minimal |
-| `--savefile FILE` | Checkpoint file path | Minimal |
-
-### Seed Recovery Flags
-| Flag | Description | Performance Impact |
-|------|-------------|-------------------|
-| `--mnemonic "..."` | Mnemonic with ? for unknown words | Required |
-| `--mnemonic-length N` | 12, 15, 18, 21, or 24 | Required |
-| `--mnemonic-alternatives "..." | Alternative words for positions | Linear |
-| `--wallet-file FILE` | Wallet file to verify against | Required |
-| `--address-database FILE` | Known addresses to check | Fast |
-| `--bip39` | Use BIP39 wordlist | Default |
-| `--electrum1` | Use Electrum 1.x seed format | Alternative |
-| `--electrum2` | Use Electrum 2.x seed format | Alternative |
-| `--slip39` | Use SLIP39 (Shamir) format | Alternative |
-| `--language LANG` | Wordlist language | Required if non-English |
-| `--path "..."` | Derivation paths to try | Linear |
-
-### Performance Impact Notes
-- `--typos 1` with all mutation flags: ~100× slowdown per word
-- `--typos 2`: ~10,000× slowdown per word (use with caution)
-- Each additional unknown word in seed recovery: 2048× increase
-- `--threads N`: Near-linear speedup up to CPU core count
-- GPU acceleration: 10-100× faster than CPU for password recovery
-
----
-*Reference for btcrecover-skill tokenlist generation and typo mutation selection*
+**Performance:** `--typos 1` is ~100x slowdown per word. `--typos 2` is ~10,000x. Each unknown seed word adds 2048x. GPU is 10–100x faster than CPU.

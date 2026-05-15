@@ -1,6 +1,6 @@
 ---
 name: btcrecover-skill
-description: AI-guided Bitcoin wallet recovery using btcrecover. Helps users recover lost wallet passwords, seed phrases, and discover wallet backups through guided, step-by-step assistance. Works offline-first with local models (Ollama) or cloud APIs. Supports password recovery, BIP39/SLIP39 seed recovery, and file archaeology. Three-tier security model. Post-recovery safety protocol with fund sweeping and session destruction.
+description: AI-guided Bitcoin wallet recovery using btcrecover. Recovers lost passwords, seed phrases and wallet backups. Works offline with local models or cloud APIs. Three-tier security with post-recovery fund sweeping and session destruction.
 ---
 
 # btcrecover-skill
@@ -9,285 +9,173 @@ The AI layer that makes Bitcoin wallet recovery accessible to everyone.
 
 Built on btcrecover by Stephen Rothery (3rdIteration). Free and open source. Always.
 
-## Progressive Disclosure
+## Flow
 
 ```
-L1 — Advertise (~80 tokens in system prompt)
-     name + description only
-     Agent knows the skill exists and when to use it
-
-L2 — Load (< 5,000 tokens, loaded when triggered)
-     This main SKILL.md orchestrator
-     Loaded when user describes a recovery situation
-
-L3 — Sub-skills (loaded per recovery type)
-     skills/password/SKILL.md   → password/passphrase recovery
-     skills/seed/SKILL.md       → mnemonic recovery
-     skills/forensics/SKILL.md  → file archaeology
-
-L4 — References and scripts (loaded on demand)
-     references/ files loaded only when the sub-skill needs them
-     scripts/ executed only when the user approves each command
+User describes situation
+  → Step 0: Consent (ACCEPT)
+  → Step 0: Verify btcrecover
+  → Step 1: Check connectivity
+  → Step 2: Recommend model
+  → Step 3: Classify problem (password/seed/forensics/hybrid)
+  → Step 4: Route to subskill, build command, user approves
+  → Step 5: Manage long sessions
+  → Step 6: Report progress
+  → Step 7: Sweep funds → Destroy session
 ```
 
-## Orchestration Flow
+## Step 0: First Run
 
-```
-User describes situation (plain English)
-          │
-          ▼
-    Step 0A: First-run consent gate (ACCEPT)
-    Step 0B: btcrecover integrity check (verify-btcrecover.sh)
-          │
-          ▼
-    Step 1: Connectivity gate (connectivity-check.sh)
-          │
-     ┌────┴────┐
-  OFFLINE    ONLINE
-     │           │
-  Green       Tier warning
-  light       + acknowledgment
-     │           │
-     └────┬───────┘
-          │
-    Step 2: Model router reads benchmarks.json
-    Calculates EV: (task_score × evidence_quality) - cost_penalty - risk_penalty
-    Recommends optimal model
-          │
-          ▼
-    Step 3: Natural language triage interview
-    Classifies: PASSWORD | SEED | FORENSIC | HYBRID
-          │
-          ▼
-    Step 4: Routes to appropriate sub-skill
-    Sub-skill builds btcrecover command
-    Shows command to user in plain English
-    User approves → runs (never auto-executes)
-          │
-    ┌─────┴──────┐
-  Found      Not found
-    │              │
-    ▼         Expand search
-  Step 7:     or escalate
-  sweep-
-  reminder
-  .sh (6 steps)
-    │
-    ▼
-  nuke-session.sh
-  (secure destroy everything)
-```
+Show DISCLAIMER.md. User types `ACCEPT`. Log to `consent.log`. One time only.
 
-## Step 0A: First-Run Consent Gate
-
-On first run only, display DISCLAIMER.md and require the user to type `ACCEPT` to proceed. This is a one-time gate per agent installation.
-
-```
-Before we begin, I need you to read and accept the terms in DISCLAIMER.md.
-This skill provides guidance for Bitcoin wallet recovery. It does not
-guarantee recovery. You assume all risk. See DISCLAIMER.md for full terms.
-
-Type ACCEPT to continue:
-```
-
-Log the acceptance with timestamp to `~/.btcrecover-skill/consent.log`.
-
-## Step 0B: btcrecover Integrity Check
-
-Before any recovery work, verify btcrecover installation authenticity:
+## Step 0: Verify btcrecover
 
 ```bash
 bash scripts/verify-btcrecover.sh
 ```
 
-This checks:
-- Git remote URL against official repo (3rdIteration/btcrecover)
-- Known malicious fork patterns (TCRetriever, demining, etc.)
-- SHA256 checksums of core files
+Checks remote URL against official repo. Checks for known malicious forks. Halts on failure.
 
-If verification fails, halt the session and warn the user.
-
-## Step 1: Connectivity Gate
+## Step 1: Connectivity
 
 ```bash
 bash scripts/connectivity-check.sh
 ```
 
-Three-layer detection:
-1. ICMP ping to 8.8.8.8
-2. DNS resolution via nslookup
-3. TCP port 53 check
+Checks: ICMP ping, DNS resolution, TCP port 53. Also detects active interfaces and cloud sync processes.
 
-Also checks for active network interfaces and cloud sync processes (Dropbox, iCloud, OneDrive, Nextcloud).
+Exit 0 = offline (safe). Exit 1 = online (requires tier choice).
 
-**Exit codes:**
-- 0 = OFFLINE (safe, Tier 1 — proceed)
-- 1 = ONLINE (requires tier acknowledgment)
+When online:
 
-If ONLINE, display the tier selection:
 ```
-You are currently online. Please select a security tier:
+TIER 1 — Fully offline (recommended)
+  Disconnect internet. Use local AI. Maximum security.
 
-TIER 1 — FULLY OFFLINE (recommended)
-  Disconnect from internet, use local AI model
-  Nobody sees your keys. Maximum security.
-
-TIER 2 — LOCAL AGENT + CLOUD API
-  Local btcrecover + cloud AI reasoning
+TIER 2 — Local agent + cloud API
   Keys stay local. Only text prompts go to cloud.
   Type "I UNDERSTAND" to proceed.
 
-TIER 3 — FULLY ONLINE
-  Use with clear understanding of risks.
-  Type "I UNDERSTAND AND ACCEPT" to proceed.
+TIER 3 — Fully online
+  Last resort. Type "I UNDERSTAND AND ACCEPT" to proceed.
 ```
 
 ## Step 2: Model Recommendation
 
-Read `references/benchmarks.json` and calculate EV for each available model:
+Read `references/benchmarks.json`. Calculate expected value:
 
 ```
 EV = (task_score × evidence_multiplier) - cost_penalty - risk_penalty
-
-Where:
-  task_score          = model's benchmark score for this recovery type (0-100)
-  evidence_multiplier = HIGH: ×1.0 | MEDIUM: ×0.85 | LOW: ×0.70
-  cost_penalty        = (estimated_cost_usd / wallet_value_usd) × 20, capped at 20
-  risk_penalty        = 0 (Tier 1) | 5 (Tier 2) | 15 (Tier 3)
 ```
 
-Recommend the top-scoring model in plain English with alternatives explained.
+Recommend the top model in plain English.
 
-## Step 3: Natural Language Triage Interview
+## Step 3: Classify Problem
 
-Ask the user about their situation. Classify into one of:
+| Type | What it is | Route |
+|------|------------|-------|
+| Password | Forgotten wallet password | password/ |
+| Seed | Wrong BIP39/SLIP39 words | seed/ |
+| Passphrase | Forgotten BIP39 25th word | password/ |
+| Forensics | Wallet file location unknown | forensics/ |
+| Hybrid | Multiple issues | All in sequence |
 
-| Type | Description | Sub-skill |
-|------|-------------|-----------|
-| PASSWORD | Forgotten wallet encryption password | password/ |
-| SEED | Missing or wrong BIP39/SLIP39 words | seed/ |
-| PASSPHRASE | Forgotten BIP39 25th word | password/ (passphrase mode) |
-| FORENSIC | Unknown wallet file location | forensics/ |
-| HYBRID | Multiple issues combined | All sub-skills in sequence |
+Rate evidence: high, medium or low.
 
-Also classify evidence quality:
-- **HIGH**: Strong candidates, small space (<1 billion)
-- **MEDIUM**: Partial memory, medium space (1B-1T)
-- **LOW**: Very vague, large space (>1T)
+## Step 4: Route to Subskill
 
-## Step 4: Sub-Skill Routing
+Load the right subskill. For each command:
 
-Load the appropriate sub-skill and follow its phases. For each btcrecover command:
+1. Show it in plain English
+2. Explain what it does
+3. Wait for approval
+4. Run it
+5. Report results
 
-1. Show the command in plain English
-2. Explain what it does and why
-3. Wait for explicit user approval
-4. Run the command
-5. Parse output and report progress in human terms
+## Step 5: Long Sessions
 
-## Step 5: Long Session Management
-
-For recovery jobs expected to take more than 30 minutes:
+Jobs over 30 minutes:
 
 ```bash
 bash scripts/session-manager.sh start
 ```
 
-This wraps btcrecover in a managed `screen` or `tmux` session with automatic checkpointing via `--savefile`.
-
-Progress parsing reads btcrecover's native output and translates to: "X% complete, estimated Y hours remaining."
+Wraps btcrecover in screen/tmux with automatic checkpointing. Reports progress in plain English.
 
 ## Step 6: Progress Briefings
 
-At each milestone (25%, 50%, 75%, completion), provide a plain-English progress briefing:
+At 25%, 50%, 75% and completion, report:
 - What has been tried
-- What is currently running
-- Estimated time remaining
-- Whether the search space is being reduced as expected
+- What is running
+- Time remaining
+- Search space reduction
 
-## Step 7: Post-Recovery Protocol
+## Step 7: Post Recovery
 
 When btcrecover finds the credential:
 
-**Stage 1 — Intercept (before congratulations)**
-"We found it. Before anything else, I need to walk you through something important."
+**Intercept** — "We found it. Before anything else, walk through this with me."
 
-**Stage 2-7: Run sweep-reminder.sh**
+**Run sweep script:**
 ```bash
 bash scripts/sweep-reminder.sh
 ```
 
-Six mandatory steps with Enter gates between each:
-1. The reframe: "Accessible is not the same as safe."
-2. New wallet setup on clean device
-3. Address display with 8-character verification
-4. Test transaction gate (defeats clipboard hijackers)
-5. Full sweep (sweep, not import)
+Six steps with Enter gates:
+1. Reframe: accessible is not safe
+2. Create new wallet on clean device
+3. Verify receive address (8 characters)
+4. Test transaction (defeats clipboard hijackers)
+5. Full sweep (not import)
 6. On-chain verification
 
-**Stage 8: Session destruction**
+**Destroy session:**
 ```bash
 bash scripts/nuke-session.sh
 ```
 
-Destroys all session data, tokenlists, extract files, clipboard, shell history, and terminal scrollback.
+Deletes tokenlists, extracts, clipboard, shell history, scrollback.
 
-## Security Model
+## Security
 
 ### Three Tiers
 
-**TIER 1 — FULLY OFFLINE (maximum security)**
-- Local AI model + internet disconnected + btcrecover local
-- Nobody sees keys outside your machine
-- Recommended for any wallet above $1,000
+**Tier 1 — Fully offline**
+Local AI, no internet, btcrecover local. No one sees your keys. Recommended for wallets over $1,000.
 
-**TIER 2 — LOCAL AGENT + CLOUD API (safe cloud reasoning)**
-- Hermes on your machine calls a cloud AI API
-- Wallet file and btcrecover run locally
-- Only text prompts go to the cloud
-- Consent gate: "I UNDERSTAND"
+**Tier 2 — Local agent + cloud API**
+Hermes on your machine calls a cloud API. Wallet file stays local. Text prompts only. Consent: "I UNDERSTAND".
 
-**TIER 3 — FULLY ONLINE (use with clear understanding)**
-- Skill runs on Claude.ai, Grok, VPS, or uncontrolled environment
-- Consent gate: "I UNDERSTAND AND ACCEPT"
-- Sweep urgency: IMMEDIATE — treat all keys as compromised
+**Tier 3 — Fully online**
+Use with caution. Consent: "I UNDERSTAND AND ACCEPT". Sweep immediately.
 
-### Key Principle
-Mode 2 is not Mode 3. In Mode 2, the cloud AI is a reasoning engine generating command-line instructions. You run those instructions locally. In Mode 3, the inference environment is not under your control.
+### Key Distinction
+Tier 2 is not Tier 3. In Tier 2, the cloud API receives text prompts, never your wallet file or keys. You run the commands locally. In Tier 3, the platform itself controls the environment.
 
-## What the Skill Never Does
+## What This Skill Never Does
 
-- Never executes anything without explicit user approval
-- Never holds, moves, or transmits funds
-- Never shares seed phrases or private keys with anyone
-- Never stores sensitive information in plain text
-- Never contacts the user (the skill is a file, not a service)
-- Never guarantees successful recovery
+- Execute anything without approval
+- Hold, move or transmit funds
+- Share seed phrases or private keys
+- Store sensitive data in plain text
+- Contact you (it is a file, not a service)
+- Guarantee success
 
-## Agent Compatibility
+## Compatibility
 
-Works with any agent supporting the agentskills.io SKILL.md standard:
-- Hermes Agent (Nous Research) — primary agent, see `agents/hermes.md`
-- Claude Code (Anthropic) — see `agents/claude-code.md`
-- Cline (VS Code) — see `agents/cline.md`
-- Cursor — see `agents/cursor.md`
-- Any LLM or chat interface — see `agents/generic.md`
+**Agents:** Hermes, Claude Code, Cline, Cursor, any agent supporting the SKILL.md standard.
 
-## Model Compatibility
-
-Works with local models (Ollama) and cloud APIs:
-- Local: Ollama with hermes3:8b, qwen3:14b, deepseek-r1:14b/32b
-- Cloud: Claude, GPT, Gemini, DeepSeek via OpenRouter
+**Models:** Local via Ollama (hermes3:8b, qwen3:14b, deepseek-r1:14b/32b). Cloud via Claude, GPT, Gemini, DeepSeek, OpenRouter.
 
 ## License
 
-GPL-2.0 — free forever.
+GPL-2.0. Free forever.
 
 ## Attribution
 
 Built on btcrecover by Stephen Rothery (3rdIteration).
 Inspired by @cprkrn's May 2026 recovery story.
-Skill structure informed by Andrej Karpathy's LLM coding observations.
+Skill structure informed by Andrej Karpathy's work on LLM agent behaviour.
 
 ---
 *Free. Open source. Always.*

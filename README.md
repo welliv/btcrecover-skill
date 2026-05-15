@@ -6,20 +6,22 @@ Built on btcrecover by 3rdIteration. Free and open source. Always.
 
 ## Quick Start
 
-See [install.sh](install.sh) for the verified one-command installer.
+```bash
+curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
+```
 
-## Documentation
+## Docs
 
-- [PROJECT.md](PROJECT.md) - Complete project overview
-- [SKILL.md](SKILL.md) - Main AI orchestrator (start here)
-- [guides/local-recovery-setup.md](guides/local-recovery-setup.md) - Complete Ollama + Hermes setup
-- [agents/](agents/) - Agent-specific installation guides
+- [PROJECT.md](PROJECT.md) — full project overview
+- [SKILL.md](SKILL.md) — AI orchestrator (start here)
+- [guides/local-recovery-setup.md](guides/local-recovery-setup.md) — Ollama + Hermes setup
+- [agents/](agents/) — agent-specific install guides
 
 ## Security
 
-- [SECURITY.md](SECURITY.md) - Responsible disclosure policy
-- [VERIFIED.md](VERIFIED.md) - Cryptographic authenticity anchor
-- [DISCLAIMER.md](DISCLAIMER.md) - Legal protection and informed consent
+- [SECURITY.md](SECURITY.md) — disclosure policy
+- [VERIFIED.md](VERIFIED.md) — authenticity anchor
+- [DISCLAIMER.md](DISCLAIMER.md) — legal protection
 
 ## Maintainers
 

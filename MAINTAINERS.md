@@ -12,7 +12,7 @@ Stephen is the original author and maintainer of btcrecover, the battle-tested r
 
 ## Skill Author
 
-**@you** (or your preferred GitHub handle)  
+**welliv**  
 - GitHub: [https://github.com/welliv](https://github.com/welliv)  
 - Role: Architecture, security model, agent integration, post-recovery safety protocol, and overall skill design.
 
