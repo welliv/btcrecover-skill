@@ -15,7 +15,7 @@
 
 ### How to report
 
-Send a private report to: **welliv@users.noreply.github.com**
+Send a private report to: **steve@cryptoguide.tips**
 
 Subject line: `[SECURITY] btcrecover-skill — [brief description]`
 
