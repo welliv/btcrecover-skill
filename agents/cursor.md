@@ -9,14 +9,14 @@ Cursor is an AI-powered code editor that supports the SKILL.md format.
 ### Option 1 — Verified installer
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 # Select option 3: ~/.cursor/skills/ (Cursor)
 ```
 
 ### Option 2 — Manual
 
 ```bash
-git clone https://github.com/[yourusername]/btcrecover-skill
+git clone https://github.com/welliv/btcrecover-skill
 
 # Global (all projects)
 mkdir -p ~/.cursor/skills/

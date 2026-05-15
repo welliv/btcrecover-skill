@@ -10,14 +10,14 @@ SKILL.md format and can use both local models (via Ollama) and cloud APIs.
 ### Option 1 — Verified installer
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 # Select option 3: .vscode/skills/ (Cline)
 ```
 
 ### Option 2 — Manual
 
 ```bash
-git clone https://github.com/[yourusername]/btcrecover-skill
+git clone https://github.com/welliv/btcrecover-skill
 mkdir -p .vscode/skills/
 cp -r btcrecover-skill .vscode/skills/
 chmod +x .vscode/skills/btcrecover-skill/scripts/*.sh

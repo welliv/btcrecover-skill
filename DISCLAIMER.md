@@ -136,4 +136,4 @@ agree to its terms. That confirmation was timestamped in the session log.
 ---
 
 *GPL-2.0 License — see LICENSE file*
-*btcrecover skill — https://github.com/[yourusername]/btcrecover-skill*
+*btcrecover skill — https://github.com/welliv/btcrecover-skill*

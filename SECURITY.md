@@ -18,7 +18,7 @@ Please follow the responsible disclosure process below.
 
 ### How to report
 
-Send a private report to: **[your-security-email]**
+Send a private report to: **welliv@users.noreply.github.com**
 
 Use this subject line: `[SECURITY] btcrecover-skill — [brief description]`
 
@@ -36,8 +36,8 @@ If the vulnerability involves sensitive details you would prefer to
 encrypt, use the author's GPG key:
 
 ```bash
-curl https://keybase.io/[yourusername]/key.asc | gpg --import
-gpg --encrypt --recipient [yourusername] --armor your-report.txt
+curl https://keybase.io/welliv/key.asc | gpg --import
+gpg --encrypt --recipient welliv --armor your-report.txt
 ```
 
 Send the encrypted output to the email address above.

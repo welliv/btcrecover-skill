@@ -15,7 +15,7 @@ message. No installation required.
 1. Open your LLM chat interface (any model, any platform)
 
 2. Copy the entire contents of SKILL.md from:
-   https://github.com/[yourusername]/btcrecover-skill/blob/main/SKILL.md
+   https://github.com/welliv/btcrecover-skill/blob/main/SKILL.md
 
 3. Paste it as your first message (or as the system prompt if supported)
 

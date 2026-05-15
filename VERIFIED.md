@@ -13,7 +13,7 @@ canonical repository, treat the installation as potentially compromised.
 ## Canonical source
 
 ```
-https://github.com/[yourusername]/btcrecover-skill
+https://github.com/welliv/btcrecover-skill
 ```
 
 This is the only official repository. Every other copy is either a fork
@@ -28,15 +28,15 @@ cryptographically signed and publicly auditable on Keybase.
 
 | Platform | URL |
 |---|---|
-| Keybase | https://keybase.io/[yourusername] |
-| GitHub | https://github.com/[yourusername] |
-| X (Twitter) | https://x.com/[yourusername] |
+| Keybase | https://keybase.io/welliv |
+| GitHub | https://github.com/welliv |
+| X (Twitter) | https://x.com/welliv |
 
 To verify these identities are linked:
 
 ```bash
 # Install Keybase: https://keybase.io/download
-keybase id [yourusername]
+keybase id welliv
 # Output shows all verified accounts linked to the same cryptographic key
 ```
 
@@ -53,7 +53,7 @@ Import the author's public key:
 
 ```bash
 # From Keybase (recommended)
-curl https://keybase.io/[yourusername]/key.asc | gpg --import
+curl https://keybase.io/welliv/key.asc | gpg --import
 
 # Then verify a signed release:
 gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
@@ -69,7 +69,7 @@ a tamper-resistant public record that cannot be altered after the fact.
 
 ```
 Certificate identity:
-  https://github.com/[yourusername]/btcrecover-skill/.github/workflows/release.yml@refs/tags/[version]
+  https://github.com/welliv/btcrecover-skill/.github/workflows/release.yml@refs/tags/[version]
 
 OIDC issuer:
   https://token.actions.githubusercontent.com
@@ -82,7 +82,7 @@ Verify a release with Cosign:
 
 cosign verify-blob \
   --bundle CHECKSUMS.sha256.bundle \
-  --certificate-identity-regexp="github.com/[yourusername]" \
+  --certificate-identity-regexp="github.com/welliv" \
   --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
   CHECKSUMS.sha256
 
@@ -110,7 +110,7 @@ The safest way to install. Does Cosign verification, GPG verification,
 and SHA256 file integrity check automatically:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 ```
 
 Only proceed if all three checks pass.
@@ -155,7 +155,7 @@ does any of the above in the name of this skill is a scammer.
 If you find a package on skills.sh, GitHub, npm, or any other platform
 that appears to be impersonating this skill:
 
-Open an issue at: https://github.com/[yourusername]/btcrecover-skill/issues
+Open an issue at: https://github.com/welliv/btcrecover-skill/issues
 Title it: `[IMPERSONATION] found fake skill at [URL]`
 
 Include the URL and any details you have. We will investigate and file

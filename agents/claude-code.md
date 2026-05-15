@@ -10,7 +10,7 @@ Claude Code, Anthropic's official terminal coding agent.
 ### Option 1 — Verified installer (recommended)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 ```
 
 The installer auto-detects Claude Code's skills directory (`~/.claude/skills/`)
@@ -19,13 +19,13 @@ and installs there by default.
 ### Option 2 — npx (via skills.sh)
 
 ```bash
-npx skills add [yourusername]/btcrecover-skill
+npx skills add welliv/btcrecover-skill
 ```
 
 ### Option 3 — Manual
 
 ```bash
-git clone https://github.com/[yourusername]/btcrecover-skill
+git clone https://github.com/welliv/btcrecover-skill
 cp -r btcrecover-skill ~/.claude/skills/
 chmod +x ~/.claude/skills/btcrecover-skill/scripts/*.sh
 ```

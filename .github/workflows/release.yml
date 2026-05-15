@@ -152,7 +152,7 @@ jobs:
               CHECKSUMS.sha256
 
             # GPG
-            curl https://keybase.io/[yourusername]/key.asc | gpg --import
+            curl https://keybase.io/welliv/key.asc | gpg --import
             gpg --verify CHECKSUMS.sha256.asc CHECKSUMS.sha256
 
             # File integrity
@@ -160,8 +160,8 @@ jobs:
             ```
 
             ### Author identity
-            - Keybase: https://keybase.io/[yourusername]
-            - GitHub: https://github.com/[yourusername]
+            - Keybase: https://keybase.io/welliv
+            - GitHub: https://github.com/welliv
 
             ### Built on
             - btcrecover by Stephen Rothery: https://github.com/3rdIteration/btcrecover

@@ -967,8 +967,8 @@ Complete in this order. Do not skip or reorder.
 ```
 1. Create Keybase account
    keybase login
-   keybase prove github [yourusername]
-   keybase prove twitter [yourusername]
+   keybase prove github welliv
+   keybase prove twitter welliv
    keybase pgp gen
 
 2. Add GPG key to GitHub
@@ -985,13 +985,13 @@ Complete in this order. Do not skip or reorder.
    Require signed commits
 
 5. Add CODEOWNERS file
-   @[yourusername] on all security-critical files
+   @welliv on all security-critical files
 
 6. Create .github/workflows/release.yml
    Cosign keyless signing on every tag push
    Artifacts: CHECKSUMS.sha256, CHECKSUMS.sha256.bundle, CHECKSUMS.sha256.asc
 
-7. Fill in all [yourusername] and [your address] placeholders
+7. Fill in all welliv and [your address] placeholders
    Files containing placeholders:
    - MAINTAINERS.md
    - VERIFIED.md
@@ -1012,7 +1012,7 @@ Complete in this order. Do not skip or reorder.
    sha256sum -c CHECKSUMS.sha256
 
 10. Test the verified installer on a clean machine
-    curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+    curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
     Confirm: Cosign ✓, GPG ✓, SHA256 ✓
 
 11. Submit to skills.sh
@@ -1029,7 +1029,7 @@ Complete in this order. Do not skip or reorder.
 ### The canonical install command (publish this everywhere)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 ```
 
 This command downloads, verifies (Cosign + GPG + SHA256), and installs.
@@ -1064,5 +1064,5 @@ Then tell no one about it for thirty days.
 *Built on btcrecover by Stephen Rothery (3rdIteration)*
 *GPL-2.0 — free forever*
 
-*Canonical source: https://github.com/[yourusername]/btcrecover-skill*
-*Author identity: https://keybase.io/[yourusername]*
+*Canonical source: https://github.com/welliv/btcrecover-skill*
+*Author identity: https://keybase.io/welliv*

@@ -8,7 +8,7 @@
 #   3. SHA256 checksums — verifies every installed file is unmodified
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/[yourusername]/btcrecover-skill/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 #
 # The installer will NOT complete if any verification step fails.
 # It will delete any partial installation and exit with an error.
@@ -17,8 +17,8 @@
 set -euo pipefail
 
 # --- Configuration (updated on each release) ---
-GITHUB_USER="[yourusername]"
-KEYBASE_USER="[yourusername]"
+GITHUB_USER="welliv"
+KEYBASE_USER="welliv"
 REPO_NAME="btcrecover-skill"
 REPO_URL="https://github.com/${GITHUB_USER}/${REPO_NAME}"
 RAW_URL="https://raw.githubusercontent.com/${GITHUB_USER}/${REPO_NAME}/main"

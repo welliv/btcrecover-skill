@@ -24,7 +24,7 @@ from datetime import datetime
 from pathlib import Path
 
 # --- Configuration ---
-CANONICAL_GITHUB  = "[yourusername]/btcrecover-skill"
+CANONICAL_GITHUB  = "welliv/btcrecover-skill"
 CANONICAL_NAME    = "btcrecover-skill"
 SKILLS_SH_API     = "https://api.skills.sh/v1/search"
 GITHUB_SEARCH_API = "https://api.github.com/search/repositories"

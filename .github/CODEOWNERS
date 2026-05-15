@@ -13,44 +13,44 @@
 # --- Security-critical: require author approval ---
 
 # The main skill orchestrator
-SKILL.md                                    @[yourusername]
+SKILL.md                                    @welliv
 
 # Safety rules — the most sensitive document in the repo
-references/safety-rules.md                  @[yourusername]
+references/safety-rules.md                  @welliv
 
 # Post-recovery scripts — handle private keys and session cleanup
-scripts/sweep-reminder.sh                   @[yourusername]
-scripts/nuke-session.sh                     @[yourusername]
+scripts/sweep-reminder.sh                   @welliv
+scripts/nuke-session.sh                     @welliv
 
 # Installation and verification chain
-install.sh                                  @[yourusername]
-scripts/verify-btcrecover.sh                @[yourusername]
-VERIFIED.md                                 @[yourusername]
-CHECKSUMS.sha256                            @[yourusername]
+install.sh                                  @welliv
+scripts/verify-btcrecover.sh                @welliv
+VERIFIED.md                                 @welliv
+CHECKSUMS.sha256                            @welliv
 
 # GitHub Actions — prevents supply chain attacks via CI
-.github/workflows/release.yml              @[yourusername]
+.github/workflows/release.yml              @welliv
 
 # Legal and identity documents
-DISCLAIMER.md                               @[yourusername]
-MAINTAINERS.md                              @[yourusername]
+DISCLAIMER.md                               @welliv
+MAINTAINERS.md                              @welliv
 
 # --- Connectivity and session management ---
-scripts/connectivity-check.sh               @[yourusername]
-scripts/session-manager.sh                  @[yourusername]
+scripts/connectivity-check.sh               @welliv
+scripts/session-manager.sh                  @welliv
 
 # --- Reference data (security-relevant) ---
-references/benchmarks.json                  @[yourusername]
+references/benchmarks.json                  @welliv
 
 # --- Sub-skills (sensitive — handle wallet data logic) ---
-skills/password/SKILL.md                    @[yourusername]
-skills/seed/SKILL.md                        @[yourusername]
-skills/forensics/SKILL.md                   @[yourusername]
+skills/password/SKILL.md                    @welliv
+skills/seed/SKILL.md                        @welliv
+skills/forensics/SKILL.md                   @welliv
 
 # --- Everything else: any maintainer can approve ---
 # Add co-maintainers here as the project grows:
-# README.md                                 @[yourusername] @[comaintainer]
-# references/wallet-types.md               @[yourusername] @[comaintainer]
-# references/typo-patterns.md              @[yourusername] @[comaintainer]
-# agents/                                  @[yourusername] @[comaintainer]
-# guides/                                  @[yourusername] @[comaintainer]
+# README.md                                 @welliv @[comaintainer]
+# references/wallet-types.md               @welliv @[comaintainer]
+# references/typo-patterns.md              @welliv @[comaintainer]
+# agents/                                  @welliv @[comaintainer]
+# guides/                                  @welliv @[comaintainer]
