@@ -11,7 +11,17 @@ Built on btcrecover by Stephen Rothery. Free and open source. Always.
 
 ## Response style (user preference)
 
-Use simplified British English with perfect grammar and natural tone. Keep responses brief, substantive, and free of redundancy. Never use dashes between words or as sentence separators. Prefer decisive one-pass action ("Go!", "Do it on my behalf", "Push the fix"). When the user says "audit", "fact check", or "review docs", immediately run full wargame scoring, locate every mention across all files, rewrite the highest-visibility files first, soften unverifiable claims, and confirm zero remaining issues before finishing. When asked to "remember our btcrecover session", immediately recall the hybrid recovery pattern (passphrase truncation, Sparrow BIP84 change address at index 10, --addr-limit 100, cd ~/btcrecover, seedrecover-cli with --passphrase-list). See references/hybrid-recovery.md for the exact template.
+Use simplified British English with perfect grammar and natural tone. Keep responses brief, substantive, and free of redundancy. Never use dashes between words or as sentence separators. Prefer decisive one-pass action ("Go!", "Do it on my behalf", "Push the fix").
+
+When the user says "audit", "fact check", or "review docs":
+1. Run full wargame scoring on 10-12 core scenarios.
+2. Locate every mention across all files.
+3. Rewrite the highest-visibility files first (SECURITY.md, SKILL.md, PROJECT.md, README.md).
+4. Soften unverifiable claims.
+5. Confirm zero remaining issues before finishing.
+6. Patch this SKILL.md with the new permanent rule.
+
+Respond to "remember our btcrecover session" by immediately recalling the hybrid recovery pattern (passphrase truncation, Sparrow BIP84 change address at index 10, --addr-limit 100, cd ~/btcrecover, python3 btcrecover.py --bip39 with --passwordlist). See references/hybrid-recovery.md for the exact template.
 
 ## Audit & Housekeeping Workflow (captured 16 May 2026)
 
