@@ -43,7 +43,7 @@ bash scripts/verify-btcrecover.sh
 ```
 - Exit 0: verified — proceed to Step 1.
 - Exit 1: suspicious fork detected — show warning, refuse to continue until user reinstalls from the official source.
-- Exit 2: btcrecover missing (deleted or moved) — offer to re-run setup.
+- Exit 2: btcrecover missing or broken (deleted, moved, venv corrupted) — offer to re-run setup.
 
 **If marker does not exist (first run):** tell the user warmly:
 > "Before we start, I need to set up btcrecover — the open-source tool that does the actual recovery work. One-time setup, takes about a minute."
@@ -54,9 +54,16 @@ bash scripts/setup-btcrecover.sh
 ```
 - Exit 0: ready — proceed to Step 1.
 - Exit 1: failed or declined — explain what is needed and wait.
-- Exit 2: prerequisites missing (Python/git) — show the install instructions from the script output and pause until the user confirms they are installed.
+- Exit 2: prerequisites missing (Python/git/venv) — show the install instructions from the script output and pause until the user confirms they are installed.
 
 If btcrecover is missing at any later step, do not show a raw error. Say: "It looks like btcrecover is missing — let me set that up." Then run `setup-btcrecover.sh` and resume.
+
+**After setup**, run btcrecover and seedrecover via the convenience wrappers (not raw python):
+```bash
+~/btcrecover/btcrecover --help
+~/btcrecover/seedrecover --help
+```
+The setup script creates a Python virtual environment (`venv/`) inside the btcrecover directory and installs all dependencies there (pycryptodome for password recovery, coincurve for seed recovery). The wrappers auto-activate the venv — never bypass them with raw `python btcrecover.py`.
 
 ## Step 1: Connectivity — HARD GATE
 
@@ -181,11 +188,56 @@ Load the right subskill. For each command:
 
 **Command-building defaults (all cases):**
 - Always use `--addr-limit 100` unless the user knows the exact address index. People send and receive to non-default indices (change addresses, reused wallets). Index 0 is not safe to assume.
-- Always force all derivation paths: `--force-bip44 --force-p2sh --force-p2tr`. btcrecover auto-detects the address type and skips other paths, but wallet software (Sparrow, Electrum, hardware wallets) may use different derivation types for different addresses. Forcing all paths catches more matches at minimal performance cost.
+- Use `--no-eta` to skip the pre-counting phase and speed up search start.
+- Force derivation paths: `--force-bip44 --force-p2sh`. ⚠️ **Avoid `--force-p2tr`** — the P2TR (Taproot) code in btcrecover crashes on some systems (coincurve/P2TR_tools segfault). Instead, supply the user's address directly — btcrecover auto-detects the address type and only searches compatible derivation paths.
+- For `bc1q...` (BIP84 SegWit) addresses, no force flags are needed — the tool auto-detects correctly.
 - Pass this rule to any subskill that builds btcrecover commands.
+
+**Hybrid recovery — missing seed word + unknown passphrase (two-variable search):**
+When the user has BOTH a missing/unknown seed word AND a forgotten passphrase, don't run seedrecover separately for each dimension. Combine them in one pass:
+
+```bash
+python seedrecover.py \
+  --mnemonic "word1 word2 word3 ? word5 word6 word7 word8 word9 word10 word11 word12" \
+  --passphrase-list /tmp/passphrase_candidates.txt \
+  --addrs bc1q... \
+  --addr-limit 100 \
+  --wallet-type bip39 \
+  --no-eta --no-dupchecks
+```
+
+This iterates both dimensions simultaneously: all candidate words for `?` × all passphrases in the list. With 22 passphrases and 2048 word candidates (~45K combos), Phase 2 completes in ~15-30 seconds on CPU. Always pass `--no-eta` to skip the pre-counting phase.
+
+**Passphrase truncation is critical.** Users almost always shorten passphrases compared to what they remember. For every passphrase hint, generate truncations of 3-5 characters: `recoverytesting` → `recoverytest`, `recoverytestin`, `recoverytesti`, etc. Use a tokenlist or passphrase-list file (one per line). Save to `--passphrase-list FILE` and pass to seedrecover.
+
+**Checksum pre-filter for missing seed word:**
+When the 12th word is missing (and only the 12th), pre-compute which BIP39 words pass the checksum. For a 12-word seed, exactly 128 of 2048 words are valid checksum completions. This confirms the seed phrase structure is sound and identifies the exact candidate pool. To compute:
+
+```python
+import hashlib
+wordlist = open('lib/bitcoinlib/wordlist/english.txt').read().splitlines()
+word_to_idx = {w: i for i, w in enumerate(wordlist)}
+known_indices = [word_to_idx[w] for w in known_words]
+valid = []
+for c_idx, c_word in enumerate(wordlist):
+    bits = ''.join(f'{i:011b}' for i in known_indices + [c_idx])
+    entropy_bytes = int(bits[:128], 2).to_bytes(16, 'big')
+    checksum = f'{int(hashlib.sha256(entropy_bytes).hexdigest()[0], 16):04b}'[:4]
+    if bits[128:] == checksum:
+        valid.append(c_word)
+# valid now contains the ~128 checksum-valid completions
+```
+
+Use this as a pre-flight check, not to restrict the search — seedrecover handles the full 2048-word search in seconds anyway. The value is confirming the problem structure (missing word vs. wrong word in a different position).
 
 **Tokenlist building (passphrase recovery):**
 For every passphrase guess, generate truncations. If the user says `recoverytesting`, include `recoverytest`, `recoverytestin`, `recoverytesti` and other natural truncations. People often shorten phrases in wallets. Also generate all-lowercase versions and common suffix additions (numbers, `!`).
+
+**Subskills available (see references in skill directory):**
+
+- **Password recovery** (`references/password-skill.md`): 8-phase approach for wallet password, passphrase, BIP38, brainwallet, warpwallet, and raw private key recovery. Includes GPU acceleration guidance.
+- **Seed recovery** (`references/seed-skill.md`): 6 problem types (missing words, wrong word, scrambled, invalid checksum, wrong derivation, extra passphrase). Covers BIP39, SLIP39, Electrum, aezeed.
+- **Forensics** (`references/forensics-skill.md`): File archaeology and backup discovery. 9 phases including the cprkrn Protocol.
 
 ## Step 5: Long Sessions
 
@@ -254,40 +306,6 @@ If you discovered a bug in btcrecover, used a workaround, or added a feature dur
 
 btcrecover improves because users upstream their findings. A single bug report helps the next person in the same situation.
 
-## Test Prompts
-
-Run these to validate the skill:
-
-```text
-"I lost my Bitcoin Core wallet password. I think it was a pet name with numbers."
-
-"I have 12 seed words but three of them might be wrong. Help me recover."
-
-"I found an old USB stick with wallet files. Not sure what type."
-
-"I remember the password had leet speak in it. Like @ for a and 3 for e."
-
-"I have the wallet file but the password changed in 2020. Is there an older backup?"
-
-"I have my 12 seed words and a known address from the wallet, but I forgot my passphrase. It was a sentence-like phrase, all lowercase."
-
-"I have my 12 seed words but they might be in the wrong order. I know my old address though."
-
-"I have a BIP38 encrypted paper wallet. The private key starts with 6Pn."
-
-"I have a brainwallet address and I remember the passphrase was a book title."
-
-"My seed words are all there but I think 2 words might be swapped."
-
-"I only have 10 of my 12 seed words. I have an address with some transactions on it."
-
-"I have a SLIP39 backup from my Trezor. I have 2 of 3 shares but one word in each share might be wrong."
-
-"I remember my Electrum wallet password was a movie quote with numbers."
-```
-
-Each prompt should trigger a different subskill (password, seed, forensics, typo mutations, descrambling, BIP38, brainwallet, hybrid seed+passphrase, swapped words, SLIP39, and wallet password recovery).
-
 ## Security
 
 ### Three Tiers
@@ -313,11 +331,48 @@ Tier 2 is not Tier 3. In Tier 2, only text prompts go to cloud — your wallet f
 - Contact you (it's a file, not a service)
 - Guarantee success
 
-## Compatibility
+## Pitfalls
 
-**Agents:** Hermes, Claude Code, Cline, Cursor, any agent supporting the SKILL.md standard.
+### `|| true` swallows setup failures
+The original `setup-btcrecover.sh` used `pip3 install ... || true`, which silently suppressed all install failures — including PEP 668 "externally-managed-environment" errors on modern Debian/Ubuntu (Python ≥3.11). The script would exit 0 with "✅" despite no dependencies installed, and btcrecover/seedrecover would crash at first use with `ModuleNotFoundError: No module named 'Crypto'` or `No module named 'coincurve'`.
 
-**Models:** Local via Ollama (hermes3:8b, qwen3:14b, deepseek-r1:14b/32b). Cloud via Claude, GPT, Gemini, DeepSeek, OpenRouter.
+**Fix (already applied):** The setup script now:
+1. Creates a Python virtual environment (`venv/`) — bypasses PEP 668 entirely
+2. Installs requirements into the venv
+3. Verifies both tools load before writing the marker file
+4. Creates convenience wrappers (`~/btcrecover/btcrecover` and `~/btcrecover/seedrecover`) that auto-activate the venv
+5. The verify script now checks venv existence, wrapper executability, and runs a load test — not just file+git-remote checks
+
+If you land in a situation where setup exits 0 but tools don't run, always check whether `pip install` ran successfully. Running `~/btcrecover/btcrecover --help` directly is the best smoke test.
+
+### Interactive gate scripts in PTY
+The `connectivity-check.sh --enforce` script is interactive. It blocks on stdin waiting for a tier phrase. Always spawn it in a PTY (terminal with `pty=true`) and keep the session alive. If the PTY process ends before you submit input, re-run it. The user must type the exact phrase shown — do not abbreviate or rephrase it. The three valid inputs are: `DISCONNECTED`, `TIER2 I UNDERSTAND`, `TIER3 I UNDERSTAND AND ACCEPT`.
+
+### No address means blind recovery
+If the user provides seed words but no address, xpub, wallet file, or AddressDB, btcrecover has nothing to verify against. It will generate candidate seeds but cannot tell which one is correct. Always push for at least one known receive address before running seedrecover. This is covered in the "When Recovery Is Not Practical" section — enforce it.
+
+### seedrecover Phase 3 timeout produces scary-but-harmless crash traces
+
+seedrecover runs in 4 phases. Phase 2 (1 missing/different word from the BIP39 list) completes in ~1 second for single-word searches. Phase 3 allows up to 2 mistakes (228K+ combinations) and can take 2+ minutes. When the process is killed by `timeout`, the worker pool threads crash with deep `KeyboardInterrupt` traces through `btcrseed.py` → `coincurve` → `P2TR_tools.py` / `base64.b16decode`. This is **normal** — just the timeout interrupting worker processes mid-computation.
+
+- If **Phase 2** says "Search Complete — Seed not found", the 1-missing-word case (2048 candidates) is exhausted with no match. The problem requires more variables.
+- If **Phase 3** is mid-run when timeout hits, the seed was not found in whatever it searched so far. You can resume with `--skip N` (see seed-skill reference).
+- Always run with `--no-eta` to skip the 8-30 second pre-counting phase.
+- The first 2-3 failures are harmless (the search space grows exponentially by phase).
+
+### 12th-word search with passphrase: always use `--passphrase-list`, never single `--passphrase-arg`
+
+When searching for a missing 12th word AND an unknown passphrase, a single `--passphrase-arg "recovertester"` call tests only one passphrase against all 2048 words. This is too narrow — the user's actual passphrase is almost always a truncation or variation of what they recall. Use `--passphrase-list FILE` with 20-30 candidates (original hints + truncations + variants) to test both dimensions simultaneously in a single Phase 2 pass (~30 seconds).
+
+### missing pycryptodome and coincurve
+
+These are the two most common missing dependencies and cause opaque import errors:
+- `No module named 'Crypto'` → missing pycryptodome (password recovery, btcrecover.py)
+- `No module named 'coincurve'` → missing coincurve (seed recovery, seedrecover.py)
+The updated setup script installs both, but if pip fails mid-way, install them explicitly:
+```bash
+cd ~/btcrecover && source venv/bin/activate && pip install pycryptodome coincurve
+```
 
 ## License
 
@@ -327,7 +382,7 @@ GPL-2.0. Free forever.
 
 Built on btcrecover by Stephen Rothery (3rdIteration).
 Inspired by @cprkrn's May 2026 recovery story.
-Skill structure informed by Andrej Karpathy's work on LLM agent behaviour ([tweet](https://x.com/karpathy/status/2015883857489522876), [repo](https://github.com/multica-ai/andrej-karpathy-skills)).
+Skill structure informed by Andrej Karpathy's work on LLM agent behaviour.
 
 ---
 *Free. Open source. Always.*
