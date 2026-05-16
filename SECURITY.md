@@ -2,7 +2,7 @@
 
 This skill is designed with strong safety principles.
 
-## Three tiers of security
+## Two tiers of security
 
 **Tier 1 (offline)**  
 Everything runs on your computer with a local AI model. No data leaves your machine. This is the safest option for large amounts.
@@ -10,13 +10,10 @@ Everything runs on your computer with a local AI model. No data leaves your mach
 **Tier 2 (recommended)**  
 Your wallet data stays on your computer. The AI uses the cloud only for reasoning. This offers good security with easy setup.
 
-**Tier 3 (high risk)**  
-The recovery runs fully online. Your data may be processed by the cloud. Only choose this if you accept the risk. Sweep funds immediately if recovery succeeds.
-
 ## What we never do
 
 - Hold or move your funds
-- Ask for your seed phrase or private keys unless you choose tier 3
+- Ask for your seed phrase or private keys
 - Guarantee that recovery will succeed
 - Replace professional advice for complex cases
 

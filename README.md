@@ -19,7 +19,7 @@ curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/instal
 
 ## Verification
 
-- [docs/verified-recoveries.md](docs/verified-recoveries.md) — 35/35 recovery scenarios proven against real wallets
+- [docs/verified-recoveries.md](docs/verified-recoveries.md) — Core recovery scenarios verified in wargame audit
 
 ## Security
 

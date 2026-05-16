@@ -27,7 +27,6 @@ recovery. You will run all generated commands yourself in a separate
 terminal.
 
 **Security note:** When using this method with a cloud LLM (Claude.ai,
-ChatGPT, Gemini, etc.), you are in Tier 3 (fully online). Do not paste
 your seed phrase, private keys, or wallet file into the chat. Use
 btcrecover's extract scripts to share only a safe hash.
 

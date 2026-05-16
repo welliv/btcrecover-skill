@@ -39,7 +39,6 @@ def get_recommendation(tier: int, recovery_type: str = "general", priority: str 
             "reason": "Currently one of the best balances of accuracy and speed.",
             "alternative": "GPT-4o - very capable and often faster."
         },
-        3: {  # Tier 3 - High risk / speed
             "primary": "GPT-4o Mini",
             "reason": "Fast and cost-effective for most recovery tasks.",
             "alternative": "Claude 3.5 Sonnet - more accurate if speed is less important."
@@ -86,5 +85,4 @@ if __name__ == "__main__":
     print(format_recommendation(2, "password"))
     print("\n=== Tier 1 Example ===")
     print(format_recommendation(1))
-    print("\n=== Tier 3 Example ===")
     print(format_recommendation(3))

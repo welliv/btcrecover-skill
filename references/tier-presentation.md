@@ -17,12 +17,10 @@
 |------|------------|-------------|
 | ⚡ **Tier 2** | Low Risk | Recommended. ... |
 | 🔒 **Tier 1** | Very Low Risk | ... |
-| 🚨 **Tier 3** | High Risk | ... |
 ```
 
 ## Risk Framing Rules
 
-- Tier 3 must explicitly state data exposure risk
 - Use "Only if you accept..." language for high-risk tiers
 - Add a separate warning line below the table for high-risk options
 

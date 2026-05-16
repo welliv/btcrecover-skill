@@ -85,7 +85,6 @@ User describes situation in plain English
         ↓
 Step 0: btcrecover installed/verified (setup-btcrecover.sh / verify-btcrecover.sh)
         ↓
-Step 1: Connectivity gate (Tier 1=offline / Tier 2=local+API / Tier 3=fully online)
         ↓
 Step 2: Triage — classify as PASSWORD | SEED | PASSPHRASE | FORENSICS | HYBRID
         ↓

@@ -1,12 +1,12 @@
 #!/bin/bash
-# btcrecover-skill connectivity checker
-# 3-layer online/offline detection: ping → DNS → TCP
+# btcrecover-skill connectivity checker (2-tier version)
+# Layered online/offline detection: ping → DNS → TCP
 #
-# Normal mode (backward-compatible):
+# Normal mode:
 #   bash scripts/connectivity-check.sh
-#   → exit 0 = FULLY_ONLINE | exit 1 = LOCAL_ONLY | exit 2 = OFFLINE
+#   → exit 0 = ONLINE | exit 1 = OFFLINE
 #
-# Enforce mode (hard gate — interactive tier consent):
+# Enforce mode (interactive consent):
 #   bash scripts/connectivity-check.sh --enforce
 #   → Shows tier menu if online, requires typed consent
 #   → Only returns exit 0 after valid consent or confirmed offline
@@ -20,7 +20,7 @@ LAYER3_TARGET="1.1.1.1:53"
 SESSION_DIR="${HOME}/.btcrecover-skill"
 CONSENT_LOG="${SESSION_DIR}/consent.log"
 
-# Colours (no-op if not a terminal)
+# Colours
 if [ -t 1 ]; then
   RED='\033[0;31m' GREEN='\033[0;32m' YELLOW='\033[1;33m'
   CYAN='\033[0;36m' BOLD='\033[1m' DIM='\033[2m' NC='\033[0m'
@@ -47,7 +47,7 @@ log_consent() {
 # =============================================================================
 
 echo ""
-step "Checking connectivity (3-layer)..."
+step "Checking connectivity (2-tier)..."
 echo ""
 
 # Layer 1: ICMP ping
@@ -59,7 +59,7 @@ else
   LAYER1=0
 fi
 
-# Layer 2: DNS resolution via TCP port 53
+# Layer 2: DNS resolution
 if timeout 3 bash -c "echo >/dev/tcp/$LAYER2_TARGET/53" 2>/dev/null; then
   echo "  ✓ Layer 2 (DNS): Online"
   LAYER2=1
@@ -68,7 +68,7 @@ else
   LAYER2=0
 fi
 
-# Layer 3: Direct TCP connection
+# Layer 3: Direct TCP
 if timeout 3 bash -c "echo >/dev/tcp/${LAYER3_TARGET%:*}/${LAYER3_TARGET#*:}" 2>/dev/null; then
   echo "  ✓ Layer 3 (TCP): Online"
   LAYER3=1
@@ -79,172 +79,53 @@ fi
 
 echo ""
 
-# Determine overall status
 if [[ $LAYER1 -eq 1 && $LAYER2 -eq 1 && $LAYER3 -eq 1 ]]; then
-  ONLINE_STATUS="FULLY_ONLINE"
-  EXIT_CODE=0
-elif [[ $LAYER1 -eq 1 ]]; then
-  ONLINE_STATUS="LOCAL_ONLY"
-  EXIT_CODE=1
+  ONLINE=1
+  echo -e "${GREEN}Result: ONLINE${NC}"
 else
-  ONLINE_STATUS="OFFLINE"
-  EXIT_CODE=2
+  ONLINE=0
+  echo -e "${YELLOW}Result: OFFLINE / PARTIAL${NC}"
 fi
 
-echo "  STATUS: ${ONLINE_STATUS}"
-echo ""
+# Enforce mode - two tier consent only
+if [[ "${1:-}" == "--enforce" ]]; then
+  if [[ $ONLINE -eq 1 ]]; then
+    hr
+    step "Connectivity detected. Choose tier:"
+    echo ""
+    echo -e "  ${GREEN}1${NC} — Tier 1 (offline)  |  Local model only (safest)"
+    echo -e "  ${YELLOW}2${NC} — Tier 2 (recommended) |  Local data + cloud reasoning"
+    echo ""
+    read -rp "Enter tier number [1-2]: " choice
 
-# Additional checks: active interfaces and cloud sync processes
-echo "Checking for active interfaces and cloud sync..."
-
-# Check for active non-loopback network interfaces
-ACTIVE_IFACES=()
-if command -v ip >/dev/null 2>&1; then
-  while IFS= read -r line; do
-    ACTIVE_IFACES+=("$line")
-  done < <(ip -br link show 2>/dev/null | grep -v "^lo " | awk '$2 == "UP" {print $1}')
-elif command -v ifconfig >/dev/null 2>&1; then
-  while IFS= read -r line; do
-    ACTIVE_IFACES+=("$line")
-  done < <(ifconfig 2>/dev/null | grep -E "^[a-z]" | grep -v "^lo" | grep "RUNNING" | awk -F: '{print $1}')
-fi
-
-if [[ ${#ACTIVE_IFACES[@]} -gt 0 && $EXIT_CODE -eq 2 ]]; then
-  warn "Active interface(s) detected despite ping failure: ${ACTIVE_IFACES[*]}"
-  warn "A VPN or firewall may be blocking ICMP. Treat as potentially online."
-fi
-
-# Check for cloud sync processes
-SYNC_PROCS=()
-for proc in "Dropbox" "Google Drive" "OneDrive" "iCloud" "nextcloud" "syncthing"; do
-  if pgrep -fi "$proc" >/dev/null 2>&1; then
-    SYNC_PROCS+=("$proc")
+    case "$choice" in
+      1)
+        log_consent 1 "TIER1 I UNDERSTAND"
+        echo -e "${GREEN}Tier 1 selected. Offline mode enforced.${NC}"
+        ;;
+      2)
+        read -rp "Type 'TIER2 I UNDERSTAND' to confirm: " confirm
+        if [[ "$confirm" == "TIER2 I UNDERSTAND" ]]; then
+          log_consent 2 "TIER2 I UNDERSTAND"
+          echo -e "${GREEN}Tier 2 selected.${NC}"
+        else
+          fail "Consent phrase incorrect. Aborting."
+          exit 1
+        fi
+        ;;
+      *)
+        fail "Invalid choice."
+        exit 1
+        ;;
+    esac
+  else
+    echo "Offline detected. Tier 1 enforced automatically."
+    log_consent 1 "TIER1 AUTO (offline)"
   fi
-done
-
-if [[ ${#SYNC_PROCS[@]} -gt 0 ]]; then
-  echo ""
-  warn "Cloud sync process(es) detected: ${SYNC_PROCS[*]}"
-  warn "These may upload recovery files before the cleanup step runs."
-  warn "Pause them before continuing. Resume after nuke-session.sh completes."
-  echo ""
 fi
 
-# =============================================================================
-# BACKWARD-COMPATIBLE MODE (no --enforce flag)
-# =============================================================================
-
-ENFORCE=false
-for arg in "$@"; do
-  [ "$arg" = "--enforce" ] && ENFORCE=true
-done
-
-if ! $ENFORCE; then
-  exit $EXIT_CODE
-fi
-
-# =============================================================================
-# ENFORCE MODE — INTERACTIVE TIER CONSENT
-# =============================================================================
-
-# If already offline, no enforcement needed
-if [[ $EXIT_CODE -eq 2 ]]; then
-  echo -e "${GREEN}${BOLD}  ✅ OFFLINE — Tier 1 active (maximum security)${NC}"
-  echo ""
-  echo "  No consent required. This is the default safe path."
-  echo ""
-  echo "  Optional: Verify full Tier 1 readiness with:"
-  echo "    bash scripts/tier1-check.sh"
-  echo ""
+if [[ $ONLINE -eq 1 ]]; then
   exit 0
+else
+  exit 1
 fi
-
-# ──────────────────────────────────────────────────────────────────────────────
-# ONLINE — Must show tier menu and obtain consent
-# ──────────────────────────────────────────────────────────────────────────────
-
-echo -e "${RED}${BOLD}  ⚠  YOU ARE ONLINE${NC}"
-echo ""
-echo "  Running wallet recovery while connected to the internet"
-echo "  exposes your sensitive data to network-level threats."
-echo ""
-
-while true; do
-
-hr
-echo ""
-step "Choose your security tier:"
-echo ""
-echo -e "  ${GREEN}1${NC} — DISCONNECT (recommended)"
-echo "       Type: DISCONNECTED"
-echo "       Disconnect Wi-Fi, Ethernet, VPN, and mobile hotspot."
-echo "       The check will re-run to confirm offline status."
-echo ""
-echo -e "  ${YELLOW}2${NC} — TIER 2: Local agent + cloud API"
-echo "       Type: TIER2 I UNDERSTAND"
-echo "       Text prompts go to cloud AI. Wallet file and keys stay"
-echo "       local. You run all btcrecover commands on your machine."
-echo ""
-echo -e "  ${RED}3${NC} — TIER 3: Fully online"
-echo "       Type: TIER3 I UNDERSTAND AND ACCEPT"
-echo "       Last resort. Platform controls the environment."
-echo "       Treat all keys as compromised if recovery succeeds."
-echo "       Sweep funds IMMEDIATELY."
-echo ""
-hr
-echo ""
-echo -n "  Type your choice > "
-read -r USER_INPUT
-echo ""
-
-case "${USER_INPUT^^}" in  # Uppercase for case-insensitive matching
-
-  DISCONNECTED)
-    echo "  Re-running connectivity check..."
-    echo ""
-    # Re-run the layers
-    LAYER1=0; LAYER2=0; LAYER3=0
-    if ping -c 1 -W 2 "$LAYER1_TARGET" >/dev/null 2>&1; then LAYER1=1; fi
-    if timeout 3 bash -c "echo >/dev/tcp/$LAYER2_TARGET/53" 2>/dev/null; then LAYER2=1; fi
-    if timeout 3 bash -c "echo >/dev/tcp/${LAYER3_TARGET%:*}/${LAYER3_TARGET#*:}" 2>/dev/null; then LAYER3=1; fi
-
-    if [[ $LAYER1 -eq 0 ]]; then
-      echo -e "${GREEN}${BOLD}  ✅ Now offline — Tier 1 active${NC}"
-      echo ""
-      exit 0
-    else
-      warn "Still connected. Disconnect all network interfaces and try again."
-      echo ""
-      continue
-    fi
-    ;;
-
-  "TIER2 I UNDERSTAND")
-    log_consent "2" "I UNDERSTAND"
-    echo ""
-    echo "  TIER 2 ACTIVE — Wallet file stays local. Text prompts only."
-    echo ""
-    exit 0
-    ;;
-
-  "TIER3 I UNDERSTAND AND ACCEPT")
-    log_consent "3" "I UNDERSTAND AND ACCEPT"
-    echo ""
-    echo -e "${RED}${BOLD}  TIER 3 ACTIVE — HIGHEST RISK${NC}"
-    echo "  Your wallet data may be processed in the cloud."
-    echo "  Sweep funds IMMEDIATELY after recovery."
-    echo ""
-    exit 0
-    ;;
-
-  *)
-    warn "Invalid input."
-    echo "  Valid options:"
-    echo "    DISCONNECTED"
-    echo "    TIER2 I UNDERSTAND"
-    echo "    TIER3 I UNDERSTAND AND ACCEPT"
-    echo ""
-    ;;
-
-esac
-done

@@ -341,7 +341,6 @@ Six mandatory steps with Enter gates between each:
 3. **Address display**: Double-check format, write down 8 characters.
 4. **Test transaction gate**: Send smallest possible amount. Paste tx link.
    Mandatory YES/NO confirmation. Script halts on NO with diagnostics.
-   Addresses clipboard hijacker detection (Tier 3 fast-path).
 5. **Full sweep**: Sweep not Import. Pre-broadcast checklist.
 6. **On-chain verification**: Paste sweep tx link. Handles pending gracefully.
 
@@ -513,7 +512,6 @@ Recommended for:  Complex forensics, users without GPU hardware
 Use extract scripts to ensure the wallet file never goes near the API
 Sweep urgency:    Standard — keys were never exposed
 
-TIER 3 — FULLY ONLINE (use with clear understanding)
 ─────────────────────────────────────────────────────
 What it means:    Skill runs on Claude.ai, Grok, VPS, or any uncontrolled environment
 Who sees keys:    The platform running the inference
@@ -664,7 +662,6 @@ Where:
   task_score         = model's benchmark score for this recovery type (0-100)
   evidence_multiplier = HIGH: ×1.0 | MEDIUM: ×0.85 | LOW: ×0.70
   cost_penalty       = (estimated_cost_usd / wallet_value_usd) × 20, capped at 20
-  risk_penalty       = 0 (Tier 1) | 5 (Tier 2) | 15 (Tier 3)
 ```
 
 The router calculates EV for every available model and recommends the best scorer in plain English.
@@ -898,7 +895,6 @@ advice, not for what the advisee does with it.
 
 Every major decision point requires a typed word of confirmation:
 `ACCEPT` (first run), `I UNDERSTAND` (Tier 2), `I UNDERSTAND AND ACCEPT`
-(Tier 3), `DONE` (post-sweep), `NUKE` (session destruction).
 
 Each confirmation is timestamped in `~/.btcrecover-skill/consent.log`
 during the session window. The log is destroyed in the nuke step — its
