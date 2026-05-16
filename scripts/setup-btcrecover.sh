@@ -41,6 +41,24 @@ echo "Installing Python dependencies into venv..."
   }
 }
 
+# Install optional but recommended dependencies for full recovery coverage
+echo "Installing optional recovery dependencies..."
+"${BTC_RECOVER_DIR}/venv/bin/pip" install --quiet \
+  ecdsa \
+  shamir-mnemonic \
+  eth-keyfile \
+  PyNaCl \
+  sjcl \
+  groestlcoin_hash \
+  "py_ecc>=7.0.0" \
+  py-crypto-hd-wallet \
+  2>&1 || {
+  echo "⚠️ Some optional dependencies could not be installed."
+  echo "  BIP38, SLIP39, Ethereum, and advanced HD wallet recoveries may not work."
+  echo "  Run 'source ~/btcrecover/venv/bin/activate && pip install ecdsa shamir-mnemonic eth-keyfile'"
+  echo "  to install missing packages individually."
+}
+
 # Create convenience wrappers (use python3 — venv may not create a 'python' symlink)
 # Note: use -cli suffix because ~/btcrecover/btcrecover conflicts with the
 # btcrecover/ subdirectory inside the cloned repo.

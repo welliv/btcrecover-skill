@@ -374,6 +374,44 @@ The updated setup script installs both, but if pip fails mid-way, install them e
 cd ~/btcrecover && source venv/bin/activate && pip install pycryptodome coincurve
 ```
 
+### missing ecdsa (BIP38 wallet recovery)
+
+BIP38 encrypted paper wallet recovery requires the `ecdsa` module. Without it btcrecover exits with:
+```
+ERROR: Cannot load ecdsa module which is required for BIP38 wallets
+```
+Install: `pip install ecdsa`
+Affected recovery types: BIP38 (Bitcoin, Litecoin, Dash, etc.).
+
+### missing shamir-mnemonic (SLIP39 share recovery)
+
+SLIP39 Shamir backup recovery requires `shamir-mnemonic`. Without it seedrecover exits with:
+```
+ERROR: Cannot import shamir_mnemonic which is required for SLIP39 share recovery
+```
+Install: `pip install shamir-mnemonic[cli]`
+Affected recovery types: SLIP39 seed/phrase recovery.
+
+### missing eth-keyfile (Ethereum keystore wallets)
+
+Ethereum/ERC-20 wallet file recovery requires `eth-keyfile`. Install: `pip install eth-keyfile`.
+
+### missing py-crypto-hd-wallet (advanced HD wallets)
+
+Solana, Stellar, Tron, Tezos, Cosmos, Avalanche, Polkadot/Substrate, MultiversX wallets require the `py-crypto-hd-wallet` module. Without it these wallet types are skipped during recovery. Install: `pip install py-crypto-hd-wallet`.
+
+### missing PyNaCl (certain wallet types)
+
+Some wallet types require `PyNaCl`. Install: `pip install PyNaCl`.
+
+### missing sjcl (Stanford JS Crypto Library)
+
+Some wallet types require `sjcl`. Install: `pip install sjcl`.
+
+### missing groestlcoin_hash (Groestlcoin)
+
+Groestlcoin wallet recovery needs `groestlcoin_hash`. Install: `pip install groestlcoin_hash`.
+
 ## License
 
 GPL-2.0. Free forever.
