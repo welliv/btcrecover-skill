@@ -1,22 +1,20 @@
-# AGENTS
+# Agents
 
-This file enables BTCRecover-skill compatibility with AI coding agents. It is consumed automatically by Claude Code, GitHub Copilot, Cline, and other agents that support AGENTS.md.
+This file helps AI coding agents work with the btcrecover skill.
 
 ## Purpose
 
-The primary skill definition is in [SKILL.md](SKILL.md). This file tells agents to look there.
+The main instructions are in SKILL.md. Agents should read that file first.
 
-## Agent Setup
+## How to use with agents
 
-**Claude Code**: Run `claude` from the btcrecover checkout directory. SKILL.md is auto-picked.
+**Claude Code**: Run the claude command from the btcrecover skill directory.
 
-**Cline** (VS Code): Place the btcrecover-skill directory in your workspace. Cline reads SKILL.md from the project root.
+**Cline or GitHub Copilot**: Open the btcrecover-skill folder in your editor. The agent will use SKILL.md automatically.
 
-**GitHub Copilot**: Open the btcrecover-skill directory in VS Code. Copilot Chat uses SKILL.md for context.
+**Other agents**: Copy the content of SKILL.md into your first message.
 
-**Manual / Other agents**: Paste the contents of SKILL.md as the first message or system prompt.
+## Related files
 
-## Related
-
-- [SKILL.md](SKILL.md) — Main skill definition
-- [PROJECT.md](PROJECT.md) — Project overview and manifest
+- SKILL.md (main instructions)
+- docs folder (setup guides)
