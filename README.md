@@ -17,6 +17,10 @@ curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/instal
 - [guides/local-recovery-setup.md](guides/local-recovery-setup.md) — Ollama + Hermes setup
 - [agents/](agents/) — agent-specific install guides
 
+## Verification
+
+- [docs/verified-recoveries.md](docs/verified-recoveries.md) — 35/35 recovery scenarios proven against real wallets
+
 ## Security
 
 - [SECURITY.md](SECURITY.md) — disclosure policy
