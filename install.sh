@@ -1,69 +1,62 @@
 #!/usr/bin/env bash
 # install.sh — btcrecover skill installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/install.sh | bash
 
 set -euo pipefail
 
-REPO_URL="https://github.com/welliv/btcrecover-skill"
-AGENT_DIRS=(
+REPO="https://github.com/welliv/btcrecover-skill"
+INSTALL_PATHS=(
     "${HOME}/.claude/skills"
     "${HOME}/.hermes/skills"
     "${HOME}/.cursor/skills"
     "${HOME}/.codex/skills"
 )
-DEFAULT_INSTALL="${HOME}/.claude/skills"
-
-if [ -t 1 ]; then
-    BOLD='\033[1m' GREEN='\033[0;32m' YELLOW='\033[1;33m' DIM='\033[2m' NC='\033[0m'
-else
-    BOLD='' GREEN='' YELLOW='' DIM='' NC=''
-fi
 
 echo ""
-echo -e "${BOLD}btcrecover skill — Installer${NC}"
-echo -e "${DIM}${REPO_URL}${NC}"
+echo "btcrecover skill installer"
+echo "This will install the skill for use with AI agents."
 echo ""
 
-echo "Where should the skill be installed?"
-for i in "${!AGENT_DIRS[@]}"; do
-    echo "  $((i+1)). ${AGENT_DIRS[$i]}"
+echo "Where would you like to install it?"
+for i in "${!INSTALL_PATHS[@]}"; do
+    echo "  $((i+1)). ${INSTALL_PATHS[$i]}"
 done
-echo "  $((i+2)). Custom path"
+echo "  $((i+2)). Custom location"
 echo ""
-echo -n "Choice [1-5, default 1]: "
-read -r CHOICE
 
-case "${CHOICE:-1}" in
-    1) INSTALL_DIR="${AGENT_DIRS[0]}/btcrecover-skill" ;;
-    2) INSTALL_DIR="${AGENT_DIRS[1]}/btcrecover-skill" ;;
-    3) INSTALL_DIR="${AGENT_DIRS[2]}/btcrecover-skill" ;;
-    4) INSTALL_DIR="${AGENT_DIRS[3]}/btcrecover-skill" ;;
-    5) echo -n "Custom path: "; read -r CUSTOM; INSTALL_DIR="${CUSTOM}/btcrecover-skill" ;;
-    *) INSTALL_DIR="${AGENT_DIRS[0]}/btcrecover-skill" ;;
+read -r -p "Choice [1-5, default 1]: " choice
+choice=${choice:-1}
+
+case $choice in
+    1) TARGET="${INSTALL_PATHS[0]}" ;;
+    2) TARGET="${INSTALL_PATHS[1]}" ;;
+    3) TARGET="${INSTALL_PATHS[2]}" ;;
+    4) TARGET="${INSTALL_PATHS[3]}" ;;
+    5) read -r -p "Enter custom path: " custom; TARGET="$custom" ;;
+    *) TARGET="${INSTALL_PATHS[0]}" ;;
 esac
 
+INSTALL_DIR="${TARGET}/btcrecover-skill"
+
 if [ -d "$INSTALL_DIR" ]; then
-    echo ""
-    echo -e "${YELLOW}Directory exists: $INSTALL_DIR${NC}"
-    echo -n "Overwrite? [y/N]: "
-    read -r OVERWRITE
-    if [ "${OVERWRITE,,}" != "y" ]; then
-        echo "Cancelled."
+    read -r -p "Folder already exists. Replace it? (y/N): " confirm
+    if [[ "$confirm" != [yY]* ]]; then
+        echo "Installation cancelled."
         exit 0
     fi
     rm -rf "$INSTALL_DIR"
 fi
 
 echo ""
-echo "Cloning from ${REPO_URL}..."
-git clone --quiet "$REPO_URL" "$INSTALL_DIR"
+echo "Downloading from official source..."
+git clone --quiet "$REPO" "$INSTALL_DIR"
+
 chmod +x "${INSTALL_DIR}/scripts/"*.sh
 
 echo ""
-echo -e "${GREEN}${BOLD}✓ Installation complete${NC}${NC}"
-echo "  Installed to: ${INSTALL_DIR}"
+echo "Installation complete."
+echo "The skill is now in ${INSTALL_DIR}"
 echo ""
 echo "Open your AI agent and describe your recovery situation."
 echo ""
-echo -e "${DIM}btcrecover by Stephen Rothery: github.com/3rdIteration/btcrecover${NC}"
-echo -e "${DIM}This skill: ${REPO_URL}${NC}"
+echo "btcrecover by Stephen Rothery"
+echo "This skill by welliv"

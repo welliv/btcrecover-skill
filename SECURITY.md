@@ -1,116 +1,36 @@
-# Security Policy — btcrecover skill
+# Security
 
-## Supported versions
+This skill is designed with strong safety principles.
 
-| Version | Supported |
-|---|---|
-| v1.x (current) | ✅ Active security support |
-| < v1.0 | ❌ Pre-release — no support |
+## Three tiers of security
 
----
+**Tier 1 (offline)**  
+Everything runs on your computer with a local AI model. No data leaves your machine. This is the safest option for large amounts.
 
-## Reporting a vulnerability
+**Tier 2 (recommended)**  
+Your wallet data stays on your computer. The AI uses the cloud only for reasoning. This offers good security with easy setup.
 
-**Do not open a public GitHub issue for security vulnerabilities.** Public disclosure before a fix is available puts users at risk. Please follow responsible disclosure.
+**Tier 3 (high risk)**  
+The recovery runs fully online. Your data may be processed by the cloud. Only choose this if you accept the risk. Sweep funds immediately if recovery succeeds.
 
-### How to report
+## What we never do
 
-Send a private report to: **steve@cryptoguide.tips**
+- Hold or move your funds
+- Ask for your seed phrase or private keys unless you choose tier 3
+- Guarantee that recovery will succeed
+- Replace professional advice for complex cases
 
-Subject line: `[SECURITY] btcrecover-skill — [brief description]`
+## Safety rules
 
-### What to include
+- You must approve every command before it runs
+- We encourage you to move recovered funds to a new wallet immediately
+- We run a cleanup script after successful recovery to remove temporary files
+- We show clear warnings at every important step
 
-- Description of the vulnerability
-- Affected files and line numbers
-- Steps to reproduce
-- Impact assessment
-- Suggested fix (optional)
+## Reporting security issues
 
-## Response timeline
-
-| Action | Target time |
-|---|---|
-| Acknowledgment | Within 48 hours |
-| Initial assessment | Within 5 days |
-| Fix timeline communicated | Within 10 days |
-| Fix released | Within 30 days of confirmation |
-| Public disclosure | After fix is available |
-
-For critical vulnerabilities (those that could cause immediate fund loss), the target for a fix is 7 days.
+If you find a security problem, please contact us privately rather than opening a public issue. This helps protect users while we fix the problem.
 
 ---
 
-## Scope
-
-**In scope:**
-
-- `SKILL.md` and all subskill files in `skills/`
-- All shell scripts in `scripts/`
-- `install.sh` and the verification chain
-- `references/safety-rules.md`
-- Session management and cleanup flow
-- Any issue that could expose private keys, seed phrases, or wallet files to unintended parties
-- Any issue that could allow a malicious actor to manipulate recovery output (e.g. prompt injection in the forensics subskill)
-
-**Out of scope (report to the relevant project):**
-
-- btcrecover itself → https://github.com/3rdIteration/btcrecover/issues
-- Ollama → https://github.com/ollama/ollama/issues
-- Hermes Agent → https://github.com/NousResearch/hermes-agent/issues
-- The AI models used with this skill
-- Social engineering attacks targeting users directly (documented in `references/safety-rules.md §SCAM-DETECTION`)
-
----
-
-## What constitutes a valid security vulnerability
-
-**Valid:**
-- A path by which private keys, seed phrases, or wallet files could be exfiltrated without the user's knowledge
-- A prompt injection vector that could override safety rules or redirect funds
-- A flaw in `nuke-session.sh` that causes sensitive data to persist after cleanup
-- A flaw in `connectivity-check.sh` that falsely reports OFFLINE when online
-- A flaw in `verify-btcrecover.sh` that allows a malicious btcrecover fork to pass integrity checks
-- A flaw in `install.sh` that allows a tampered installation to pass signature verification
-- A typosquatted package that could be confused with this skill
-
-**Not valid (known limitations, not vulnerabilities):**
-- The skill cannot detect malware present before it ran
-- The skill cannot prevent users from ignoring safety warnings
-- The skill cannot guarantee recovery success
-
----
-
-## Bug bounty
-
-There is no formal bug bounty. Critical findings (those that could directly cause fund loss) will be acknowledged in release notes by name (or anonymously if preferred) and may receive a discretionary BTC tip from the author.
-
----
-
-## Hall of fame
-
-Researchers who have responsibly disclosed issues and helped make this skill safer:
-
-*This section will grow. The first entry will be here.*
-
----
-
-## Coordinated disclosure
-
-Once a fix is released, the author will:
-
-1. Tag a new version with the fix
-2. Push the fix to main
-3. Publish a security advisory on GitHub
-4. Credit the reporter in the release notes (unless anonymity requested)
-5. Update this file with the vulnerability in the hall of fame
-
-The reporter is welcome to publish their own writeup after the fix is available. We ask only that public disclosure waits until the fix is out.
-
----
-
-## A note on AI-specific vulnerabilities
-
-This skill involves AI agents processing user input and external file content. Security researchers interested in prompt injection, indirect injection via wallet file metadata, or skill-injection attacks (as documented in the Skill-Inject paper, arXiv 2602.20156) are particularly welcome to review the skill files and report findings.
-
-These are active research areas and real attack vectors for skills like this. Reports in this category will be treated with high priority.
+Free. Open source. Always.

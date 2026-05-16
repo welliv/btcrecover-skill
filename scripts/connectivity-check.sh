@@ -153,6 +153,9 @@ if [[ $EXIT_CODE -eq 2 ]]; then
   echo ""
   echo "  No consent required. This is the default safe path."
   echo ""
+  echo "  Optional: Verify full Tier 1 readiness with:"
+  echo "    bash scripts/tier1-check.sh"
+  echo ""
   exit 0
 fi
 
@@ -227,7 +230,9 @@ case "${USER_INPUT^^}" in  # Uppercase for case-insensitive matching
   "TIER3 I UNDERSTAND AND ACCEPT")
     log_consent "3" "I UNDERSTAND AND ACCEPT"
     echo ""
-    echo -e "${RED}${BOLD}  TIER 3 ACTIVE — Sweep funds immediately on recovery.${NC}"
+    echo -e "${RED}${BOLD}  TIER 3 ACTIVE — HIGHEST RISK${NC}"
+    echo "  Your wallet data may be processed in the cloud."
+    echo "  Sweep funds IMMEDIATELY after recovery."
     echo ""
     exit 0
     ;;

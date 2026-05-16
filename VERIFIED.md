@@ -1,80 +1,39 @@
-# VERIFIED — btcrecover skill authenticity anchor
+# Verified
 
-Use this file to verify any installation you did not download from the canonical source. If the information here does not match what you see at the GitHub URL below, or if you received this file from anywhere else, treat the installation as potentially compromised.
+Use this file to check that you have the genuine btcrecover skill.
 
----
+## Official source
 
-## Canonical source
+The only official version is at:
 
-```
 https://github.com/welliv/btcrecover-skill
-```
 
-This is the only official repository. Every other copy is either a fork (verify separately) or a fake.
+Any other copy may be fake. Always download from this address.
 
----
+## Author
 
-## Author identity
+The skill is maintained by welliv on GitHub.
 
-| Platform | URL |
-|---|---|
-| GitHub | https://github.com/welliv |
-| X (Twitter) | https://x.com/welliv |
+## How to verify
 
-## How to verify authenticity
+1. Check that the repository URL matches the one above.
+2. Look for verified commits on GitHub (green verified badge).
+3. Confirm the files match those in the official repository.
 
-**Commit signing.** Every commit in this repository should show a "Verified" badge on GitHub, proving it was signed by the account owner's GPG key.
+## How to spot fakes
 
-To check: visit [the commit history](https://github.com/welliv/btcrecover-skill/commits/main) and confirm commits show the green "Verified" badge. Any commit without it was not made by the repository owner.
+The real skill never:
+- Asks you to install software from unknown sources
+- Contacts you directly by message or email
+- Asks for payment
+- Offers to run the recovery for you
+- Guarantees success
+- Has support staff or a website requiring login
 
-**Clone only from the canonical URL:**
-```bash
-git clone https://github.com/welliv/btcrecover-skill
-```
+The skill is only a file. It has no team and cannot contact you. Anyone claiming otherwise is likely a scammer.
 
-After cloning, check the remote:
-```bash
-git remote -v
-# Should show: origin  https://github.com/welliv/btcrecover-skill
-```
-
-If the remote URL is anything other than the canonical URL above, the installation is not from this repository.
+If you think you have a fake version, do not use it and open an issue in the official repository.
 
 ---
 
-## What the real skill NEVER does
-
-Use this list to detect fakes and scams:
-
-```
-✗  Asks you to install software from a non-canonical source
-✗  Contacts you via DM, email, Telegram, Discord, or any channel
-✗  Accepts payment of any kind
-✗  Runs a website requiring login to use the skill
-✗  Asks for your seed phrase in any online chat
-✗  Asks for your private key or WIF key in any online chat
-✗  Has a support team, staff, or human representatives
-✗  Guarantees recovery success
-✗  Asks for an upfront fee
-✗  Offers to run the recovery for you remotely
-```
-
-The skill is a file. It has no staff. It cannot contact you. Anyone doing any of the above in its name is a scammer.
-
----
-
-## If you suspect a fake
-
-1. Do not interact with it further
-2. Do not share any wallet data, seed phrases, or private keys
-3. Open an issue at https://github.com/welliv/btcrecover-skill/issues
-
----
-
-## Reporting impersonators and typosquats
-
-If you find a package on skills.sh, GitHub, npm, or any platform impersonating this skill, open an issue at: https://github.com/welliv/btcrecover-skill/issues
-
-Title it: `[IMPERSONATION] found fake skill at [URL]`
-
-Include the URL and any details. We will investigate and file takedown requests where applicable.
+Free. Open source. Always.
