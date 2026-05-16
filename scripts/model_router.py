@@ -35,13 +35,9 @@ def get_recommendation(tier: int, recovery_type: str = "general", priority: str 
             "alternative": "Qwen2.5 32B (local) - slightly faster on modest hardware."
         },
         2: {  # Tier 2 - Recommended
-            "primary": "Claude 3.5 Sonnet",
-            "reason": "Currently one of the best balances of accuracy and speed.",
+            "primary": "Claude Sonnet 4",
+            "reason": "Best balance of accuracy and speed for recovery tasks.",
             "alternative": "GPT-4o - very capable and often faster."
-        },
-            "primary": "GPT-4o Mini",
-            "reason": "Fast and cost-effective for most recovery tasks.",
-            "alternative": "Claude 3.5 Sonnet - more accurate if speed is less important."
         }
     }
     
