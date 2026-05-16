@@ -124,14 +124,11 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo
 echo "This skill is free and always will be."
 echo ""
-echo "Support btcrecover first — the tool that did the actual recovery work:"
-echo "  Stephen Rothery (3rdIteration)"
-echo "  BTC: 37N7B7sdHahCXTcMJgEnHz7YmiR4bEqCrS"
-echo "  https://github.com/3rdIteration/btcrecover"
-echo ""
-echo "Support this skill second, only if you want to:"
-echo "  https://github.com/welliv/btcrecover-skill"
-echo
+Support btcrecover — the tool that did the actual recovery work:
+  Stephen Rothery (3rdIteration)
+  BTC: 37N7B7sdHahCXTcMJgEnHz7YmiR4bEqCrS
+  https://github.com/3rdIteration/btcrecover
+
 
 # Optional feedback report
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

@@ -11,7 +11,7 @@ Built on btcrecover by Stephen Rothery. Free and open source. Always.
 
 ## Response style (user preference)
 
-Always use simplified British English, natural human tone, brief and substantive responses. No redundancy. Prefer one-pass fixes: audit, clean, verify, report. Respond to "remember our btcrecover session" by immediately recalling hybrid details (passphrase truncation, Sparrow BIP84 change address at index 10, addr-limit 100, seedrecover-cli with --passphrase-list). When asked to audit, produce a short clear summary and push fixes.
+Always use simplified British English, natural human tone, brief and substantive responses. No redundancy. Prefer one-pass fixes: audit, clean, verify, report. Respond to "remember our btcrecover session" by immediately recalling hybrid details (passphrase truncation — "recoverytesting" remembered but "recoverytest" actual; Sparrow BIP84 change path index 10; --addr-limit 100; seedrecover-cli --passphrase-list with bip39 + --force-bip84). See references/hybrid-recovery.md for exact command template and pitfalls. When asked to audit, produce a short clear summary and push fixes.
 
 ## How to use this skill
 
@@ -37,12 +37,14 @@ After you confirm your tier, I will recommend the best model for your recovery. 
 
 1. Consent and setup
 2. Tier selection
-3. Model recommendation
-4. Problem classification
+3. Quick classification (one message: wallet file/seed status, known address, what is missing/remembered)
+4. Model recommendation
 5. Pre flight checks
 6. Build and run commands with your approval
 7. Progress updates
 8. Post recovery safety and cleanup
+
+After tier confirmation, always ask the three classification questions in one concise message to minimise back-and-forth.
 
 ## Step 0: First run
 
