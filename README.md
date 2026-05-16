@@ -31,6 +31,17 @@ curl -fsSL https://raw.githubusercontent.com/welliv/btcrecover-skill/main/instal
 
 See [MAINTAINERS.md](MAINTAINERS.md)
 
+## Community
+
+**Report a successful recovery:**
+https://github.com/welliv/btcrecover-skill/discussions — category: Recovery Reports
+
+**Report a problem or error:**
+https://github.com/welliv/btcrecover-skill/discussions — category: Recovery Problems
+
+Recovery reports help others know what is possible and strengthen the
+skill over time. No sensitive data — wallet type and scenario only.
+
 ## License
 
 GPL-2.0

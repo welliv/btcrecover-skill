@@ -133,6 +133,42 @@ echo "Support this skill second, only if you want to:"
 echo "  https://github.com/welliv/btcrecover-skill"
 echo
 
+# Optional feedback report
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "OPTIONAL: Help the next person"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo
+echo "Anonymous recovery reports help improve the skill"
+echo "and show others that recovery is possible."
+echo "No sensitive data — wallet type and scenario only."
+echo
+echo -n "Generate a report to share? [y/N]: "
+read -r FEEDBACK
+
+if [[ "${FEEDBACK,,}" == "y" ]]; then
+    echo ""
+    echo "Copy the block below and paste it at:"
+    echo "https://github.com/welliv/btcrecover-skill/discussions"
+    echo "(category: Recovery Reports)"
+    echo ""
+    echo "────────────────────────────────────────"
+    echo "**Recovery Report**"
+    echo "Outcome: SUCCESS"
+    echo "Date: $(date '+%Y-%m')"
+    echo "Wallet software: [e.g. Electrum 2.8, MetaMask, Bitcoin Core]"
+    echo "Blockchain: [e.g. Bitcoin, Ethereum, Cardano]"
+    echo "Recovery type: [PASSWORD / SEED / PASSPHRASE / FORENSICS / HYBRID]"
+    echo "Scenario: [e.g. forgot password / 1 missing seed word / wrong word]"
+    echo "Time to recover: [e.g. 3 minutes / 2 hours]"
+    echo "Agent used: [e.g. Claude Code, Hermes + Ollama, Claude.ai]"
+    echo "Notes: [optional — what helped or what was unexpected]"
+    echo ""
+    echo "DO NOT include: passwords, seed phrases, private keys,"
+    echo "                addresses, wallet balances, or amounts."
+    echo "────────────────────────────────────────"
+    echo ""
+fi
+
 # Nuke handoff
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "SESSION DESTRUCTION"
