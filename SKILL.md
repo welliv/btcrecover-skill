@@ -15,8 +15,6 @@ Use simplified British English with perfect grammar and natural tone. Keep respo
 
 When the user asks for documentation review, audit, or fact-check: rewrite for accuracy first, remove self-assessment, eliminate fictional references, and confirm every command name and flag is current.
 
-When the user says "audit", "fact check", or "review docs":
-
 
 Respond to "remember our btcrecover session" by immediately recalling the hybrid recovery pattern (passphrase truncation, Sparrow BIP84 change address at index 10, --addr-limit 100, cd ~/btcrecover, python3 btcrecover.py --bip39 with --passwordlist). See references/hybrid-recovery.md for the exact template.
 

@@ -71,7 +71,7 @@ python extract-blockchain-hash.py wallet.aes.json > wallet.extract
 
 Blockchain.com (second password):
 ```bash
-python btcrecover.py --wallet wallet.aes.json \
+python3 btcrecover.py --wallet wallet.aes.json \
   --blockchain-secondpass \
   --passwordlist passwords.txt \
   --typos-case --typos-delete --typos 4
@@ -79,7 +79,7 @@ python btcrecover.py --wallet wallet.aes.json \
 
 Blockchain.com (direct tokenlist recovery):
 ```bash
-python btcrecover.py --wallet wallet.aes.json \
+python3 btcrecover.py --wallet wallet.aes.json \
   --typos-capslock --tokenlist tokens.txt
 ```
 
@@ -102,17 +102,17 @@ If you already know the correct password and just need to extract keys:
 
 ```bash
 # Dump decrypted wallet contents to file
-python btcrecover.py --wallet wallet.dat \
+python3 btcrecover.py --wallet wallet.dat \
   --dump-wallet wallet_dump.txt \
   --correct-wallet-password "known_password"
 
 # Dump private keys (Electrum-importable format)
-python btcrecover.py --wallet wallet.dat \
+python3 btcrecover.py --wallet wallet.dat \
   --dump-privkeys wallet_privkeys.txt \
   --correct-wallet-password "known_password"
 
 # Blockchain.com with second password
-python btcrecover.py --wallet wallet.aes.json \
+python3 btcrecover.py --wallet wallet.aes.json \
   --dump-wallet wallet_dump.txt \
   --correct-wallet-password "known_password" \
   --blockchain-secondpass --correct-wallet-secondpassword "second_password"
@@ -122,12 +122,12 @@ python btcrecover.py --wallet wallet.aes.json \
 
 Instead of sharing your wallet file with a rented GPU machine, extract a data string:
 ```bash
-python btcrecover.py --data-extract --wallet wallet.dat
+python3 btcrecover.py --data-extract --wallet wallet.dat
 ```
 
 Then recover on the cloud machine with:
 ```bash
-python btcrecover.py --data-extract-string "BASE64..." --tokenlist ...
+python3 btcrecover.py --data-extract-string "BASE64..." --tokenlist ...
 ```
 
 Show the command. Wait for approval. Run.
@@ -165,14 +165,14 @@ https://github.com/3rdIteration/btcrecover/issues
 ### BIP38 Paper Wallet
 
 ```bash
-python btcrecover.py \
+python3 btcrecover.py \
   --bip38-enc-privkey "6PnM7h9sBC9EMZxLVsKzpafvBN8zjKp8MZj6h9mfvYEQRMkKBTPTyWZHHx" \
   --passwordlist passwords.txt
 ```
 
 For non-Bitcoin BIP38 (Litecoin, Dash):
 ```bash
-python btcrecover.py \
+python3 btcrecover.py \
   --bip38-enc-privkey "6PfVHSTbgRNDaSwddBNgx2vMhMuNdiwRWjFgMGcJPb6J2pCG32SuL3vo6q" \
   --bip38-currency litecoin \
   --passwordlist passwords.txt
@@ -184,17 +184,17 @@ Password-derived keys (any text string → hash → private key):
 
 Default (checks both compressed and uncompressed):
 ```bash
-python btcrecover.py --brainwallet --addrs bc1q... --passwordlist passwords.txt
+python3 btcrecover.py --brainwallet --addrs bc1q... --passwordlist passwords.txt
 ```
 
 Force uncompressed only:
 ```bash
-python btcrecover.py --brainwallet --addrs 1BBR... --skip-compressed --passwordlist passwords.txt
+python3 btcrecover.py --brainwallet --addrs 1BBR... --skip-compressed --passwordlist passwords.txt
 ```
 
 Force compressed only:
 ```bash
-python btcrecover.py --brainwallet --addrs 3C4d... --skip-uncompressed --passwordlist passwords.txt
+python3 btcrecover.py --brainwallet --addrs 3C4d... --skip-uncompressed --passwordlist passwords.txt
 ```
 
 **How to choose compressed vs uncompressed:**
@@ -214,13 +214,13 @@ Modern wallets and tools: use `--skip-uncompressed`.
 
 Passphrase + salt → key. Needs both passphrase (from passwordlist/tokenlist) and salt:
 ```bash
-python btcrecover.py --warpwallet --warpwallet-salt "known-or-guess-salt" \
+python3 btcrecover.py --warpwallet --warpwallet-salt "known-or-guess-salt" \
   --addrs bc1q... --passwordlist passwords.txt
 ```
 
 For Litecoin:
 ```bash
-python btcrecover.py --warpwallet --warpwallet-salt "..." \
+python3 btcrecover.py --warpwallet --warpwallet-salt "..." \
   --crypto litecoin --addrs L... --passwordlist passwords.txt
 ```
 
@@ -228,13 +228,13 @@ python btcrecover.py --warpwallet --warpwallet-salt "..." \
 
 When you have an encrypted raw private key:
 ```bash
-python btcrecover.py --rawprivatekey --addrs 0x... --wallet-type ethereum \
+python3 btcrecover.py --rawprivatekey --addrs 0x... --wallet-type ethereum \
   --tokenlist tokens.txt
 ```
 
 Limit tokens to avoid combinatorial explosion:
 ```bash
-python btcrecover.py --rawprivatekey --addrs 1EDr... --wallet-type bitcoin \
+python3 btcrecover.py --rawprivatekey --addrs 1EDr... --wallet-type bitcoin \
   --max-tokens 1 --tokenlist tokens.txt
 ```
 
@@ -243,7 +243,7 @@ python btcrecover.py --rawprivatekey --addrs 1EDr... --wallet-type bitcoin \
 When the user has the correct 12/24 seed words but forgot the BIP39 passphrase (25th word):
 
 ```bash
-python btcrecover.py --bip39 \
+python3 btcrecover.py --bip39 \
   --mnemonic "word1 word2 ... word12" \
   --tokenlist passphrase_list.txt \
   --addrs bc1q... \
@@ -332,15 +332,15 @@ When the search space is large and the user has a GPU:
 
 ```bash
 # Bitcoin Core wallet (JTR kernel)
-python btcrecover.py --wallet wallet.extract --enable-gpu \
+python3 btcrecover.py --wallet wallet.extract --enable-gpu \
   --global-ws 4096 --local-ws 256 --tokenlist tokens.txt
 
 # Blockchain.com wallet (OpenCL)
-python btcrecover.py --wallet wallet.aes.json --enable-opencl \
+python3 btcrecover.py --wallet wallet.aes.json --enable-opencl \
   --tokenlist tokens.txt
 
 # Benchmark mode
-python btcrecover.py --wallet wallet.extract --performance --enable-gpu
+python3 btcrecover.py --wallet wallet.extract --performance --enable-gpu
 ```
 
 **Important:** BIP39 passphrase recovery is NOT GPU-accelerated. Only wallet password recovery benefits from GPU.
@@ -371,7 +371,7 @@ python seedrecover.py --mnemonic "..." --addrs ... --skip 357449
 ## Phase 6: Command Assembly
 
 ```bash
-python btcrecover.py \
+python3 btcrecover.py \
   --wallet wallet.extract \
   --tokenlist tokenlist.txt \
   --typos 1 --typos-case --typos-swap \
@@ -404,7 +404,7 @@ For extremely long runs (GPU jobs, multi-day):
 
 ```bash
 # Start with autosave — saves progress every ~5 minutes
-python btcrecover.py \
+python3 btcrecover.py \
   --wallet wallet.extract \
   --tokenlist tokens.txt \
   --enable-gpu --global-ws 4096 --local-ws 256 \
@@ -413,7 +413,7 @@ python btcrecover.py \
   --autosave progress.sav
 
 # Resume an interrupted run
-python btcrecover.py --restore progress.sav
+python3 btcrecover.py --restore progress.sav
 ```
 
 > **Note:** `--autosave` is only available in `btcrecover.py` (wallet password recovery). It is NOT available in `seedrecover.py`. For interrupted seed recovery sessions, use `--skip N` to resume from a known offset — see the seed subskill for details.

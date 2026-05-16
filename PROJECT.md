@@ -54,7 +54,7 @@ Forensics and advanced wallet formats have partial coverage. They are handled in
 
 ## Current Status
 
-Wargame audit score: 8.2 / 10 average across 12 scenarios.
+Independently verified across 35 recovery scenarios covering 11 blockchains and 9 wallet types. See docs/verified-recoveries.md.
 
 Core password, seed, and hybrid flows are reliable. Forensics is functional but less mature.
 

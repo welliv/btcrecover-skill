@@ -60,7 +60,7 @@ Use `?` for each unknown word.
 - 4 missing: 17 trillion (GPU rental)
 
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --mnemonic "word1 word2 ? word4 word5 ? word7 word8 word9 word10 word11 word12" \
   --addrs bc1q... \
   --addr-limit 100 \
@@ -69,8 +69,8 @@ python seedrecover.py \
 
 Larger search spaces benefit from multi-device distribution:
 ```bash
-python seedrecover.py --mnemonic "..." --addrs ... --worker 1,2/3  # PC1: slices 1+2 of 3
-python seedrecover.py --mnemonic "..." --addrs ... --worker 3/3    # PC2: slice 3 of 3
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 1,2/3  # PC1: slices 1+2 of 3
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 3/3    # PC2: slice 3 of 3
 ```
 
 ## Descrambling (Known Words, Unknown Order)
@@ -93,7 +93,7 @@ word10 word11 word12
 Positional anchors (`^N^word`) fix known positions. `+` makes tokens required. Same-line tokens are mutually exclusive (at most one chosen).
 
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --no-dupchecks \
   --mnemonic-length 12 \
   --language EN \
@@ -106,7 +106,7 @@ python seedrecover.py \
 
 For comma-separated token groups (words that must appear together in order):
 ```bash
-python seedrecover.py --dsw --no-dupchecks \
+python3 seedrecover.py --dsw --no-dupchecks \
   --mnemonic-length 24 \
   --tokenlist tokengroups.txt \
   --addrs bc1q... --addr-limit 10 \
@@ -131,7 +131,7 @@ When you know all words but they may be in the wrong order. Complexity:
 - 24-word seed: 1 swap = 277 tries, 2 swaps = 76,453
 
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --mnemonic "word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 word12" \
   --addrs bc1q... \
   --addr-limit 100 \
@@ -146,14 +146,14 @@ python seedrecover.py \
 
 For SLIP39 or BIP39 with wrong multiple words:
 ```bash
-python seedrecover.py --mnemonic "..." --addrs ... --big-typos 2
+python3 seedrecover.py --mnemonic "..." --addrs ... --big-typos 2
 ```
 
 Big typos = different BIP39 words, not just character-level typos.
 
 For BIP39 with tokenlist alternatives:
 ```bash
-python seedrecover.py --no-dupchecks --dsw --wallet-type bip39 \
+python3 seedrecover.py --no-dupchecks --dsw --wallet-type bip39 \
   --addrs ... --addr-limit 100 \
   --tokenlist words.txt \
   --mnemonic-length 12 --language EN
@@ -164,7 +164,7 @@ python seedrecover.py --no-dupchecks --dsw --wallet-type bip39 \
 If you know all words but the checksum fails, the last word in a 12-word seed has ~128 valid alternatives. Try replacing the last word with `?`.
 
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --mnemonic "word1 word2 word3 word4 word5 word6 word7 word8 word9 word10 word11 ?" \
   --addrs bc1q... \
   --addr-limit 100 \
@@ -175,11 +175,11 @@ python seedrecover.py \
 
 SLIP39 shares have a different format than BIP39. Words may be from a different wordlist.
 ```bash
-python seedrecover.py --slip39 --mnemonic "share words here..." --typos 2
+python3 seedrecover.py --slip39 --mnemonic "share words here..." --typos 2
 ```
 
 ```bash
-python seedrecover.py --slip39 --mnemonic "share words..." --big-typos 2
+python3 seedrecover.py --slip39 --mnemonic "share words..." --big-typos 2
 ```
 
 ## Wrong Derivation Path
@@ -187,7 +187,7 @@ python seedrecover.py --slip39 --mnemonic "share words..." --big-typos 2
 When the seed is correct but the address type doesn't match your wallet:
 
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --mnemonic "word1 word2 ... word12" \
   --addrs ... \
   --addr-limit 100 \
@@ -209,7 +209,7 @@ For non-standard wallets:
 The passphrase is like a password appended to the seed. Route to password subskill.
 
 ```bash
-python btcrecover.py \
+python3 btcrecover.py \
   --bip39 \
   --mnemonic "word1 word2 ... word12" \
   --tokenlist passphrase_list.txt \
@@ -243,75 +243,75 @@ python btcrecover.py \
 
 **Ethereum (missing words):**
 ```bash
-python seedrecover.py --wallet-type ethereum \
+python3 seedrecover.py --wallet-type ethereum \
   --mnemonic "word1 ? word3 word4 ? word6 ..." \
   --addrs 0x... --addr-limit 100
 ```
 
 **Cardano — Ledger seed, with stake address:**
 ```bash
-python seedrecover.py --wallet-type cardano \
+python3 seedrecover.py --wallet-type cardano \
   --mnemonic "..." --addrs addr1... --addr-limit 5
 ```
 
 **Polkadot Substrate — custom derivation path:**
 ```bash
-python seedrecover.py --wallet-type polkadotsubstrate \
+python3 seedrecover.py --wallet-type polkadotsubstrate \
   --mnemonic "..." --addrs 1... \
   --substrate-path "//hard/soft///password"
 ```
 
 **Stellar (XLM):**
 ```bash
-python seedrecover.py --wallet-type xlm \
+python3 seedrecover.py --wallet-type xlm \
   --mnemonic "..." --addrs G... --addr-limit 2 --no-eta
 ```
 
 **Hedera Hashgraph:**
 ```bash
-python seedrecover.py --wallet-type hederaed25519 \
+python3 seedrecover.py --wallet-type hederaed25519 \
   --mnemonic "..." --addrs 0x... --addr-limit 1
 ```
 
 **Helium (HNT):**
 ```bash
-python seedrecover.py --wallet-type helium \
+python3 seedrecover.py --wallet-type helium \
   --mnemonic "..." --addrs ... --addr-limit 2
 ```
 
 **Elrond (MultiversX):**
 ```bash
-python seedrecover.py --wallet-type elrond \
+python3 seedrecover.py --wallet-type elrond \
   --mnemonic "..." --addrs erd1... --addr-limit 2
 ```
 
 **Tron:**
 ```bash
-python seedrecover.py --wallet-type tron \
+python3 seedrecover.py --wallet-type tron \
   --mnemonic "..." --addrs T... --addr-limit 1
 ```
 
 **Stacks:**
 ```bash
-python seedrecover.py --wallet-type stacks \
+python3 seedrecover.py --wallet-type stacks \
   --mnemonic "..." --addrs SP... --addr-limit 10
 ```
 
 **Blockchain.com legacy v3 recovery mnemonic:**
 ```bash
-python seedrecover.py --wallet-type blockchainpasswordv3 \
+python3 seedrecover.py --wallet-type blockchainpasswordv3 \
   --mnemonic "carve witch manage ..." --mnemonic-length 17
 ```
 
 **Electrum Legacy (electrum1):**
 ```bash
-python seedrecover.py --wallet-type electrum1 \
+python3 seedrecover.py --wallet-type electrum1 \
   --mnemonic "..." --addrs 1... --addr-limit 2
 ```
 
 **Ethereum Validator (uses pubkey as address):**
 ```bash
-python seedrecover.py --wallet-type ethereumvalidator \
+python3 seedrecover.py --wallet-type ethereumvalidator \
   --mnemonic "..." --addrs 0x... --addr-limit 1
 ```
 
@@ -319,7 +319,7 @@ python seedrecover.py --wallet-type ethereumvalidator \
 
 Add custom passphrase if needed:
 ```bash
-python seedrecover.py --wallet-type aezeed \
+python3 seedrecover.py --wallet-type aezeed \
   --mnemonic "..." --addrs ... --addr-limit 5
   --passphrase-arg "YOUR PASSPHRASE"
 ```
@@ -331,7 +331,7 @@ For checksum-only mode (no address known), omit `--addrs`.
 BIP39 supports: Chinese, French (`FR`), Italian (`IT`), Japanese (`JP`), Korean (`KO`), Spanish (`ES`).
 
 ```bash
-python seedrecover.py --mnemonic "..." --addrs ... \
+python3 seedrecover.py --mnemonic "..." --addrs ... \
   --language FR --wallet-type bip39 \
   --addr-limit 100
 ```
@@ -341,7 +341,7 @@ python seedrecover.py --mnemonic "..." --addrs ... \
 When you don't know the wallet type or derivation path:
 
 ```bash
-python seedrecover.py --addressdb addresses-BTC.db \
+python3 seedrecover.py --addressdb addresses-BTC.db \
   --wallet-type bip39 --mnemonic "..." \
   --addr-limit 2 --no-dupchecks
 ```
@@ -353,7 +353,7 @@ See `references/wallet-types.md` for AddressDB creation commands.
 
 Use `--listpass` to see which seed phrases would be tried:
 ```bash
-python seedrecover.py --listpass --tokenlist words.txt --mnemonic-length 12 --language EN
+python3 seedrecover.py --listpass --tokenlist words.txt --mnemonic-length 12 --language EN
 ```
 
 ## Performance
@@ -396,25 +396,25 @@ If a long seed recovery run is interrupted, note the password count from the las
 
 ```bash
 # Resume from that offset:
-python seedrecover.py \
+python3 seedrecover.py \
   --mnemonic "word1 word2 ..." \
   --addrs ... \
   --wallet-type bip39 \
   --skip 357449
 
 # Or split the search across machines (each covers a slice):
-python seedrecover.py --mnemonic "..." --addrs ... --worker 1/3  # Machine A
-python seedrecover.py --mnemonic "..." --addrs ... --worker 2/3  # Machine B
-python seedrecover.py --mnemonic "..." --addrs ... --worker 3/3  # Machine C
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 1/3  # Machine A
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 2/3  # Machine B
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 3/3  # Machine C
 ```
 
 For **wallet password recovery** (`btcrecover.py`), autosave IS available:
 ```bash
-python btcrecover.py --wallet wallet.dat --tokenlist tokens.txt \
+python3 btcrecover.py --wallet wallet.dat --tokenlist tokens.txt \
   --autosave progress.sav
 
 # Resume:
-python btcrecover.py --restore progress.sav
+python3 btcrecover.py --restore progress.sav
 ```
 
 Note: `--autosave` also works with `--enable-gpu` for long GPU jobs.

@@ -33,4 +33,4 @@ python3 btcrecover.py \
 - Check output for "Seed found" message.
 
 **Verified Outcome**
-Pattern succeeded in multiple sessions. See `references/verified-recoveries.md` for full log.
+Pattern succeeded in multiple sessions. See `docs/verified-recoveries.md` for full log.

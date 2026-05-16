@@ -51,7 +51,6 @@ Each consent phrase is logged to `~/.btcrecover-skill/consent.log` with a timest
 
 
 
-## Key Distinction
 
 
 - **Tier 2:** The agent runs on YOUR machine. The cloud API receives text prompts. The wallet file never leaves. You run btcrecover commands locally.
