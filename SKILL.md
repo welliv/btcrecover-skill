@@ -13,6 +13,8 @@ Built on btcrecover by Stephen Rothery. Free and open source. Always.
 
 Use simplified British English with perfect grammar and natural tone. Keep responses brief, substantive, and free of redundancy. Never use dashes between words or as sentence separators. Prefer decisive one-pass action ("Go!", "Do it on my behalf", "Push the fix").
 
+When the user asks for documentation review, audit, or fact-check: rewrite for accuracy first, remove self-assessment, eliminate fictional references, and confirm every command name and flag is current.
+
 When the user says "audit", "fact check", or "review docs":
 1. Run full wargame scoring on 10-12 core scenarios.
 2. Locate every mention across all files.
@@ -67,6 +69,16 @@ After you confirm your tier, I will recommend the best model.
 ## Feasibility Gate
 
 Check this table immediately after classification. If any of these conditions apply, state the limitation clearly and explain what additional information would make recovery possible. Do not start the memory interview.
+
+## Model Recommendation
+
+After confirming feasibility, run:
+
+```bash
+python3 scripts/model_router.py
+```
+
+This returns the recommended model for the current tier and recovery type. Use its output for the next step.
 
 | Recovery type | Not practical when... |
 |---|---|

@@ -32,6 +32,12 @@ python3 -m venv venv 2>&1 || { echo "Failed to create venv. Try: sudo apt instal
 [ -L "${BTC_RECOVER_DIR}/venv/bin/python" ] || ln -sf python3 "${BTC_RECOVER_DIR}/venv/bin/python"
 
 echo "Installing Python dependencies into venv..."
+if [ -f requirements-full.txt ]; then
+  echo "  requirements-full.txt detected — installing extended dependencies (Cardano, Cosmos, Polkadot, etc.)"
+  "${BTC_RECOVER_DIR}/venv/bin/pip" install -r requirements-full.txt --quiet 2>&1 || echo "  Extended install failed — continuing with core requirements"
+else
+  echo "  Using requirements.txt (Bitcoin + common wallets only)"
+fi
 # Use explicit venv pip path to avoid externally-managed-environment issues
 "${BTC_RECOVER_DIR}/venv/bin/pip" install -r requirements.txt --quiet 2>&1 || {
   echo "Requirements install failed. Installing core packages individually..."

@@ -1,12 +1,14 @@
 # Hybrid Seed + Passphrase Recovery
 
-**Trigger**: Known BIP39 seed (12/24 words from image or text) + partial passphrase memory ("recoverytesting", "recovertest", "recoverytesters" etc). All lowercase, no spaces.
+## Schema
 
-**Key Lessons from verified sessions**
-- User memory is often one or more characters longer than actual passphrase. Systematic truncation (remove last 2-5 characters) is essential.
-- Sparrow Wallet commonly places funds on BIP84 change addresses (m/84'/0'/0'/1/10 or higher). `--addr-limit 100` is mandatory.
-- Use `btcrecover.py` with `--bip39` and `--passwordlist` for passphrase recovery.
-- Exact command template that succeeded (verified 2026-05-16):
+**Trigger**  
+Known BIP39 seed (12/24 words) + partial passphrase memory.
+
+**Key Insight**  
+User memory is often 1–5 characters longer than the actual passphrase. Systematic truncation is essential. Sparrow Wallet frequently places funds on BIP84 change addresses at index 10+.
+
+**Exact Command (Verified 2026-05-16)**
 
 ```bash
 cd ~/btcrecover
@@ -20,19 +22,15 @@ python3 btcrecover.py \
   --dsw
 ```
 
-**Passphrase list construction**
-Create `/tmp/passphrases.txt` with:
+**Passphrase List Construction**
 - All user-suggested variants
-- Truncations: `recoverytest`, `recoveryt`, `recovertes`, `recovertesti` etc.
-- Common misspellings (`reovertest`, `recovertesters`)
+- Truncations (remove last 2–5 characters)
+- Common misspellings
 
 **Pitfalls**
-- `derivationpath-lists/BTC.txt` lookup is relative. Must `cd ~/btcrecover` or wrappers fail with FileNotFoundError.
-- `--wallet-type bip39 --force-bip84` combination required for bc1q (native segwit) addresses.
-- Tool prints "Seed found" on success. Check output carefully for which passphrase worked.
-- After recovery: immediately sweep funds and run session cleanup (`scripts/nuke-session.sh`).
+- Must `cd ~/btcrecover` — derivation path lookup is relative.
+- Use `--bip32-path "m/84'/0'/0'/0"` for Sparrow change addresses.
+- Check output for "Seed found" message.
 
-**Post-recovery**
-Always follow tier 2/3 safety: new wallet on air-gapped device, donate 1% to btcrecover maintainers if significant funds recovered.
-
-See `verified-scenarios.md` for benchmarks. This pattern has succeeded in multiple sessions.
+**Verified Outcome**
+Pattern succeeded in multiple sessions. See `references/verified-recoveries.md` for full log.
