@@ -1,3 +1,8 @@
+---
+name: btcrecover-forensics
+description: Find a lost or forgotten Bitcoin wallet file through file archaeology, backup discovery, and timeline reconstruction. Implements the cprkrn Protocol for pre-password-change backup recovery. Invoke when the user cannot locate their wallet file or does not know which backup to use.
+---
+
 # Forensics Recovery
 
 File archaeology and backup discovery for Bitcoin wallets. The cprkrn scenario.

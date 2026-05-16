@@ -1,3 +1,8 @@
+---
+name: btcrecover-password-recovery
+description: Recover a forgotten Bitcoin wallet password or BIP39 passphrase using btcrecover.py. Handles wallet files (Bitcoin Core, Electrum, MetaMask, MultiBit), BIP38 paper wallets, brainwallets, warpwallets, raw private keys, and SLIP39 passphrases. Invoke when the user has a wallet file or encrypted key and a partial password memory.
+---
+
 # Password Recovery
 
 Handles password and passphrase recovery for Bitcoin wallets using btcrecover.

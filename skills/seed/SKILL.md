@@ -1,3 +1,8 @@
+---
+name: btcrecover-seed-recovery
+description: Recover a BIP39/SLIP39/Electrum seed phrase with missing, wrong, or scrambled words using seedrecover.py. Handles 1-4 missing words, wrong-word typos, scrambled order, invalid checksum, and wrong derivation paths across 18+ wallet types. Invoke when the user has most of their seed phrase but cannot access their wallet.
+---
+
 # Seed Recovery
 
 Handles mnemonic (BIP39, SLIP39, Electrum, aezeed) seed-level issues using seedrecover.py.
