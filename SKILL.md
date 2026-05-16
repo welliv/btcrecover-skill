@@ -118,7 +118,7 @@ python3 btcrecover.py --bip39 --wallet-type bip39 \
 ```
 
 See `references/hybrid-recovery.md` for the proven hybrid pattern and
-`references/verified-recoveries.md` for the full 35-scenario verification log.
+`docs/verified-recoveries.md` for the full 35-scenario verification log.
 
 ## Principles
 
@@ -137,7 +137,7 @@ This reference file is the skill's institutional memory.
 
 **Independently verified:** 35 recovery scenarios across 11 blockchains and 9 wallet
 types, all confirmed using btcrecover's official test suite. See
-`references/verified-recoveries.md` for the full log.
+`docs/verified-recoveries.md` for the full log.
 
 ## Step 0: First run
 

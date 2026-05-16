@@ -45,11 +45,11 @@ def get_recommendation(tier: int, recovery_type: str = "general", priority: str 
     
     # Customize slightly based on recovery type
     if recovery_type == "password" and tier == 2:
-        rec["primary"] = "Claude 3.5 Sonnet"
+        rec["primary"] = "Claude Sonnet 4"
         rec["reason"] = "Excellent at understanding password patterns and variations."
     
     if recovery_type == "seed" and tier == 2:
-        rec["primary"] = "Claude 3.5 Sonnet"
+        rec["primary"] = "Claude Sonnet 4"
         rec["reason"] = "Very good at structured seed phrase recovery tasks."
     
     return rec

@@ -6,17 +6,6 @@
     "huggingface"
   ],
   "models": {
-    "anthropic/claude-3.5-sonnet": {
-      "quality": 92,
-      "speed": 78,
-      "cost_per_million": 3.0,
-      "context": 200000,
-      "offline": false,
-      "tier_compatible": [
-        2,
-        3
-      ]
-    },
     "anthropic/claude-3-opus": {
       "quality": 95,
       "speed": 52,
@@ -79,6 +68,16 @@
       "offline": true,
       "tier_compatible": [
         1
+      ]
+    },
+    "anthropic/claude-sonnet-4-6": {
+      "quality": 93,
+      "speed": 82,
+      "cost_per_million": 3.0,
+      "context": 200000,
+      "offline": false,
+      "tier_compatible": [
+        2
       ]
     }
   }
