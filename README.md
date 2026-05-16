@@ -34,10 +34,10 @@ See [MAINTAINERS.md](MAINTAINERS.md)
 ## Community
 
 **Report a successful recovery:**
-https://github.com/welliv/btcrecover-skill/discussions — category: Recovery Reports
+https://github.com/welliv/btcrecover-skill/discussions/categories/recovery-reports
 
 **Report a problem or error:**
-https://github.com/welliv/btcrecover-skill/discussions — category: Recovery Problems
+https://github.com/welliv/btcrecover-skill/discussions/categories/recovery-problems-%EF%B8%8F
 
 Recovery reports help others know what is possible and strengthen the
 skill over time. No sensitive data — wallet type and scenario only.
