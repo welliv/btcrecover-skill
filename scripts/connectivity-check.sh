@@ -94,6 +94,42 @@ fi
 echo "  STATUS: ${ONLINE_STATUS}"
 echo ""
 
+# Additional checks: active interfaces and cloud sync processes
+echo "Checking for active interfaces and cloud sync..."
+
+# Check for active non-loopback network interfaces
+ACTIVE_IFACES=()
+if command -v ip >/dev/null 2>&1; then
+  while IFS= read -r line; do
+    ACTIVE_IFACES+=("$line")
+  done < <(ip -br link show 2>/dev/null | grep -v "^lo " | awk '$2 == "UP" {print $1}')
+elif command -v ifconfig >/dev/null 2>&1; then
+  while IFS= read -r line; do
+    ACTIVE_IFACES+=("$line")
+  done < <(ifconfig 2>/dev/null | grep -E "^[a-z]" | grep -v "^lo" | grep "RUNNING" | awk -F: '{print $1}')
+fi
+
+if [[ ${#ACTIVE_IFACES[@]} -gt 0 && $EXIT_CODE -eq 2 ]]; then
+  warn "Active interface(s) detected despite ping failure: ${ACTIVE_IFACES[*]}"
+  warn "A VPN or firewall may be blocking ICMP. Treat as potentially online."
+fi
+
+# Check for cloud sync processes
+SYNC_PROCS=()
+for proc in "Dropbox" "Google Drive" "OneDrive" "iCloud" "nextcloud" "syncthing"; do
+  if pgrep -fi "$proc" >/dev/null 2>&1; then
+    SYNC_PROCS+=("$proc")
+  fi
+done
+
+if [[ ${#SYNC_PROCS[@]} -gt 0 ]]; then
+  echo ""
+  warn "Cloud sync process(es) detected: ${SYNC_PROCS[*]}"
+  warn "These may upload recovery files before the cleanup step runs."
+  warn "Pause them before continuing. Resume after nuke-session.sh completes."
+  echo ""
+fi
+
 # =============================================================================
 # BACKWARD-COMPATIBLE MODE (no --enforce flag)
 # =============================================================================

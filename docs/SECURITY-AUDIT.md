@@ -15,7 +15,7 @@ Shut down (not sleep) after recovery. Optional RAM clear with `sudo sdmem -v`.
 `verify-btcrecover.sh` checks remote URL against official repo. Blocked patterns: TCRetriever, demining, etc.
 
 ## 5. Poisoned SKILL.md
-GPG commit signing. Weekly typosquat monitoring.
+Typosquat monitoring via `scripts/typosquat-monitor.py` (run manually or via crontab). CODEOWNERS file protects SKILL.md from unauthorised PR merges. GPG commit signing is a planned improvement.
 
 ## 6. Compromised Python Dependencies
 `pip install --require-hashes` guidance. Virtual environment isolation.
@@ -33,7 +33,10 @@ Eight-point verification checklist. Red flags: upfront fee, Telegram-only, 100% 
 Forensics subskill treats all file names and metadata as untrusted data.
 
 ## 11. DNS Leaks
-Connectivity check detects active interfaces and cloud sync processes, not just ping.
+Connectivity check uses 3 layers (ICMP → DNS → TCP) to detect online status.
+For additional protection: pause cloud sync (Dropbox, iCloud, OneDrive) manually
+before recovery, and verify disconnection with `ping -c 2 8.8.8.8` (must fail).
+Active interface and sync-process detection is a planned improvement.
 
 ## 12. Swap Space
 OS-specific swap clearing instructions. Linux: `swapoff -a && swapon -a`.

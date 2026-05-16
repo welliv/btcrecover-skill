@@ -104,8 +104,7 @@ The skill is:
 
 ## 4. What We Built
 
-Twenty files, 7,628 lines, across eight months of design, research, and
-iteration. Here is everything at a glance before the detail sections.
+Thirty-four files, 6,676 lines. Here is everything at a glance before the detail sections.
 
 ```
 btcrecover-skill/
@@ -117,7 +116,7 @@ btcrecover-skill/
 ├── DISCLAIMER.md                 ← Legal protection and informed consent
 ├── SECURITY.md                   ← Responsible disclosure policy
 ├── VERIFIED.md                   ← Cryptographic authenticity anchor
-├── install.sh                    ← Verified one-command installer (3-layer check)
+├── install.sh                    ← One-command installer (git clone + chmod)
 │
 ├── .github/                      ← GitHub automation and governance
 │   └── CODEOWNERS                ← Security-critical file ownership rules
@@ -161,7 +160,7 @@ btcrecover-skill/
     └── AUTHENTICITY-AND-LIABILITY.md ← Anti-impersonation and legal research
 ```
 
-**Total: 29 files across 9 directories**
+**Total: 34 files**
 
 ---
 
@@ -306,8 +305,8 @@ benchmarks. Covers: Bitcoin Core, Electrum, Blockchain.com, Trezor,
 Ledger, MetaMask, Exodus, MultiBit Classic, MultiBit HD, Armory, Wasabi,
 Sparrow. Includes GPU rental guidance for large search spaces.
 
-Notable: explicitly documents the sharedKey concatenation order bug
-(the root cause of the cprkrn 11-year failure) so the skill watches for it.
+Includes GPU rental guidance for large search spaces and extract script
+references for Tier 2 (split-workflow) recovery.
 
 ---
 
@@ -328,11 +327,8 @@ Three-layer detection in order:
 2. DNS resolution via nslookup (fallback for firewalled ICMP)
 3. TCP port 53 check via netcat or curl (last resort)
 
-Also checks for active network interfaces (catches VPN users who fail the
-ping test but are still routing traffic) and cloud sync processes (Dropbox,
-iCloud, OneDrive, Nextcloud).
-
-Exit code 0 = OFFLINE (safe). Exit code 1 = ONLINE (requires tier acknowledgment).
+Exit codes: 0 = FULLY_ONLINE, 1 = LOCAL_ONLY (ICMP only), 2 = OFFLINE (safe).
+These match the values in SKILL.md Step 1.
 
 ---
 
@@ -567,7 +563,7 @@ What the user never sees:
 - Technical wallet format details
 - BIP44/49/84 derivation path numbers
 - The game-theory router calculation
-- Any of the 7,628 lines of implementation
+- Any of the 6,676 lines of implementation
 
 ### Recovery type taxonomy
 
@@ -694,13 +690,23 @@ All benchmark data comes from public verified sources and updates daily:
 
 Task scores (forensics, password, seed, passphrase) are derived from general LLM capability benchmarks and refined through community submissions. They start at reasonable defaults and improve over time.
 
-### Daily auto-update
+### Updating benchmarks
 
-`scripts/benchmark-updater.py` runs daily at 06:00 UTC via cron. It fetches:
+`scripts/benchmark-updater.py` fetches current pricing and model data:
 - OpenRouter API (no key needed) — model listing, pricing, context length
 - btcrecover GPU Acceleration guide — password/sec hardware data
 
-Every model entry records its data source and the timestamp of its last update. If a source is unreachable, cached data persists and the cron logs the failure. No data is ever lost due to a transient network error.
+Run it manually, or add to crontab for automatic updates:
+```bash
+# Run once
+python3 scripts/benchmark-updater.py
+
+# Add to crontab for daily updates at 06:00
+0 6 * * * python3 /path/to/btcrecover-skill/scripts/benchmark-updater.py
+```
+
+Every model entry records its data source and the timestamp of its last update.
+If a source is unreachable, cached data persists. No data is lost on failure.
 
 ---
 
@@ -787,7 +793,7 @@ a list of known malicious fork patterns (TCRetriever, demining, etc.).
 Run mandatory before first session.
 
 **5. Poisoned SKILL.md (HIGH)**
-Fix: Prompt injection awareness in forensics subskill. Typosquat monitoring via `scripts/typosquat-monitor.py` (weekly cron). All changes tracked via git history.
+Fix: Prompt injection awareness in forensics subskill. Typosquat monitoring via `scripts/typosquat-monitor.py` (run manually or add to crontab). All changes tracked via git history.
 
 **6. Compromised Python dependencies (MEDIUM)**
 Fix: `pip install --require-hashes` guidance. Virtual environment for
@@ -816,8 +822,7 @@ names and metadata as untrusted data, not instructions.
 ### Category 4 — Operational
 
 **11. DNS leaks during "offline" recovery (MEDIUM)**
-Fix: connectivity-check.sh checks active network interfaces and cloud sync
-processes, not just ping/DNS response.
+Fix: connectivity-check.sh uses 3-layer check (ICMP → DNS → TCP).
 
 **12. Swap space persists key data (MEDIUM)**
 Fix: OS-specific swap clearing instructions in nuke-session.sh output.
@@ -838,28 +843,33 @@ screen recording, do not screenshot to "save for later."
 
 Full detail in `AUTHENTICITY-AND-LIABILITY.md`. Summary:
 
-### The cryptographic chain
+### Trust model
 
-```
-Keybase identity
-  └── proves GitHub account, X account simultaneously
-        └── GPG commit signing
-              └── GitHub "Verified" badge on every commit
+The canonical source is `https://github.com/welliv/btcrecover-skill`.
+Anyone cloning from this URL gets exactly what the repository owner published.
+
+To verify an installation: check the remote URL after cloning:
+```bash
+git remote -v
+# Must show: origin  https://github.com/welliv/btcrecover-skill
 ```
 
-A fake cannot break any link in this chain without controlling your accounts.
+CODEOWNERS enforces that security-critical files (SKILL.md, safety-rules.md,
+the sweep and nuke scripts, install.sh, verify-btcrecover.sh) require the
+repository owner's approval before any pull request can merge.
+
+GPG commit signing and Keybase cross-verification are planned improvements
+that will strengthen this model when implemented.
 
 ### Clone detection
 
-- Weekly typosquat monitoring via `scripts/typosquat-monitor.py`
-- GitHub branch protection: signed commits required, no force push
-- CODEOWNERS file: security-critical files require your approval
+- Weekly typosquat monitoring via `scripts/typosquat-monitor.py` (add to crontab manually)
+- CODEOWNERS file: security-critical files require author approval
 - skills.sh canonical listing under the exact registered name
 
 ### The VERIFIED.md trust anchor
 
-Published in the repo. States: canonical GitHub URL, Keybase URL, GPG
-fingerprint, and critically — what the real skill never
+Published in the repo. States: canonical GitHub URL, and critically — what the real skill never
 does. Anyone who receives the skill from outside the canonical URL can compare
 against this file.
 
@@ -936,7 +946,7 @@ skill files are complete and verified.
 
 ### v1.1 — Community and hardening
 - Community benchmark submission system active
-- `scripts/typosquat-monitor.py` running weekly
+- `scripts/typosquat-monitor.py` available for weekly monitoring (add to crontab manually)
 - `agents/claude-code.md`, `agents/cline.md`, `agents/cursor.md`, `agents/generic.md`
 - `SECURITY.md` with responsible disclosure policy live
 - Windows-specific guidance expanded
@@ -1012,13 +1022,11 @@ Any other installation method bypasses the verification chain.
 
 ## Summary
 
-Twenty files. 7,628 lines. Built across an extended design session that
-started with a viral $400,000 recovery story and ended with a production-ready
-skill that addresses 14 security blind spots, covers three recovery types,
-runs on seven AI agents, supports eleven wallet formats, works fully offline
-or with cloud AI reasoning, self-destructs its own session data after use,
-and tells users to donate to Stephen Rothery's btcrecover project before it
-mentions its own donation address.
+Thirty-four files. 6,676 lines. Built to address the gap between a powerful
+technical recovery tool and the non-technical users who need it most —
+with 14 documented security controls, recovery support for 18+ wallet types
+across multiple blockchains, offline-first operation, and a post-recovery
+protocol that self-destructs all session data after use.
 
 The skill's purpose is not to be impressive. Its purpose is to be the thing
 that works when someone who does not know what a derivation path is finds an

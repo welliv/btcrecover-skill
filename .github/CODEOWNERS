@@ -26,10 +26,12 @@ scripts/nuke-session.sh                     @welliv
 install.sh                                  @welliv
 scripts/verify-btcrecover.sh                @welliv
 VERIFIED.md                                 @welliv
-CHECKSUMS.sha256                            @welliv
+# CHECKSUMS.sha256                          @welliv
+# ^ Planned: signed file integrity manifest (not yet implemented)
 
 # GitHub Actions — prevents supply chain attacks via CI
-.github/workflows/release.yml              @welliv
+# .github/workflows/release.yml            @welliv
+# ^ Planned: Cosign + GPG release signing workflow (not yet implemented)
 
 # Legal and identity documents
 DISCLAIMER.md                               @welliv
