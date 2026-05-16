@@ -11,7 +11,7 @@ Built on btcrecover by Stephen Rothery. Free and open source. Always.
 
 ## Response style (user preference)
 
-Always use simplified British English, natural human tone, brief and substantive responses. No redundancy. Prefer one-pass fixes: audit, clean, verify, report. Respond to "remember our btcrecover session" by immediately recalling hybrid details (passphrase truncation — "recoverytesting" remembered but "recoverytest" actual; Sparrow BIP84 change path index 10; --addr-limit 100; seedrecover-cli --passphrase-list with bip39 + --force-bip84). See references/hybrid-recovery.md for exact command template and pitfalls. When asked to audit, produce a short clear summary and push fixes.
+Always use simplified British English, natural human tone, brief and substantive responses with perfect economy. No redundancy or explanations unless asked. User prefers decisive action ("Go!", "Do it on my behalf", "Push the fix", one-pass audit-clean-verify-report). Respond to "remember our btcrecover session" by immediately recalling hybrid details (passphrase truncation — "recoverytesting" remembered but "recoverytest" actual; Sparrow BIP84 change path index 10; --addr-limit 100; must cd ~/btcrecover; seedrecover-cli --passphrase-list with bip39 + --force-bip84). See references/hybrid-recovery.md for exact command template and pitfalls. When asked to audit, produce short clear summary and push fixes.
 
 ## How to use this skill
 
@@ -19,19 +19,16 @@ Tell me about your recovery situation. I will guide you step by step.
 
 ## Security tiers
 
-We recommend tier 2 for most users.
+We recommend **Tier 2** for most users.
 
-| Tier | Risk level | Description |
-|------|------------|-------------|
-| ⚡ Tier 2 | Low risk | Recommended. Your wallet data stays on your machine. Only the AI reasoning uses the cloud. |
-| 🔒 Tier 1 | Very low risk | Maximum privacy. Everything runs offline using a local AI model. Requires more setup. |
-| 🚨 Tier 3 | High risk | Fastest but riskiest. Your data is processed online. Only use if you accept full exposure. |
+| Tier | Risk | Description |
+|------|------|-------------|
+| ⚡ Tier 2 | Low | Recommended. Wallet data stays on your machine. Only AI reasoning uses the cloud. |
+| 🔒 Tier 1 | Very low | Maximum privacy. Everything runs offline with a local model. Requires setup. |
 
-**Important points**
-- Tier 2 offers the best balance for most people.
-- Tier 3 should only be used if you fully understand and accept the risks.
+**Tier 2** offers the best balance. Use Tier 1 for high-value wallets.
 
-After you confirm your tier, I will recommend the best model for your recovery. You can accept the recommendation or choose an alternative.
+After you confirm your tier, I will recommend the best model.
 
 ## Flow
 
