@@ -60,8 +60,8 @@ If btcrecover is missing at any later step, do not show a raw error. Say: "It lo
 
 **After setup**, run btcrecover and seedrecover via the convenience wrappers (not raw python):
 ```bash
-~/btcrecover/btcrecover --help
-~/btcrecover/seedrecover --help
+~/btcrecover/btcrecover-cli --help
+~/btcrecover/seedrecover-cli --help
 ```
 The setup script creates a Python virtual environment (`venv/`) inside the btcrecover directory and installs all dependencies there (pycryptodome for password recovery, coincurve for seed recovery). The wrappers auto-activate the venv — never bypass them with raw `python btcrecover.py`.
 

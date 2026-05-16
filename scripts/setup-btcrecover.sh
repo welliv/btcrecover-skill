@@ -42,19 +42,24 @@ echo "Installing Python dependencies into venv..."
 }
 
 # Create convenience wrappers (use python3 — venv may not create a 'python' symlink)
-cat > "${BTC_RECOVER_DIR}/btcrecover" <<'WRAPPER'
+# Note: use -cli suffix because ~/btcrecover/btcrecover conflicts with the
+# btcrecover/ subdirectory inside the cloned repo.
+cat > "${BTC_RECOVER_DIR}/btcrecover-cli" <<'WRAPPER'
 #!/usr/bin/env bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
 exec "$DIR/venv/bin/python3" "$DIR/btcrecover.py" "$@"
 WRAPPER
-chmod +x "${BTC_RECOVER_DIR}/btcrecover"
+chmod +x "${BTC_RECOVER_DIR}/btcrecover-cli"
+# Legacy alias for scripts that reference the old path
+ln -sf btcrecover-cli "${BTC_RECOVER_DIR}/btcrecover" 2>/dev/null || true
 
-cat > "${BTC_RECOVER_DIR}/seedrecover" <<'WRAPPER'
+cat > "${BTC_RECOVER_DIR}/seedrecover-cli" <<'WRAPPER'
 #!/usr/bin/env bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
 exec "$DIR/venv/bin/python3" "$DIR/seedrecover.py" "$@"
 WRAPPER
-chmod +x "${BTC_RECOVER_DIR}/seedrecover"
+chmod +x "${BTC_RECOVER_DIR}/seedrecover-cli"
+ln -sf seedrecover-cli "${BTC_RECOVER_DIR}/seedrecover" 2>/dev/null || true
 
 # Verify both tools load (using venv python3 explicitly)
 echo "Verifying installation..."
@@ -66,9 +71,12 @@ date -u +'%Y-%m-%dT%H:%M:%SZ' > "${MARKER_FILE}"
 
 echo ""
 echo "✅ btcrecover is set up and ready."
-echo "  ~/btcrecover/btcrecover --help"
-echo "  ~/btcrecover/seedrecover --help"
+echo "  ~/btcrecover/btcrecover-cli --help"
+echo "  ~/btcrecover/seedrecover-cli --help"
 echo ""
 echo "💡 Always use the wrappers (or activate the venv):"
 echo "  source ~/btcrecover/venv/bin/activate"
+echo ""
+echo "   Note: ~/btcrecover/btcrecover is a directory (part of the repo)."
+echo "   Use btcrecover-cli/seedrecover-cli for the CLI wrappers."
 exit 0
