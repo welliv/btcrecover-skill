@@ -57,11 +57,23 @@ After you confirm your tier, I will recommend the best model.
 1. Consent and setup
 2. Tier selection
 3. Quick classification (one message: wallet file/seed status, known address, what is missing/remembered)
-4. Model recommendation
-5. Pre flight checks
-6. Build and run commands with your approval
-7. Progress updates
-8. Post recovery safety and cleanup
+4. Feasibility gate (check before starting any interview)
+5. Model recommendation
+6. Pre flight checks
+7. Build and run commands with your approval
+8. Progress updates
+9. Post recovery safety and cleanup
+
+## Feasibility Gate
+
+Check this table immediately after classification. If any of these conditions apply, state the limitation clearly and explain what additional information would make recovery possible. Do not start the memory interview.
+
+| Recovery type | Not practical when... |
+|---|---|
+| Password | User has absolutely no idea and cannot bound the search space |
+| Seed — missing words | 4+ words missing AND no address/xpub/AddressDB |
+| Seed — scrambled | 24-word seed with no positional anchors |
+| Passphrase | User remembers nothing — not even theme or length |
 
 **Sub-skill orchestration**: For complex cases (forensics + seed + password), load the relevant sub-skill from `skills/forensics/SKILL.md`, `skills/seed/SKILL.md`, or `skills/password/SKILL.md` and work through them in sequence. Start with forensics if the wallet file location is unknown, then seed if the mnemonic has issues, then password.
 
