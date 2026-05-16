@@ -1,4 +1,4 @@
-# btcrecover-skill — Complete Project Document
+# btcrecover-skill Complete Project Document
 
 > The AI layer that makes Bitcoin wallet recovery accessible to everyone.
 > Built on btcrecover by 3rdIteration. Free and open source. Always.
@@ -13,12 +13,12 @@
 4. [What We Built](#4-what-we-built)
 5. [Architecture](#5-architecture)
 6. [Complete File Manifest](#6-complete-file-manifest)
-7. [Security Model — Three Tiers](#7-security-model--three-tiers)
+7. [Security Model Two Tiers](#7-security-model--two-tiers)
 8. [How Recovery Works](#8-how-recovery-works)
-9. [Local Setup — Ollama and Hermes](#9-local-setup--ollama-and-hermes)
-10. [Model Selection — The Game-Theory Router](#10-model-selection--the-game-theory-router)
+9. [Local Setup Ollama and Hermes](#9-local-setup--ollama-and-hermes)
+10. [Model Selection The Game-Theory Router](#10-model-selection--the-game-theory-router)
 11. [Post-Recovery Protocol](#11-post-recovery-protocol)
-12. [Security Hardening — 14 Blind Spots Addressed](#12-security-hardening--14-blind-spots-addressed)
+12. [Security Hardening 14 Blind Spots Addressed](#12-security-hardening--14-blind-spots-addressed)
 13. [Anti-Impersonation and Authenticity](#13-anti-impersonation-and-authenticity)
 14. [Liability Protection](#14-liability-protection)
 15. [Maintainers and Attribution](#15-maintainers-and-attribution)
@@ -31,7 +31,7 @@
 
 On **13 May 2026**, a pseudonymous X user known as [@cprkrn](https://x.com/cprkrn/status/2054586810475364536?s=20) posted a thread
 that went viral across the crypto world. He had been locked out of a Bitcoin
-wallet containing 5 BTC — worth approximately $400,000 at the time — for over
+wallet containing 5 BTC worth approximately $400,000 at the time for over
 11 years. He had tried everything: brute-force attacks renting GPU time,
 testing roughly 3.5 trillion password combinations at a cost of about $15,
 commercial recovery services, and multiple btcrecover configurations. Every
@@ -41,7 +41,7 @@ In a final act of desperation, he uploaded his entire old college computer
 to Claude AI.
 
 What happened next was not AI magic. It was AI-assisted digital forensics.
-Claude found a December 2019 wallet backup buried in years of file clutter —
+Claude found a December 2019 wallet backup buried in years of file clutter  
 a backup that predated the forgotten password change. It matched a mnemonic
 phrase cprkrn had found in an old college notebook. Then it found something
 else: a bug in btcrecover itself, where the tool was concatenating a shared
@@ -68,8 +68,8 @@ typo flags, derivation paths, and GPU acceleration. Most people who have
 lost access to a wallet do not have this knowledge and cannot acquire it
 under the stress of knowing real money is at stake.
 
-**The AI problem:** Using an AI like Claude directly for recovery — as
-cprkrn did — works. But it carries serious security risks when done naively.
+**The AI problem:** Using an AI like Claude directly for recovery as
+cprkrn did works. But it carries serious security risks when done naively.
 cprkrn uploaded his entire computer. His keys passed through Anthropic's
 infrastructure. He did the right thing and swept immediately, so he was safe.
 Not everyone will know to do that. Not everyone will be lucky.
@@ -85,20 +85,20 @@ can use it safely" is exactly where this skill lives.
 
 A non-technical user should be able to describe their situation in plain
 English, provide the details they have, and receive guided, step by step
-help through recovery — with every dangerous decision made safe by default,
+help through recovery with every dangerous decision made safe by default,
 every technical complexity abstracted away, and every scam vector anticipated
 and defended against.
 
 The skill is:
 
-- **Free** — always, without exception, at every tier
-- **Open source** — GPL-2.0, fully auditable, no black boxes
-- **Agent-agnostic** — works with Claude Code, Cursor, Cline, Codex, Hermes,
+- **Free** always, without exception, at every tier
+- **Open source** GPL-2.0, fully auditable, no black boxes
+- **Agent-agnostic** works with Claude Code, Cursor, Cline, Codex, Hermes,
   and any agent that supports the agentskills.io SKILL.md standard
-- **Model-agnostic** — works with local models (Ollama) and cloud APIs
+- **Model-agnostic** works with local models (Ollama) and cloud APIs
   (Claude, GPT, Gemini, DeepSeek, and 200+ others via OpenRouter)
-- **Offline-first** — the safest path is the default path
-- **Security-first** — safety mechanisms cannot be bypassed by user prompts
+- **Offline-first** the safest path is the default path
+- **Security-first** safety mechanisms cannot be bypassed by user prompts
 
 ---
 
@@ -109,7 +109,7 @@ Thirty-four files, 6,676 lines. Here is everything at a glance before the detail
 ```
 btcrecover-skill/
 │
-├── PROJECT.md                    ← This document — complete project overview
+├── PROJECT.md                    ← This document complete project overview
 ├── SKILL.md                      ← The main AI orchestrator (start here)
 ├── README.md                     ← Human-facing introduction and install
 ├── MAINTAINERS.md                ← Attribution, contributor list, donations
@@ -145,11 +145,11 @@ btcrecover-skill/
 │       └── SKILL.md              ← File archaeology and backup discovery (9 phases)
 │
 ├── agents/                       ← Agent-specific installation and setup guides
-│   ├── hermes.md                 ← Hermes Agent (Nous Research) — primary agent
+│   ├── hermes.md                 ← Hermes Agent (Nous Research) primary agent
 │   ├── claude-code.md            ← Claude Code (Anthropic)
 │   ├── cline.md                  ← Cline (VS Code)
 │   ├── cursor.md                 ← Cursor
-│   └── generic.md                ← Universal fallback — any LLM or chat interface
+│   └── generic.md                ← Universal fallback any LLM or chat interface
 │
 ├── guides/                       ← User guides
 │   └── local-recovery-setup.md   ← Complete Ollama + Hermes setup (10 parts)
@@ -173,21 +173,21 @@ originally developed by Anthropic and now an open standard supported by
 Claude Code, Cursor, Cline, Codex, Hermes, and 15+ other agents.
 
 ```
-L1 — Advertise (~80 tokens in system prompt)
+L1 Advertise (~80 tokens in system prompt)
      name + description only
      Agent knows the skill exists and when to use it
      Cost: essentially zero at idle
 
-L2 — Load (< 5,000 tokens, loaded when triggered)
+L2 Load (< 5,000 tokens, loaded when triggered)
      The main SKILL.md orchestrator
      Loaded when user describes a recovery situation
 
-L3 — Sub-skills (loaded per recovery type)
+L3 Sub-skills (loaded per recovery type)
      skills/password/SKILL.md   → password/passphrase recovery
      skills/seed/SKILL.md       → mnemonic recovery
      skills/forensics/SKILL.md  → file archaeology
 
-L4 — References and scripts (loaded on demand)
+L4 References and scripts (loaded on demand)
      references/ files loaded only when the subskill needs them
      scripts/ executed only when the user approves each command
 ```
@@ -244,7 +244,7 @@ User describes situation (plain English)
 
 ## 6. Complete File Manifest
 
-### `SKILL.md` — The Main Orchestrator
+### `SKILL.md` The Main Orchestrator
 
 The L2 skill file. Seven mandatory steps:
 
@@ -263,16 +263,16 @@ user approval. It is an advisor, not an actor.
 
 ---
 
-### `references/safety-rules.md` — The Security Backbone
+### `references/safety-rules.md` The Security Backbone
 
 Read by the orchestrator at the start of every session. Contains:
 
-- **§CORE**: The Three Laws — Sweep Law, No Third Parties, Local First
+- **§CORE**: The Three Laws Sweep Law, No Third Parties, Local First
 - **§ONLINE-TIER2**: Split-workflow warning with typed consent gate
-- **§ONLINE-TIER3**: Full-upload warning — "I UNDERSTAND AND ACCEPT" required
+- **§ONLINE-TIER3**: Full-upload warning "I UNDERSTAND AND ACCEPT" required
 - **§SCAM-DETECTION**: Nine red flags that halt the session immediately
 - **§VERIFICATION**: How to verify btcrecover installation authenticity
-- **§PROFESSIONAL-SERVICES**: Legitimate services vs scam services — how to tell
+- **§PROFESSIONAL-SERVICES**: Legitimate services vs scam services how to tell
 - **§POST-RECOVERY**: The complete sweep protocol in plain English
 
 These rules cannot be overridden by user prompts. They are loaded fresh
@@ -280,7 +280,7 @@ every session. The AI agent must read them before doing anything else.
 
 ---
 
-### `references/benchmarks.json` — The Model Performance Database
+### `references/benchmarks.json` The Model Performance Database
 
 Self-updating via `scripts/benchmark-updater.py`. Contains:
 
@@ -298,7 +298,7 @@ Hermes-3-Llama-3.1-8B, Qwen3-14B, DeepSeek-R1-14B, Gemma3-12B.
 
 ---
 
-### `references/wallet-types.md` — Per-Wallet Recovery Guide
+### `references/wallet-types.md` Per-Wallet Recovery Guide
 
 Eleven wallet types with exact commands, extract scripts, and GPU speed
 benchmarks. Covers: Bitcoin Core, Electrum, Blockchain.com, Trezor,
@@ -310,7 +310,7 @@ references for Tier 2 (split-workflow) recovery.
 
 ---
 
-### `references/typo-patterns.md` — Human Error Patterns
+### `references/typo-patterns.md` Human Error Patterns
 
 Three sections: password typos, seed word mistakes, passphrase patterns.
 Covers: visual character confusion, capitalisation errors, keyboard proximity
@@ -320,7 +320,7 @@ with performance impact notes.
 
 ---
 
-### `scripts/connectivity-check.sh` — The Network Gate
+### `scripts/connectivity-check.sh` The Network Gate
 
 Three-layer detection in order:
 1. ICMP ping to 8.8.8.8
@@ -332,7 +332,7 @@ These match the values in SKILL.md Step 1.
 
 ---
 
-### `scripts/sweep-reminder.sh` — The Post-Recovery Protocol
+### `scripts/sweep-reminder.sh` The Post-Recovery Protocol
 
 Six mandatory steps with Enter gates between each:
 
@@ -351,11 +351,11 @@ in Steps 4-5 fails, leaving the user with a clear path to resume.
 
 ---
 
-### `scripts/nuke-session.sh` — Secure Session Destruction
+### `scripts/nuke-session.sh` Secure Session Destruction
 
 Destroys in order:
 
-1. Session base directory (`~/.btcrecover-skill/`) — checkpoint, logs, PID
+1. Session base directory (`~/.btcrecover-skill/`) checkpoint, logs, PID
 2. Tokenlists and passwordlists from skill and working directory
 3. Wallet extract files (`*.extract`, `extract.txt`)
 4. btcrecover output and savestate files
@@ -377,7 +377,7 @@ shared machines.
 
 ---
 
-### `scripts/session-manager.sh` — Long Recovery Sessions
+### `scripts/session-manager.sh` Long Recovery Sessions
 
 Wraps btcrecover in a managed `screen` or `tmux` session (nohup fallback).
 Automatically adds `--savefile` to every btcrecover command for checkpoint
@@ -391,7 +391,7 @@ to plain English: "X% complete, estimated Y hours remaining."
 
 ---
 
-### `scripts/benchmark-updater.py` — Self-Updating Benchmarks
+### `scripts/benchmark-updater.py` Self-Updating Benchmarks
 
 Pure stdlib, no pip dependencies. Three update sources:
 1. btcrecover's official hardware benchmark page (fetches, parses HTML)
@@ -404,7 +404,7 @@ Supports: `--dry-run`, `--community`, `--hardware`.
 
 ---
 
-### `skills/password/SKILL.md` — Password Recovery Sub-Skill
+### `skills/password/SKILL.md` Password Recovery Sub-Skill
 
 Eight phases: deep memory interview → search space estimation → tokenlist
 construction → typo mutation selection → wallet extract (Tier 2) → command
@@ -422,7 +422,7 @@ shown to the user with plain-English explanation before running.
 
 ---
 
-### `skills/seed/SKILL.md` — Seed Recovery Sub-Skill
+### `skills/seed/SKILL.md` Seed Recovery Sub-Skill
 
 Six problem classifications with distinct strategies:
 
@@ -434,7 +434,7 @@ Six problem classifications with distinct strategies:
   narrow. 24-word scrambled: escalates immediately.
 - **INVALID**: Checksum failure. Last word has ~128 valid options if all others
   correct. Tokenlist approach for multiple wrong words.
-- **WRONG_COIN**: Systematic derivation path check — BIP44/49/84/86 in order.
+- **WRONG_COIN**: Systematic derivation path check BIP44/49/84/86 in order.
 |- **EXTRA_PASSPHRASE**: Routes to password subskill for passphrase recovery.
 
 Covers: BIP39, SLIP39, Electrum 1.x/2.x. Multi-language wordlists.
@@ -442,7 +442,7 @@ Address database method for recovery without a known address.
 
 ---
 
-### `skills/forensics/SKILL.md` — File Archaeology Sub-Skill
+### `skills/forensics/SKILL.md` File Archaeology Sub-Skill
 
 The cprkrn scenario. Nine phases:
 
@@ -465,80 +465,43 @@ independent of file extension.
 
 ---
 
-### `guides/local-recovery-setup.md` — Ollama and Hermes Guide
+### `guides/local-recovery-setup.md` Ollama and Hermes Guide
 
 Ten parts covering every platform:
 
 - Mode 1 (fully offline), Mode 2 (local Hermes + cloud API), Mode 3 (fully
-  online) — with a diagram explaining exactly what leaves the machine in
+  online) with a diagram explaining exactly what leaves the machine in
   each mode and when Mode 2 is genuinely safe
 - Hardware requirements table: CPU-only through Apple Silicon M4
 - Ollama install: Linux (systemd), macOS (homebrew and app), Windows (WSL2)
 - The critical context length fix: `OLLAMA_CONTEXT_LENGTH=65536` (the #1
-  failure mode — Hermes rejects models with <64K context)
+  failure mode Hermes rejects models with <64K context)
 - Model pull guide by recovery type with download sizes
 - Hermes install and configuration for each mode
 - Cloud API providers: Anthropic, OpenAI, OpenRouter, Ollama Cloud
 - The skill-driven recommendation system with example dialogue
-- Why Mode 2 is not Mode 3 — the "who controls the machine" test
+- Why Mode 2 is not Mode 3 the "who controls the machine" test
 - Quick reference commands: Ollama and Hermes essentials
 - Troubleshooting: 7 common failure modes with exact solutions
 - Security checklist: 12 items to verify before sharing wallet data
 
 ---
 
-## 7. Security Model — Three Tiers
 
-```
-TIER 1 — FULLY OFFLINE (maximum security)
-─────────────────────────────────────────
-What it means:    Local AI model + internet disconnected + btcrecover local
-Who sees keys:    Nobody outside your machine
-Connectivity:     connectivity-check.sh must return OFFLINE
-Consent gate:     none — this is the default safe path
-Recommended for:  any wallet above $1,000
-How to set up:    Ollama + local model, then disconnect. See guides/local-recovery-setup.md
-Sweep urgency:    Standard — sweep because it is good practice, not emergency
+## 7. Security Model Two Tiers
 
-TIER 2 — LOCAL AGENT + CLOUD API (safe cloud reasoning)
-────────────────────────────────────────────────────────
-What it means:    Hermes on your machine calls a cloud AI API
-Who sees prompts: The cloud AI provider (Claude, OpenAI, etc.)
-Who sees keys:    Nobody — wallet file and btcrecover run locally
-What goes to API: Your description, password patterns, error messages
-What stays local: Wallet file, seed phrase, WIF key, btcrecover execution
-Consent gate:     "I UNDERSTAND" — typed explicitly
-Recommended for:  Complex forensics, users without GPU hardware
-Use extract scripts to ensure the wallet file never goes near the API
-Sweep urgency:    Standard — keys were never exposed
 
-─────────────────────────────────────────────────────
-What it means:    Skill runs on Claude.ai, Grok, VPS, or any uncontrolled environment
-Who sees keys:    The platform running the inference
-What leaves:      Depends entirely on what the user shares
-Consent gate:     "I UNDERSTAND AND ACCEPT" — typed explicitly
-When appropriate: Last resort after Tier 1 and 2 have failed
-Sweep urgency:    IMMEDIATE — treat all keys as compromised the moment recovery succeeds
-```
+**Tier 1 Fully Offline (maximum security)**
 
-### The distinction that matters most
+Everything runs on your machine with a local model. No data leaves. Internet is disconnected during the session. Recommended for wallets above $1,000.
 
-Mode 2 is not Mode 3. This is the most important thing to communicate to
-users who will assume "using the internet = risky."
+**Tier 2 Local Agent + Cloud Reasoning (recommended)**
 
-In Mode 2, Hermes is a local program running on your computer. The cloud
-API receives text prompts — your description of the problem, the password
-patterns you remember, the wallet type. It does not receive your wallet
-file, seed phrase, or private keys. Those are processed by btcrecover on
-your machine. The cloud AI is a reasoning engine generating command-line
-instructions. You are the one who runs those instructions locally.
+Hermes runs locally on your computer. The cloud API receives only text prompts such as your description of the problem and remembered password patterns. The wallet file, seed, and btcrecover execution stay on your machine. Requires explicit typed consent.
 
-In Mode 3, the inference environment itself is not under your control.
-The risk is not from the AI being malicious — it is from not knowing what
-is logged, what is retained, and whether your data is ever seen by someone
-with access to the infrastructure.
+### The key distinction
 
----
+Tier 2 is not the same as running the entire recovery in an uncontrolled environment. In Tier 2 the wallet data never leaves your computer. The cloud model only generates reasoning and command suggestions. You run the actual btcrecover commands yourself.
 
 ## 8. How Recovery Works
 
@@ -588,7 +551,7 @@ concluding that the search space is unmanageable.
 
 ---
 
-## 9. Local Setup — Ollama and Hermes
+## 9. Local Setup Ollama and Hermes
 
 ### The recommended path for most users
 
@@ -598,7 +561,7 @@ Step 1: Install Ollama (5 minutes)
   macOS:   download from ollama.com/download
   Windows: install WSL2 first, then follow Linux steps
 
-Step 2: Set context length (critical — do not skip)
+Step 2: Set context length (critical do not skip)
   sudo systemctl edit ollama.service
   Add: Environment="OLLAMA_CONTEXT_LENGTH=65536"
   sudo systemctl daemon-reload && sudo systemctl restart ollama
@@ -651,7 +614,7 @@ that while giving access to the same model capability.
 
 ---
 
-## 10. Model Selection — The Game-Theory Router
+## 10. Model Selection The Game-Theory Router
 
 ### The formula
 
@@ -690,8 +653,8 @@ Task scores (forensics, password, seed, passphrase) are derived from general LLM
 ### Updating benchmarks
 
 `scripts/benchmark-updater.py` fetches current pricing and model data:
-- OpenRouter API (no key needed) — model listing, pricing, context length
-- btcrecover GPU Acceleration guide — password/sec hardware data
+- OpenRouter API (no key needed) model listing, pricing, context length
+- btcrecover GPU Acceleration guide password/sec hardware data
 
 Run it manually, or add to crontab for automatic updates:
 ```bash
@@ -711,36 +674,36 @@ If a source is unreachable, cached data persists. No data is lost on failure.
 
 ### The seven stages after btcrecover finds the credential
 
-**Stage 1 — Intercept (before congratulations)**
+**Stage 1 Intercept (before congratulations)**
 The skill intercepts the found credential and does not celebrate. It says:
 "We found it. Before anything else, I need to walk you through something
 important." Then `sweep-reminder.sh` takes over.
 
-**Stage 2 — The reframe (Step 1 of sweep-reminder)**
+**Stage 2 The reframe (Step 1 of sweep-reminder)**
 "Your wallet is accessible. That is not the same as safe."
 The user must press Enter to advance. Cannot be skipped.
 
-**Stage 3 — New wallet (Steps 2-3)**
+**Stage 3 New wallet (Steps 2-3)**
 Guided setup of a fresh wallet on a clean device. Write seed phrase on
 paper. Display receive address. Write down 8 characters before touching
 the clipboard.
 
-**Stage 4 — Test transaction gate (Step 4)**
+**Stage 4 Test transaction gate (Step 4)**
 Send the smallest possible amount to the new wallet. Paste the transaction
 link. Confirm arrival. If the user says NO, the script halts with diagnostics
 for three specific failure modes: pending, wrong address, broadcast failure.
 This step defeats clipboard hijackers because a swapped address means the
-test goes to the attacker — and the user catches it before the full sweep.
+test goes to the attacker and the user catches it before the full sweep.
 
-**Stage 5 — Full sweep (Step 5)**
+**Stage 5 Full sweep (Step 5)**
 Sweep, not Import. Pre-broadcast checklist: verify destination, verify
 balance, set fee. Broadcast, then return to the terminal.
 
-**Stage 6 — On-chain verification (Step 6)**
-Paste sweep tx link. Handles pending gracefully — user types `pending` and
+**Stage 6 On-chain verification (Step 6)**
+Paste sweep tx link. Handles pending gracefully user types `pending` and
 the script completes, knowing the sweep is broadcast.
 
-**Stage 7 — Celebration, donation ask, nuke (Step 7 and nuke-session.sh)**
+**Stage 7 Celebration, donation ask, nuke (Step 7 and nuke-session.sh)**
 Celebration only after DONE is typed. Donation ask structured as:
 "Support btcrecover first: https://github.com/3rdIteration/btcrecover#if-this-tool-or-other-content-on-my-youtube-channel-was-helpful-feel-free-to-send-a-tip-to. Support this skill second, only if you want to."
 Then nuke-session.sh destroys all session data and exits clean.
@@ -761,14 +724,14 @@ final output so nothing is left unclear.
 
 ---
 
-## 12. Security Hardening — 14 Blind Spots Addressed
+## 12. Security Hardening 14 Blind Spots Addressed
 
 Full detail in `SECURITY-AUDIT.md`. Summary:
 
-### Category 1 — Active Malware on the Recovery Machine
+### Category 1 Active Malware on the Recovery Machine
 
 **1. Clipboard hijacker replaces sweep address (HIGH)**
-Fix: Written address verification ritual — write 8 characters before pasting,
+Fix: Written address verification ritual write 8 characters before pasting,
 compare 8 characters after. Defeats Laplas Clipper (which spoofs first/last
 chars), ClipXDaemon (Linux, Feb 2026), and all known clipboard hijackers.
 Also: malware scan guidance before sweeping, ClamAV commands provided.
@@ -782,7 +745,7 @@ Screenshot warning fires before btcrecover prints the found credential.
 Fix: Shut down (not sleep) after recovery. `sudo sdmem -v` optional RAM
 clear. Swap clearing instructions per OS.
 
-### Category 2 — Supply Chain Attacks
+### Category 2 Supply Chain Attacks
 
 **4. Fake btcrecover forks on GitHub (HIGH)**
 Fix: `verify-btcrecover.sh` checks git remote URL against official repo and
@@ -796,13 +759,13 @@ Fix: Prompt injection awareness in forensics subskill. Typosquat monitoring via 
 Fix: `pip install --require-hashes` guidance. Virtual environment for
 btcrecover isolates dependencies from the rest of the system.
 
-### Category 3 — Social Engineering
+### Category 3 Social Engineering
 
 **7. Post-viral double-scam targeting (HIGH)**
 Fix: 30-day silence recommendation in nuke-session.sh closing message.
 Specific guidance: do not post amounts, timing, or wallet addresses publicly.
 
-**8. AI impersonation — "btcrecover support" (HIGH)**
+**8. AI impersonation "btcrecover support" (HIGH)**
 Fix: Added to safety-rules.md §SCAM-DETECTION: "This skill is a file.
 It does not have staff. It cannot contact you." Pre-empts the most likely
 impersonation vector for this skill specifically.
@@ -816,7 +779,7 @@ success guarantee, seed phrase required for "verification."
 Fix: Forensics subskill explicitly instructs the AI to treat all file
 names and metadata as untrusted data, not instructions.
 
-### Category 4 — Operational
+### Category 4 Operational
 
 **11. DNS leaks during "offline" recovery (MEDIUM)**
 Fix: connectivity-check.sh uses 3-layer check (ICMP → DNS → TCP).
@@ -866,7 +829,7 @@ that will strengthen this model when implemented.
 
 ### The VERIFIED.md trust anchor
 
-Published in the repo. States: canonical GitHub URL, and critically — what the real skill never
+Published in the repo. States: canonical GitHub URL, and critically what the real skill never
 does. Anyone who receives the skill from outside the canonical URL can compare
 against this file.
 
@@ -897,7 +860,7 @@ Every major decision point requires a typed word of confirmation:
 `ACCEPT` (first run), `I UNDERSTAND` (Tier 2), `I UNDERSTAND AND ACCEPT`
 
 Each confirmation is timestamped in `~/.btcrecover-skill/consent.log`
-during the session window. The log is destroyed in the nuke step — its
+during the session window. The log is destroyed in the nuke step its
 purpose is contemporaneous evidence during the period when a dispute could
 arise, not permanent surveillance.
 
@@ -921,7 +884,7 @@ possible. The skill is a UI layer on top of years of his work. The donation
 link to his project appears before any other donation address in every
 file that mentions donations.
 
-The skill author is listed under "This Skill" — not under a title, not
+The skill author is listed under "This Skill" not under a title, not
 as "creator" or "founder," but as the person who built this specific layer
 with a job description: skill author, security architecture, initial build.
 
@@ -935,12 +898,12 @@ and Andrej Karpathy ([tweet](https://x.com/karpathy/status/2015883857489522876),
 
 ## 16. Roadmap
 
-### v1.0 — Core skill (publish-ready)
+### v1.0 Core skill (publish-ready)
 All 20 files as documented. The complete implementation detailed in this
 document. Ready to publish to skills.sh and GitHub on the day the
 skill files are complete and verified.
 
-### v1.1 — Community and hardening
+### v1.1 Community and hardening
 - Community benchmark submission system active
 - `scripts/typosquat-monitor.py` available for weekly monitoring (add to crontab manually)
 - `agents/claude-code.md`, `agents/cline.md`, `agents/cursor.md`, `agents/generic.md`
@@ -948,14 +911,14 @@ skill files are complete and verified.
 - Windows-specific guidance expanded
 - First security audit results incorporated
 
-### v1.2 — Intelligence layer
+### v1.2 Intelligence layer
 - Hermes persistent memory integration (recovery context survives sessions)
 - Multi-language UX: Spanish, Portuguese, Mandarin (high demand regions)
 - Mobile-friendly flow for phone-based recovery sessions
 - GPU rental integration guide with cost estimator
 - Extended wallet type coverage (Sparrow, Wasabi edge cases, mobile wallets)
 
-### v2.0 — Ecosystem
+### v2.0 Ecosystem
 - Published bounty board for feature development
 - Benchmark self-update fully automated
 - Official skills.sh verified listing
@@ -1019,7 +982,7 @@ Any other installation method bypasses the verification chain.
 ## Summary
 
 Thirty-four files. 6,676 lines. Built to address the gap between a powerful
-technical recovery tool and the non-technical users who need it most —
+technical recovery tool and the non-technical users who need it most  
 with 14 documented security controls, recovery support for 18+ wallet types
 across multiple blockchains, offline-first operation, and a post-recovery
 protocol that self-destructs all session data after use.
@@ -1038,6 +1001,6 @@ Then tell no one about it for thirty days.
 
 *btcrecover-skill v1.0*
 *Built on btcrecover by Stephen Rothery (3rdIteration)*
-*GPL-2.0 — free forever*
+*GPL-2.0 free forever*
 
 *Canonical source: https://github.com/welliv/btcrecover-skill*
