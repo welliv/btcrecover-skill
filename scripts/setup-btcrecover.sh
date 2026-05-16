@@ -28,6 +28,8 @@ fi
 echo "Creating Python virtual environment..."
 cd "${BTC_RECOVER_DIR}"
 python3 -m venv venv 2>&1 || { echo "Failed to create venv. Try: sudo apt install python3-venv"; exit 1; }
+# Ensure python symlink exists (some systems only create python3)
+[ -L "${BTC_RECOVER_DIR}/venv/bin/python" ] || ln -sf python3 "${BTC_RECOVER_DIR}/venv/bin/python"
 
 echo "Installing Python dependencies into venv..."
 # Use explicit venv pip path to avoid externally-managed-environment issues
@@ -39,25 +41,25 @@ echo "Installing Python dependencies into venv..."
   }
 }
 
-# Verify both tools load
-echo "Verifying installation..."
-python btcrecover.py --help &>/dev/null || { echo "btcrecover.py failed to load after install"; exit 1; }
-python seedrecover.py --help &>/dev/null || { echo "seedrecover.py failed to load after install"; exit 1; }
-
-# Create convenience wrappers
+# Create convenience wrappers (use python3 — venv may not create a 'python' symlink)
 cat > "${BTC_RECOVER_DIR}/btcrecover" <<'WRAPPER'
 #!/usr/bin/env bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$DIR/venv/bin/python" "$DIR/btcrecover.py" "$@"
+exec "$DIR/venv/bin/python3" "$DIR/btcrecover.py" "$@"
 WRAPPER
 chmod +x "${BTC_RECOVER_DIR}/btcrecover"
 
 cat > "${BTC_RECOVER_DIR}/seedrecover" <<'WRAPPER'
 #!/usr/bin/env bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
-exec "$DIR/venv/bin/python" "$DIR/seedrecover.py" "$@"
+exec "$DIR/venv/bin/python3" "$DIR/seedrecover.py" "$@"
 WRAPPER
 chmod +x "${BTC_RECOVER_DIR}/seedrecover"
+
+# Verify both tools load (using venv python3 explicitly)
+echo "Verifying installation..."
+"${BTC_RECOVER_DIR}/venv/bin/python3" btcrecover.py --help &>/dev/null || { echo "btcrecover.py failed to load after install"; exit 1; }
+"${BTC_RECOVER_DIR}/venv/bin/python3" seedrecover.py --help &>/dev/null || { echo "seedrecover.py failed to load after install"; exit 1; }
 
 date -u +'%Y-%m-%dT%H:%M:%SZ' > "${MARKER_FILE}"
 (cd "${BTC_RECOVER_DIR}" && git rev-parse HEAD) >> "${MARKER_FILE}" 2>/dev/null || true
