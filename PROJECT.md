@@ -22,8 +22,6 @@ Everything runs locally with a local model. No data leaves the machine. Recommen
 **Tier 2 — Local Agent + Cloud Reasoning (recommended)**  
 The skill runs on your machine. The cloud API receives only text prompts. Wallet files, seeds, and btcrecover execution stay local. Requires explicit consent.
 
-Tier 3 has been removed. The skill no longer supports fully online recovery.
-
 ---
 
 ## Core Flow
