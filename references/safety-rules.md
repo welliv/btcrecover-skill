@@ -20,7 +20,7 @@ The only valid phrases the script accepts are those listed below. Any other inpu
 
 | Phrase | Tier | Meaning | When to use |
 |--------|------|---------|-------------|
-| `DISCONNECTED` | Tier 1 | Confirms user has disconnected. Script re-checks. | User followed the recommendation. |
+| `TIER1 I UNDERSTAND` | Tier 1 | Confirms offline mode selected. Script logs consent. | User cannot or will not disconnect. Offline status verified separately. |
 | `TIER2 I UNDERSTAND` | Tier 2 | Local keys only. Cloud reasoning permitted. | User can't go offline but keeps keys local. |
 
 Each consent phrase is logged to `~/.btcrecover-skill/consent.log` with a timestamp.
@@ -49,11 +49,7 @@ Each consent phrase is logged to `~/.btcrecover-skill/consent.log` with a timest
 - **Commands:** Generate in cloud, review locally, run locally.
 
 
-- The platform (Claude.ai, Grok, VPS, etc.) controls the environment.
-- What is shared depends entirely on what the user types.
-- Treat ALL keys as compromised the moment recovery succeeds.
-- Sweep urgency: IMMEDIATE.
-- Prefer `--data-extract` to avoid sharing raw wallet files.
+
 
 ## Key Distinction
 

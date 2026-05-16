@@ -13,8 +13,7 @@
       "context": 200000,
       "offline": false,
       "tier_compatible": [
-        2,
-        3
+        2
       ]
     },
     "openai/gpt-4o": {
@@ -24,8 +23,7 @@
       "context": 128000,
       "offline": false,
       "tier_compatible": [
-        2,
-        3
+        2
       ]
     },
     "openai/gpt-4o-mini": {
@@ -35,8 +33,7 @@
       "context": 128000,
       "offline": false,
       "tier_compatible": [
-        2,
-        3
+        2
       ]
     },
     "meta-llama/llama-3.1-70b-instruct": {
@@ -46,8 +43,7 @@
       "context": 131072,
       "offline": false,
       "tier_compatible": [
-        2,
-        3
+        2
       ]
     },
     "meta-llama/Meta-Llama-3.1-70B-Instruct": {

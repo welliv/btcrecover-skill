@@ -16,12 +16,7 @@ Use simplified British English with perfect grammar and natural tone. Keep respo
 When the user asks for documentation review, audit, or fact-check: rewrite for accuracy first, remove self-assessment, eliminate fictional references, and confirm every command name and flag is current.
 
 When the user says "audit", "fact check", or "review docs":
-1. Run full wargame scoring on 10-12 core scenarios.
-2. Locate every mention across all files.
-3. Rewrite the highest-visibility files first (SECURITY.md, SKILL.md, PROJECT.md, README.md).
-4. Soften unverifiable claims.
-5. Confirm zero remaining issues before finishing.
-6. Patch this SKILL.md with the new permanent rule.
+
 
 Respond to "remember our btcrecover session" by immediately recalling the hybrid recovery pattern (passphrase truncation, Sparrow BIP84 change address at index 10, --addr-limit 100, cd ~/btcrecover, python3 btcrecover.py --bip39 with --passwordlist). See references/hybrid-recovery.md for the exact template.
 
@@ -70,6 +65,13 @@ After you confirm your tier, I will recommend the best model.
 
 Check this table immediately after classification. If any of these conditions apply, state the limitation clearly and explain what additional information would make recovery possible. Do not start the memory interview.
 
+| Recovery type | Not practical when... |
+|---|---|
+| Password | User has absolutely no idea and cannot bound the search space |
+| Seed — missing words | 4+ words missing AND no address/xpub/AddressDB |
+| Seed — scrambled | 24-word seed with no positional anchors |
+| Passphrase | User remembers nothing — not even theme or length |
+
 ## Model Recommendation
 
 After confirming feasibility, run:
@@ -79,13 +81,6 @@ python3 scripts/model_router.py
 ```
 
 This returns the recommended model for the current tier and recovery type. Use its output for the next step.
-
-| Recovery type | Not practical when... |
-|---|---|
-| Password | User has absolutely no idea and cannot bound the search space |
-| Seed — missing words | 4+ words missing AND no address/xpub/AddressDB |
-| Seed — scrambled | 24-word seed with no positional anchors |
-| Passphrase | User remembers nothing — not even theme or length |
 
 **Sub-skill orchestration**: For complex cases (forensics + seed + password), load the relevant sub-skill from `skills/forensics/SKILL.md`, `skills/seed/SKILL.md`, or `skills/password/SKILL.md` and work through them in sequence. Start with forensics if the wallet file location is unknown, then seed if the mnemonic has issues, then password.
 
