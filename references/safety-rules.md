@@ -32,14 +32,16 @@ Each consent phrase is logged to `~/.btcrecover-skill/consent.log` with a timest
 - No typed consent required — offline status itself is consent.
 - Recommended for any wallet above $1,000.
 
-## Tier 2 — Local Agent + Cloud API (safe cloud reasoning)
+## Tier 2 — Local Agent + Cloud API
+
+**Important security note**: Even though wallet data never leaves your machine, Tier 2 still requires an active internet connection. This exposes you to risks from malware, keyloggers, remote access tools, or compromised software on an online system.
 
 - Hermes/claude-code on your machine calls a cloud AI API.
 - **Does NOT send:** wallet file, seed phrase, private keys, derivations.
 - **Does send:** text description of the problem, password patterns, error messages.
 - The wallet file stays local. btcrecover runs locally.
 - Consent: `TIER2 I UNDERSTAND` (typed into the enforcer script).
-- Standard sweep urgency — keys were never exposed.
+- For wallets above ~$5,000 we strongly recommend Tier 1 or a dedicated air-gapped machine.
 
 ### Safe online workflow (Tier 2)
 

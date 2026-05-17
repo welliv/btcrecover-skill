@@ -40,10 +40,10 @@ We recommend **Tier 2** for most users.
 
 | Tier | Risk | Description |
 |------|------|-------------|
-| ⚡ Tier 2 | Low | Recommended. Wallet data stays on your machine. Only AI reasoning uses the cloud. |
+| ⚡ Tier 2 | Moderate | Recommended for most users. Wallet data stays local. Only AI reasoning uses the cloud. Requires internet connection. | Machine stays online — exposed to malware, keyloggers and remote access risks. |
 | 🔒 Tier 1 | Very low | Maximum privacy. Everything runs offline with a local model. Requires setup. |
 
-**Tier 2** offers the best balance. Use Tier 1 for high-value wallets.
+**Tier 2** is convenient for smaller amounts. For wallets above ~$5,000 we recommend Tier 1 or a dedicated air-gapped machine.
 
 After you confirm your tier, I will recommend the best model.
 

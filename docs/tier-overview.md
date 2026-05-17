@@ -12,7 +12,7 @@
 - **🔒 Tier 1** — Everything runs completely offline using a local AI model.
 - **⚡ Tier 2** — Your wallet data stays local. Only the AI’s reasoning uses the cloud.
 
-**Recommended:** Tier 2 offers the best balance of strong privacy and effortless setup.
+**Recommended:** Tier 2 is convenient for smaller recoveries but carries moderate risk due to the internet connection.
 
 
 ## Scripts

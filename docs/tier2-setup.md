@@ -34,4 +34,4 @@ TIER2 I UNDERSTAND
 - Never paste seed phrases or wallet files into the chat.
 - The actual recovery commands always run on your machine.
 
-Tier 2 offers the best balance of security, speed, and convenience for most recovery situations.
+Tier 2 is suitable for smaller recoveries. For larger amounts, Tier 1 or air-gapped setups are strongly recommended.

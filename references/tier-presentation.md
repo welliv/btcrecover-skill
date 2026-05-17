@@ -3,7 +3,7 @@
 ## Core Principles
 
 - Lead with the recommended tier
-- Use explicit risk labels (Low Risk, High Risk)
+- Use explicit risk labels (Moderate Risk, High Risk)
 - Keep descriptions short and scannable
 - Use emojis for quick visual recognition
 - Make the recommendation stand out
@@ -15,8 +15,8 @@
 
 | Tier | Risk Level | Description |
 |------|------------|-------------|
-| ⚡ **Tier 2** | Low Risk | Recommended. ... |
-| 🔒 **Tier 1** | Very Low Risk | ... |
+| ⚡ **Tier 2** | Moderate Risk | Recommended. ... |
+| 🔒 **Tier 1** | Very Moderate Risk | ... |
 ```
 
 ## Risk Framing Rules
