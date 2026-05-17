@@ -359,10 +359,11 @@ See `references/wallet-types.md` for AddressDB creation commands.
 
 ## Debugging
 
-Use `--listpass` to see which seed phrases would be tried:
+To preview what seedrecover would try, run with a very small `--addr-limit` and a limited tokenlist first:
 ```bash
-python3 seedrecover.py --listpass --tokenlist words.txt --mnemonic-length 12 --language EN
+python3 seedrecover.py --mnemonic "word1 word2 ? word4 ..." --addr-limit 1 --tokenlist words.txt
 ```
+This shows the search space without running the full job.
 
 ## Performance
 
