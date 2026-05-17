@@ -242,7 +242,7 @@ python3 seedrecover.py \
 | `tron` | Tron |
 | `polkadotsubstrate` | Polkadot, Kusama, Substrate chains |
 | `stacks` | Stacks blockchain |
-| `elrond` | Elrond (now MultiversX) |
+| `multiversx` | Elrond (now MultiversX) |
 | `hederaed25519` | Hedera Hashgraph |
 | `helium` | Helium (HNT) |
 | `blockchainpasswordv3` | Blockchain.com legacy recovery mnemonic |
@@ -289,7 +289,7 @@ python3 seedrecover.py --wallet-type helium \
 
 **Elrond (MultiversX):**
 ```bash
-python3 seedrecover.py --wallet-type elrond \
+python3 seedrecover.py --wallet-type multiversx \
   --mnemonic "..." --addrs erd1... --addr-limit 2
 ```
 
