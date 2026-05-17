@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-"""Self-updating model benchmark fetcher for btcrecover-skill.
+"""Canonical model benchmark updater for btcrecover-skill.
 
 Fetches from three public verified sources:
 1. OpenRouter API — model pricing, context length, provider info
 2. HuggingFace Open LLM Leaderboard — MMLU, GSM8K, BBH benchmarks
 3. btcrecover official GPU benchmarks — password/speed hardware data
 
-Pure stdlib, no pip dependencies. Runs daily via cron.
+Pure stdlib, no pip dependencies. Runs daily via cron or on demand.
+This is the single benchmark script — update-benchmarks.py was consolidated
+into this file (it duplicated OpenRouter/HuggingFace fetching with a
+requests dependency and no incremental update support).
 """
 
 import json
