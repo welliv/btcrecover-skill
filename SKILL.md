@@ -90,14 +90,6 @@ Check this table immediately after classification. If any of these conditions ap
 | Seed — scrambled | 24-word seed with no positional anchors |
 | Passphrase | User remembers nothing — not even theme or length |
 
-| Recovery type | Not practical when... |
-|---|---|
-| Password | User has absolutely no idea and cannot bound the search space |
-| Seed — missing words | 4+ words missing AND no address/xpub/AddressDB |
-| Seed — scrambled | 24-word seed with no positional anchors |
-| Passphrase | User remembers nothing — not even theme or length |
-
-## Model Recommendation
 
 After confirming feasibility, run:
 
