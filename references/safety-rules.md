@@ -77,7 +77,7 @@ Halt if any of these appear:
 bash scripts/verify-btcrecover.sh
 ```
 
-Checks remote URL matches official repo, no malicious fork patterns, SHA256 checksums match.
+Checks remote URL matches official repo, no malicious fork patterns, verifies Python version and core files present.
 
 ## Professional Services
 
