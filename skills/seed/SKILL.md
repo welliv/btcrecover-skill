@@ -204,20 +204,28 @@ For non-standard wallets:
 - **Atomic Wallet (ETH):** `--checksinglexpubaddress`
 - **CoolWallet S (BTC/LTC):** `--force-p2sh`
 
-## Extra Passphrase
+## Extra Passphrase (Hybrid Recovery)
 
-The passphrase is like a password appended to the seed. Route to password subskill.
+When the user has **both** a missing/unknown seed word **and** an unknown passphrase, you must use `seedrecover.py` with `--passphrase-list`. This is the only way to search both dimensions simultaneously.
+
+**Correct command:**
 
 ```bash
-python3 btcrecover.py \
-  --bip39 \
-  --mnemonic "word1 word2 ... word12" \
-  --tokenlist passphrase_list.txt \
+python3 seedrecover.py \
+  --mnemonic "word1 word2 word3 ? word5 word6 word7 word8 word9 word10 word11 word12" \
+  --passphrase-list /tmp/passphrase_candidates.txt \
   --addrs bc1q... \
   --addr-limit 100 \
-  --force-bip44 --force-p2sh --force-p2tr \
-  --typos 1 --typos-delete --typos-swap
+  --wallet-type bip39 \
+  --no-eta --no-dupchecks
 ```
+
+**Important notes:**
+- The flag must be `--passphrase-list` (with hyphen). `--passphraselist` (no hyphen) is **not valid**.
+- Always generate truncated passphrase candidates (e.g. `recoverytesting` → `recoverytest`, `recoverytestin`, etc.).
+- Use `--addr-limit 100` because users often receive funds on non-zero indices.
+- This approach is verified in `references/verified-scenarios.md`.
+
 
 ## Wallet Types (seedrecover.py --wallet-type)
 

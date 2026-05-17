@@ -59,9 +59,36 @@ After you confirm your tier, I will recommend the best model.
 8. Progress updates
 9. Post recovery safety and cleanup
 
+## Resource Map
+
+Load these on demand — never all at once. Each costs context tokens.
+
+| When you need... | Load this |
+|---|---|
+| Password typo patterns, leet speak, keyboard proximity | `references/typo-patterns.md` |
+| Wallet type → flag mapping, OS paths, extract scripts | `references/wallet-types.md` |
+| Proven hybrid recovery commands | `references/hybrid-recovery.md` |
+| Verified recovery scenarios (35 confirmed) | `references/verified-scenarios.md` |
+| Safety rules, consent phrases, scam detection | `references/safety-rules.md` |
+| Model quality/speed/cost data | `references/benchmarks.json` |
+| Agent skill best practices | `references/agentic-skills-leading-practices.md` |
+| Tier selection guidance | `references/tier-handling.md` |
+| How to present tier options | `references/tier-presentation.md` |
+| Live demo workflow | `references/live-demo-workflow.md` |
+| Sub-skill: password recovery (8 phases) | `skills/password/SKILL.md` |
+| Sub-skill: seed recovery (6+ scenarios) | `skills/seed/SKILL.md` |
+| Sub-skill: forensics + file archaeology | `skills/forensics/SKILL.md` |
+
 ## Feasibility Gate
 
 Check this table immediately after classification. If any of these conditions apply, state the limitation clearly and explain what additional information would make recovery possible. Do not start the memory interview.
+
+| Recovery type | Not practical when... |
+|---|---|
+| Password | User has absolutely no idea and cannot bound the search space |
+| Seed — missing words | 4+ words missing AND no address/xpub/AddressDB |
+| Seed — scrambled | 24-word seed with no positional anchors |
+| Passphrase | User remembers nothing — not even theme or length |
 
 | Recovery type | Not practical when... |
 |---|---|

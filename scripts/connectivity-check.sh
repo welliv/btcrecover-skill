@@ -85,6 +85,18 @@ if [[ $LAYER1 -eq 1 && $LAYER2 -eq 1 && $LAYER3 -eq 1 ]]; then
 else
   ONLINE=0
   echo -e "${YELLOW}Result: OFFLINE / PARTIAL${NC}"
+
+  # Additional: check for active non-loopback interfaces
+  if command -v ip >/dev/null 2>&1; then
+    ACTIVE_IFACES=$(ip -br link show 2>/dev/null | awk '$2 == "UP" && $1 != "lo" {print $1}' | tr '\n' ' ')
+    [ -n "$ACTIVE_IFACES" ] && echo -e "  ${YELLOW}Active interfaces: ${ACTIVE_IFACES}(verify these are off for Tier 1)${NC}"
+  fi
+
+  # Additional: warn if cloud sync processes are running
+  for proc in Dropbox "Google Drive" OneDrive iCloud nextcloud syncthing; do
+    pgrep -fi "$proc" >/dev/null 2>&1 && echo -e "  ${YELLOW}Warning: $proc appears to be running — pause before Tier 1 recovery${NC}"
+  done
+
 fi
 
 # Enforce mode - two tier consent only
