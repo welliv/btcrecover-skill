@@ -33,10 +33,10 @@ Eight-point verification checklist. Red flags: upfront fee, Telegram-only, 100% 
 Forensics subskill treats all file names and metadata as untrusted data.
 
 ## 11. DNS Leaks
-Connectivity check uses 3 layers (ICMP → DNS → TCP) to detect online status.
-For additional protection: pause cloud sync (Dropbox, iCloud, OneDrive) manually
-before recovery, and verify disconnection with `ping -c 2 8.8.8.8` (must fail).
-Active interface and sync-process detection is a planned improvement.
+Connectivity check uses 3 layers (ICMP → DNS → TCP) to detect online status,
+then actively checks for running network interfaces (via `ip link`) and cloud
+sync processes (Dropbox, iCloud, OneDrive, Nextcloud, Syncthing). Any detected
+sync processes are flagged with a warning before recovery begins.
 
 ## 12. Swap Space
 OS-specific swap clearing instructions. Linux: `swapoff -a && swapon -a`.
