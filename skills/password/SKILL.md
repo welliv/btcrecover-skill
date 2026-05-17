@@ -248,6 +248,9 @@ python3 btcrecover.py --bip39 \
   --tokenlist passphrase_list.txt \
   --addrs bc1q... \
   --addr-limit 100 \
+**Gateway / Memory stability (important on low-RAM VMs):**
+Always add `--no-dupchecks --threads 1 --no-eta` when running alongside Hermes gateway or on machines with < 16 GB RAM. Duplicate checking and ETA calculation are the biggest memory consumers.
+
   --force-bip44 --force-p2sh --force-p2tr \
   --typos 1 --typos-delete --typos-swap
 ```
@@ -377,12 +380,18 @@ python3 btcrecover.py \
   --typos 1 --typos-case --typos-swap \
   --threads 4 \
   --addr-limit 100 \
+**Gateway / Memory stability (important on low-RAM VMs):**
+Always add `--no-dupchecks --threads 1 --no-eta` when running alongside Hermes gateway or on machines with < 16 GB RAM. Duplicate checking and ETA calculation are the biggest memory consumers.
+
   --force-bip44 --force-p2sh --force-p2tr \
   --checkpoint
 ```
 
 **Always include these flags:**
 - `--addr-limit 100` — checks 100 address indices per derivation path. Funds may be at a change address (index 15, 27, etc.), not just index 0. Do not assume index 0.
+**Gateway / Memory stability (important on low-RAM VMs):**
+Always add `--no-dupchecks --threads 1 --no-eta` when running alongside Hermes gateway or on machines with < 16 GB RAM. Duplicate checking and ETA calculation are the biggest memory consumers.
+
 - `--force-bip44 --force-p2sh --force-p2tr` — forces all derivation paths. btcrecover auto-detects the address type from `--addrs` and skips non-matching types, but wallet software sometimes uses multiple types within the same wallet.
 - If the user provided a known address, include `--addrs ADDRESS` so btcrecover stops instantly on first match.
 
