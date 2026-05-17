@@ -49,12 +49,6 @@ Each consent phrase is logged to `~/.btcrecover-skill/consent.log` with a timest
 - **Password patterns:** Safe to discuss. Build tokenlists locally.
 - **Wallet file:** Never transmit. Use `--data-extract` for hash-only material.
 - **Commands:** Generate in cloud, review locally, run locally.
-
-
-
-
-
-
 - **Tier 2:** The agent runs on YOUR machine. The cloud API receives text prompts. The wallet file never leaves. You run btcrecover commands locally.
 
 ## Scam Detection
