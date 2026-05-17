@@ -56,17 +56,17 @@ If confident: `--typos 1` with case swap. If unsure: `--typos 2`. If leet suspec
 
 Bitcoin Core:
 ```bash
-python extract-bitcoin-hash.py wallet.dat > wallet.extract
+python3 extract-bitcoin-hash.py wallet.dat > wallet.extract
 ```
 
 Electrum:
 ```bash
-python extract-electrum-hash.py wallet > wallet.extract
+python3 extract-electrum-hash.py wallet > wallet.extract
 ```
 
 Blockchain.com (main password):
 ```bash
-python extract-blockchain-hash.py wallet.aes.json > wallet.extract
+python3 extract-blockchain-hash.py wallet.aes.json > wallet.extract
 ```
 
 Blockchain.com (second password):
@@ -295,7 +295,7 @@ For non-Bitcoin wallets, add `--wallet-type`:
 SLIP39 passphrases are recovered via seedrecover.py (not btcrecover.py):
 
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --slip39 \
   --mnemonic "share1word1 share1word2 ... share2word1 share2word2 ..." \
   --passphrase-arg "candidate_passphrase" \
@@ -305,7 +305,7 @@ python seedrecover.py \
 
 For a passwordlist rather than a single passphrase:
 ```bash
-python seedrecover.py \
+python3 seedrecover.py \
   --slip39 \
   --mnemonic "share words here..." \
   --seedlist passphrases.txt \
@@ -314,14 +314,14 @@ python seedrecover.py \
 
 For shares with typos (separate from passphrase recovery):
 ```bash
-python seedrecover.py --slip39 \
+python3 seedrecover.py --slip39 \
   --mnemonic "share words here..." \
   --typos 2
 ```
 
 With missing word (big-typo = completely different word):
 ```bash
-python seedrecover.py --slip39 \
+python3 seedrecover.py --slip39 \
   --mnemonic "share words here..." \
   --big-typos 1
 ```
@@ -359,13 +359,13 @@ Estimate: `(search_space / gpu_speed) × hourly_rate`. Show cost before recommen
 
 Distribute work across machines with `--worker`:
 ```bash
-python seedrecover.py --mnemonic "..." --addrs ... --worker 1,2/3  # Machine A
-python seedrecover.py --mnemonic "..." --addrs ... --worker 3/3    # Machine B
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 1,2/3  # Machine A
+python3 seedrecover.py --mnemonic "..." --addrs ... --worker 3/3    # Machine B
 ```
 
 Or resume interrupted runs with `--skip N`:
 ```bash
-python seedrecover.py --mnemonic "..." --addrs ... --skip 357449
+python3 seedrecover.py --mnemonic "..." --addrs ... --skip 357449
 ```
 
 ## Phase 6: Command Assembly
