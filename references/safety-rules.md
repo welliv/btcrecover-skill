@@ -36,7 +36,7 @@ Each consent phrase is logged to `~/.btcrecover-skill/consent.log` with a timest
 
 **Important security note**: Even though wallet data never leaves your machine, Tier 2 still requires an active internet connection. This exposes you to risks from malware, keyloggers, remote access tools, or compromised software on an online system.
 
-- Hermes/claude-code on your machine calls a cloud AI API.
+- Hermes agent on your machine calls a cloud AI API.
 - **Does NOT send:** wallet file, seed phrase, private keys, derivations.
 - **Does send:** text description of the problem, password patterns, error messages.
 - The wallet file stays local. btcrecover runs locally.
