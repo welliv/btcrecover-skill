@@ -15,7 +15,7 @@ Shut down (not sleep) after recovery. Optional RAM clear with `sudo sdmem -v`.
 `verify-btcrecover.sh` checks remote URL against official repo. Blocked patterns: TCRetriever, demining, etc.
 
 ## 5. Poisoned SKILL.md
-Typosquat monitoring via `scripts/typosquat-monitor.py` (run manually or via crontab). CODEOWNERS file protects SKILL.md from unauthorised PR merges. GPG commit signing is a planned improvement.
+Typosquat monitoring via `scripts/typosquat-monitor.py` (run manually or via crontab). CODEOWNERS file protects SKILL.md from unauthorised PR merges. GPG commit signing is on the ROADMAP (see ROADMAP.md F(3)).
 
 ## 6. Compromised Python Dependencies
 `pip install --require-hashes` guidance. Virtual environment isolation.
