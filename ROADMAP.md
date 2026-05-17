@@ -5,7 +5,7 @@ Each arc builds on all previous arcs. The pattern grows outward.
 ## F(1) — Complete (this session)
 All nine Fibonacci redesign tasks from the first-principles analysis.
 - Resource Map added to SKILL.md
-- Three redundant files removed
+- Three redundant reference summaries removed (password-skill.md, seed-skill.md, forensics-skill.md)
 - python3 standardised across all sub-skills
 - Feedback loop added to sweep-reminder.sh
 - benchmark scripts audited
