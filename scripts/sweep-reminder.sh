@@ -130,6 +130,22 @@ echo "  BTC: 37N7B7sdHahCXTcMJgEnHz7YmiR4bEqCrS"
 echo "  https://github.com/3rdIteration/btcrecover"
 
 
+# Pattern capture — grow the library from real use
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "GROW THE LIBRARY"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo
+echo "Did you discover a pattern not in our library?"
+echo "(A flag combination that worked, a wallet quirk, a timing insight)"
+echo
+echo "Note it here — no sensitive data, wallet type and outcome only:"
+echo
+echo "  echo 'Pattern: [wallet type] [what worked] [$(date +%Y-%m)]' >> ~/btcr-patterns.txt"
+echo
+echo "At your next session, review ~/btcr-patterns.txt and add the best"
+echo "findings to references/hybrid-recovery.md."
+echo
+
 # Optional feedback report
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "OPTIONAL: Help the next person"
