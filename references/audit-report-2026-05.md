@@ -1,7 +1,7 @@
 # Audit Report - May 2026
 
 **Summary**  
-Full verification pass completed (setup-btcrecover.sh, verify-btcrecover.sh, update-benchmarks.py). Core test vectors passed. Tier 3 references removed.
+Full verification pass completed (setup-btcrecover.sh, verify-btcrecover.sh, benchmark-updater.py). Core test vectors passed. Tier 3 references removed. (update-benchmarks.py consolidated into benchmark-updater.py — duplicate fetcher removed.)
 
 **Changes made 16 May 2026**:
 - Removed all Tier 3 mentions across SECURITY.md, docs, references, PROJECT.md, SKILL.md and scripts.
