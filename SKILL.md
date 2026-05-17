@@ -163,20 +163,3 @@ I will show you the disclaimer. Please type ACCEPT to continue. This is logged f
 - We upstream any improvements or bugs found during recovery.
 
 Free. Open source. Always.
-## Advanced: Fibonacci Search Strategy
-
-Fibonacci search is used as the intelligent coordinator across password, seed, and forensics recovery.
-
-Instead of linear or simple binary search, it applies the Fibonacci sequence to generate candidate step sizes and maintain two prior search windows. This enables faster pruning of low-probability regions.
-
-### How it combines sub-skills
-
-- Starts with broad candidate generation routed primarily through `btcrecover-password-skill`.
-- On partial signals (checksums, address hits, or file clues), it recalculates the next Fibonacci step and hands off to `btcrecover-seed-skill` or `btcrecover-forensics-skill`.
-- Early pruning using golden-ratio-derived efficiency prevents wasted effort on unlikely paths.
-
-### Nature inspiration
-
-The approach mirrors the golden ratio efficiency seen in sunflowers, pinecones, and seashells — maximum coverage with minimal overlap and waste. Recovery becomes a single self-similar, efficient process rather than three disconnected tools.
-
-This is the recommended strategy for complex hybrid or high-entropy cases.
